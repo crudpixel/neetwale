@@ -5,7 +5,7 @@ export default function SetsScreen({ route, navigation }) {
   const { subject } = route.params;
   const [sets, setSets] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     fetch(`https://neet.crudpixel.tech/jsonapi/taxonomy_term/subjects?filter[parent.name]=${subject}`)
       .then(res => res.json())

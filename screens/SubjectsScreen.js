@@ -4,19 +4,19 @@ import { logoutUser } from '../cookiesApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const subjects = ['Physics', 'Chemistry', 'Biology'];
 
-export default  function SubjectsScreen({ navigation }) {
+export default function SubjectsScreen({ navigation }) {
 
-  const handleLogout=async()=>{
+  const handleLogout = async () => {
     await AsyncStorage.removeItem('user');
     navigation.navigate('Home')
   }
-  
-      
+
+
 
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Select The Subject for Real Time Test.</Text>
-      <Button title="Review" onPress={()=>navigation.navigate("test")}/>
+      <Button title="Review" onPress={() => navigation.navigate("test")} />
       {/* <Button title="Login" onPress={() => navigation.navigate('Login')} /> */}
       <Button title="Logout" onPress={handleLogout} />
       {subjects.map((subject, index) => (
@@ -27,7 +27,7 @@ export default  function SubjectsScreen({ navigation }) {
         >
           <Text style={styles.cardText}>{subject}</Text>
         </TouchableOpacity>
-        
+
       ))}
     </View>
   );
@@ -41,10 +41,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 
-  heading:{
-  fontSize:20,
-  textAlign:"center",
-  marginBottom:20,
+  heading: {
+    fontSize: 20,
+    textAlign: "center",
+    marginBottom: 20,
   },
   card: {
     backgroundColor: '#f2f2f2',

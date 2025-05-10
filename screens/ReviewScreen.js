@@ -62,9 +62,9 @@ export default function ReviewScreen({ route, navigation }) {
 
       <Text style={styles.correctAnswer}>✅ Correct Answer: {currentQuestion.correct}</Text>
       {currentQuestion.explanation ? (
-  <Text style={styles.explanationText}>💡 Explanation: {currentQuestion.explanation.replace(/<[^>]+>/g, '')}</Text>
-) : null}
-  
+        <Text style={styles.explanationText}>💡 Explanation: {currentQuestion.explanation.replace(/<[^>]+>/g, '')}</Text>
+      ) : null}
+
 
       <View style={styles.navigationButtons}>
         {currentIndex > 0 && (

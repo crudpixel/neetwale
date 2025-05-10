@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, StyleSheet ,Button} from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, StyleSheet, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function MyTestsScreen({ navigation }) {
@@ -8,29 +8,29 @@ export default function MyTestsScreen({ navigation }) {
 
   useEffect(() => {
     const fetchTests = async () => {
-        const user = JSON.parse(await AsyncStorage.getItem('user'));
-        const userId = user?.userid;
-        //const solvedId = user?.solved_id;
+      const user = JSON.parse(await AsyncStorage.getItem('user'));
+      const userId = user?.userid;
+      //const solvedId = user?.solved_id;
       //console.log(userId,solvedId)
-        if (!userId) return;
-      
-        try {
-          const res = await fetch(`https://neet.crudpixel.tech/api/student-result?user_id=${userId}`);
-          const json = await res.json();
-      
-          const allResults = json.data || [];
-      
-          // Optional: Filter by userId just to be safe
-          const userResults = allResults.filter(t => t.user_id == userId);
-      
-          setTests(userResults);
-          setLoading(false);
-        } catch (err) {
-          console.error('Error fetching tests:', err);
-          setLoading(false);
-        }
-      };
-      
+      if (!userId) return;
+
+      try {
+        const res = await fetch(`https://neet.crudpixel.tech/api/student-result?user_id=${userId}`);
+        const json = await res.json();
+
+        const allResults = json.data || [];
+
+        // Optional: Filter by userId just to be safe
+        const userResults = allResults.filter(t => t.user_id == userId);
+
+        setTests(userResults);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching tests:', err);
+        setLoading(false);
+      }
+    };
+
 
     fetchTests();
   }, []);
@@ -57,9 +57,9 @@ export default function MyTestsScreen({ navigation }) {
           </TouchableOpacity>
         )}
 
-        
+
       />
-   
+
 
     </View>
   );

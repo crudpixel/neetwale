@@ -182,17 +182,12 @@ export default function QuestionsScreen({ route, navigation }) {
       <View style={styles.navigationButtons}>
         {currentIndex === 0 ? (
           <Button title="Next" onPress={() => setCurrentIndex(prev => prev + 1)} />
-        ) : currentIndex < questions.length - 1 ? (
+        ) :
           <>
             <Button title="Previous" onPress={() => setCurrentIndex(prev => prev - 1)} />
             <Button title="Next" onPress={() => setCurrentIndex(prev => prev + 1)} />
           </>
-        ) : (
-          <>
-            <Button title="Previous" onPress={() => setCurrentIndex(prev => prev - 1)} />
-            <Button title="Next" onPress={() => setCurrentIndex(prev => prev + 1)} />
-          </>
-        )}
+        }
       </View>
     </View>
   );
@@ -204,5 +199,10 @@ const styles = StyleSheet.create({
   optionBtn: { marginVertical: 5 },
   result: { marginTop: 20, alignItems: 'center' },
   resultText: { fontSize: 18, marginBottom: 10 },
+  navigationButtons: {
+    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' }
 });

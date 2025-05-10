@@ -7,8 +7,8 @@ export default function RegisterScreen({ navigation }) {
   const [pass, setPass] = useState('');
 
 
-  const handleRegister = async() => {
-    
+  const handleRegister = async () => {
+
     const tokenRes = await fetch('https://neet.crudpixel.tech/session/token');
     const csrfToken = await tokenRes.text();
 
@@ -30,16 +30,16 @@ export default function RegisterScreen({ navigation }) {
         }
       })
     })
-    .then(res => res.json())
-    .then(data => {
-      if (data.errors) {
-        Alert.alert('Error', data.errors[0].detail);
-      } else {
-        Alert.alert('Success', 'Registration successful!');
-        navigation.navigate('Login');
-      }
-    })
-    .catch(err => Alert.alert('Error', err.message));
+      .then(res => res.json())
+      .then(data => {
+        if (data.errors) {
+          Alert.alert('Error', data.errors[0].detail);
+        } else {
+          Alert.alert('Success', 'Registration successful!');
+          navigation.navigate('Login');
+        }
+      })
+      .catch(err => Alert.alert('Error', err.message));
   };
 
   return (
