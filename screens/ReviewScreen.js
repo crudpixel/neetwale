@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, StyleSheet, ActivityIndicator,ScrollView} from 'react-native';
-
+import { useWindowDimensions } from 'react-native';
+import RenderHTML, { RenderHTMLSource } from 'react-native-render-html'
 export default function ReviewScreen({ route, navigation }) {
   const { testData } = route.params;
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const studentAnswers = JSON.parse(testData.answer);
+  const { width } = useWindowDimensions();
   console.log(testData)
   useEffect(() => {
     // Fetch the actual questions from backend based on question_paper_id
@@ -40,6 +42,7 @@ export default function ReviewScreen({ route, navigation }) {
   const selectedAnswer = studentAnswers[currentQuestion.qKey];
 
 
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Reviewing: {testData.question_paper_id}</Text>
@@ -64,9 +67,16 @@ export default function ReviewScreen({ route, navigation }) {
       <Text style={styles.correctAnswer}>✅ Correct Answer: {currentQuestion.correct}</Text>
       {currentQuestion.explanation ? (
      
-        <Text style={styles.explanationText}>💡 Explanation: {currentQuestion.explanation.replace(/<[^>]+>/g, " ")}</Text>
-        /* <RenderHtml contentWidth={width} source={{ html: `<div>${currentQuestion.explanation}</div>` }} /> */
-   
+       // <Text style={styles.explanationText}>💡 Explanation: {currentQuestion.explanation.replace(/<[^>]+>/g, " ")}</Text>
+       <RenderHTML  
+          tagsStyles={{
+               p: { fontSize: 16, color: 'black',margin:10 },
+               ul: { paddingLeft: 20, },
+               li: { fontSize:16 ,marginBottom:10, fontWeight:400}
+         }}
+    
+    contentWidth={width} source={{ html: currentQuestion.explanation }} />
+
       ) : null}
 
 </ScrollView>
@@ -91,6 +101,10 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderWidth: 1,
     marginBottom: 8,
+  },
+  explanAnswer:{
+    fontSize:26,
+    color:'red'
   },
   selectedOption: {
     borderColor: 'blue',
