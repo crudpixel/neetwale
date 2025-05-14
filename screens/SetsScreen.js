@@ -7,7 +7,7 @@ export default function SetsScreen({ route, navigation }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`https://neet.crudpixel.tech/jsonapi/taxonomy_term/subjects?filter[parent.name]=${subject}`)
+    fetch(`https://studyneet.crudpixel.tech/jsonapi/taxonomy_term/subjects?filter[parent.name]=${subject}`)
       .then(res => res.json())
       .then(data => {
         const formatted = data.data.map(item => ({

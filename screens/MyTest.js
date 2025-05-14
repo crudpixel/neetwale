@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, StyleSheet, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function MyTestsScreen({ navigation }) {
+export default function MyTestsScreen({route, 
+  
+  navigation }) {
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const solved_id = route.Params;
 
   useEffect(() => {
     const fetchTests = async () => {
@@ -15,7 +18,7 @@ export default function MyTestsScreen({ navigation }) {
       if (!userId) return;
 
       try {
-        const res = await fetch(`https://neet.crudpixel.tech/api/student-result?user_id=${userId}`);
+        const res = await fetch(`https://studyneet.crudpixel.tech/api/student-result?user_id=${userId}${solved_id}`);
         const json = await res.json();
 
         const allResults = json.data || [];
@@ -47,14 +50,18 @@ export default function MyTestsScreen({ navigation }) {
         data={tests}
         keyExtractor={item => item.solved_id.toString()}
         renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.testItem}
-            onPress={() => navigation.navigate('review', { testData: item })}
-          >
+           <>
             <Text style={styles.testTitle}>{item.question_paper_id}</Text>
             <Text>Score: {item.score} / {item.total_marks}</Text>
             <Text>Attempted: {item.attempted}</Text>
+            
+            <TouchableOpacity
+            style={styles.testItem}
+            onPress={() => navigation.navigate('review', { testData: item })}
+          >
+            <Text style={styles.reviewBtn} >Review Your Test</Text>
           </TouchableOpacity>
+          </>
         )}
 
 
@@ -66,13 +73,22 @@ export default function MyTestsScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20, flex: 1 },
+  container: { padding: 20, flex: 1, },
   title: { fontSize: 22, fontWeight: 'bold', marginBottom: 10 },
   testItem: {
     padding: 15,
-    backgroundColor: '#f2f2f2',
+    backgroundColor: 'blue',
     borderRadius: 8,
+    color:'white',
     marginBottom: 10,
+    marginTop:20,
+  },
+  reviewBtn:{
+   color:"white",
+   textAlign:"center",
+   fontSize:16,
+   fontWeight:600,
+  
   },
   testTitle: { fontWeight: 'bold', fontSize: 18 },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },

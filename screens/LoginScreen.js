@@ -15,12 +15,12 @@ export default function LoginScreen({ navigation }) {
     try {
       await CookieManager.clearAll(); // 🔑 Ensures session is clean
 
-      const tokenRes = await fetch('https://neet.crudpixel.tech/session/token');
+      const tokenRes = await fetch('https://studyneet.crudpixel.tech/session/token');
       const csrfToken = await tokenRes.text();
       // console.log('CSRF Token:', csrfToken);
 
       // Login next
-      const loginRes = await fetch('https://neet.crudpixel.tech/user/login?_format=json', {
+      const loginRes = await fetch('https://studyneet.crudpixel.tech/user/login?_format=json', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

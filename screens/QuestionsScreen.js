@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Button, ActivityIndicator, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function QuestionsScreen({ route, navigation }) {
+export default  function QuestionsScreen({ route, navigation }) {
   const { setId } = route.params; // Get the setId from route params
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,13 +11,16 @@ export default function QuestionsScreen({ route, navigation }) {
   const [userAnswers, setUserAnswers] = useState({});
   const [score, setScore] = useState(0);
   const [paperSet, setPaperSet] = useState('');
-  const [timeLeft, setTimeLeft] = useState(60 * 60);
-
-
+  const [timeLeft, setTimeLeft] = useState(60*60);
+  const [test, setTest] = useState('');
+  const [userId, setUserId] = useState("")
+  const [userSolvedId, setuserSolvedId] = useState("")
+     
+  console.log(setId)
 
   useEffect(() => {
 
-    fetch(`https://neet.crudpixel.tech/jsonapi/taxonomy_term/subjects`)
+    fetch(`https://studyneet.crudpixel.tech/jsonapi/taxonomy_term/subjects`)
       .then(res => res.json())
       .then(data => {
         const subject = data.data.find(term => term.id === setId);
@@ -28,8 +31,10 @@ export default function QuestionsScreen({ route, navigation }) {
       })
 
 
+
+  
     // Fetch the questions data based on the setId
-    fetch(`https://neet.crudpixel.tech/jsonapi/node/question?filter[field_subject_set.id]=${setId}`)
+    fetch(`https://studyneet.crudpixel.tech/jsonapi/node/question?filter[field_subject_set.id]=${setId}`)
       .then(res => res.json())
       .then(data => {
         const formatted = data.data.map(q => {
@@ -39,15 +44,25 @@ export default function QuestionsScreen({ route, navigation }) {
           return {
             id: q.id,
             title: q.attributes.title,
-            options: q.attributes.field_options,
-            correct: q.attributes.field_options[correctIndex] || ''
+            options: q.attributes.field_option,
+            correct: q.attributes.field_option[correctIndex] || ''
           };
         });
 
         setQuestions(formatted);
         setLoading(false);
       });
+
+      userData();
   }, [setId]);
+
+  const userData=async()=>{
+     const user = JSON.parse(await AsyncStorage.getItem('user'));
+      const user_id = user?.userid;
+      setUserId(user_id);
+      
+  }
+
 
   useEffect(() => {
     if (loading) return;
@@ -116,13 +131,34 @@ export default function QuestionsScreen({ route, navigation }) {
         answer: JSON.stringify(userAnswers),
       };
       console.log(testResult)
-      const response = await fetch('https://neet.crudpixel.tech/api/submit-result', {
+      const response = await fetch('https://studyneet.crudpixel.tech/api/submit-result', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(testResult),
       });
+
+         try {
+        const res = await fetch(`https://studyneet.crudpixel.tech/api/student-result?user_id=${userId}`);
+        const json = await res.json();
+
+        const allResults = json.data || [];
+
+        // Optional: Filter by userId just to be safe
+        const userResults = allResults.filter(t => t.user_id == userId);
+
+        setTest(userResults);
+        const latestResult = userResults[userResults.length - 1];
+        const solvedId = latestResult?.solved_id;
+
+        setuserSolvedId(solvedId)
+        console.log("dfdfd",solvedId);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching tests:', err);
+        setLoading(false);
+      }
 
       const data = await response.json();
       console.log("Result submitted:", data);
@@ -131,7 +167,7 @@ export default function QuestionsScreen({ route, navigation }) {
         Alert.alert(
           'Success',
           'Your test has been submitted successfully!',
-          [{ text: 'OK', onPress: () => navigation.navigate('Subjects') }]
+          [{ text: 'OK', onPress: () => navigation.navigate('test',{solved_id:userSolvedId}) }]
         );
       } else {
         console.warn("Failed to submit result:", data);

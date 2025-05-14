@@ -10,7 +10,7 @@ export default function ReviewScreen({ route, navigation }) {
   console.log(testData)
   useEffect(() => {
     // Fetch the actual questions from backend based on question_paper_id
-    fetch(`https://neet.crudpixel.tech/jsonapi/node/question?filter[field_subject_set.name]=${encodeURIComponent(testData.question_paper_id)}`)
+    fetch(`https://studyneet.crudpixel.tech/jsonapi/node/question?filter[field_subject_set.name]=${encodeURIComponent(testData.question_paper_id)}`)
       .then(res => res.json())
       .then(data => {
         const optionLabels = ['A', 'B', 'C', 'D'];
@@ -18,10 +18,10 @@ export default function ReviewScreen({ route, navigation }) {
           const correctIndex = optionLabels.indexOf(q.attributes.field_correct_answer);
           return {
             title: q.attributes.title,
-            options: q.attributes.field_options,
-            correct: q.attributes.field_options[correctIndex],
+            options: q.attributes.field_option,
+            correct: q.attributes.field_option[correctIndex],
             explanation: q.attributes.field_answer_explanation?.processed || '',
-            qKey: `Q${idx + 1}`
+            qKey: `Q${idx + 1}`,
           };
         });
 

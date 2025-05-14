@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create a base API instance
 const api = axios.create({
-  baseURL: 'https://neet.crudpixel.tech',
+  baseURL: 'https://studyneet.crudpixel.tech',
   withCredentials: true, // Send cookies
 });
 

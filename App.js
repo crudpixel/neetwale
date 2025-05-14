@@ -10,6 +10,7 @@ import FirstScreen from './screens/FirstScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ReviewScreen from './screens/ReviewScreen';
 import MyTestsScreen from './screens/MyTest';
+import DrawerNavigator from './screens/DrawerNavigator';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,7 @@ export default function App() {
         <Stack.Screen name="Questions" component={QuestionsScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
+         {/* <Stack.Screen name="MainDrawer" component={DrawerNavigator} /> */}
         <Stack.Screen name="Home" component={FirstScreen} />
         <Stack.Screen name="test" component={MyTestsScreen} />
         <Stack.Screen name="review" component={ReviewScreen} />

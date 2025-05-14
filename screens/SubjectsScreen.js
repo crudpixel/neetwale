@@ -7,7 +7,9 @@ const subjects = ['Physics', 'Chemistry', 'Biology'];
 export default function SubjectsScreen({ navigation }) {
 
   const handleLogout = async () => {
+    
     await AsyncStorage.removeItem('user');
+    logoutUser();
     navigation.navigate('Home')
   }
 
@@ -15,9 +17,8 @@ export default function SubjectsScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Select The Subject for Real Time Test.</Text>
-      <Button title="Review" onPress={() => navigation.navigate("test")} />
-      {/* <Button title="Login" onPress={() => navigation.navigate('Login')} /> */}
+      
+      {/* <Button title="Review" onPress={() => navigation.navigate("test")} /> */}
       <Button title="Logout" onPress={handleLogout} />
       {subjects.map((subject, index) => (
         <TouchableOpacity
@@ -41,11 +42,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 
-  heading: {
-    fontSize: 20,
-    textAlign: "center",
-    marginBottom: 20,
-  },
   card: {
     backgroundColor: '#f2f2f2',
     borderRadius: 12,

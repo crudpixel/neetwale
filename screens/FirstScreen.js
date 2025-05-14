@@ -5,7 +5,7 @@ import { Button, Text, View, StyleSheet } from 'react-native';
 const FirstScreen = ({ navigation }) => {
   return (
     <View style={styles.firstContainer}>
-      <Text style={styles.h1}>Hello from neetwale 👋</Text>
+      <Text style={styles.h1}>Study With Neetwala 👋</Text>
       <View style={{ marginTop: 10, }}>
         <Button title="Login" onPress={() => navigation.navigate('Login')} />
       </View>

@@ -9,10 +9,10 @@ export default function RegisterScreen({ navigation }) {
 
   const handleRegister = async () => {
 
-    const tokenRes = await fetch('https://neet.crudpixel.tech/session/token');
+    const tokenRes = await fetch('https://studyneet.crudpixel.tech/session/token');
     const csrfToken = await tokenRes.text();
 
-    fetch('https://neet.crudpixel.tech/jsonapi/user/user', {
+    fetch('https://studyneet.crudpixel.tech/jsonapi/user/user', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/vnd.api+json',
