@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, Button, StyleSheet, ActivityIndicator,ScrollView} from 'react-native';
 
 export default function ReviewScreen({ route, navigation }) {
   const { testData } = route.params;
@@ -39,6 +39,7 @@ export default function ReviewScreen({ route, navigation }) {
   const currentQuestion = questions[currentIndex];
   const selectedAnswer = studentAnswers[currentQuestion.qKey];
 
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Reviewing: {testData.question_paper_id}</Text>
@@ -59,13 +60,16 @@ export default function ReviewScreen({ route, navigation }) {
           </View>
         );
       })}
-
+       <ScrollView>
       <Text style={styles.correctAnswer}>✅ Correct Answer: {currentQuestion.correct}</Text>
       {currentQuestion.explanation ? (
-        <Text style={styles.explanationText}>💡 Explanation: {currentQuestion.explanation.replace(/<[^>]+>/g, '')}</Text>
+     
+        <Text style={styles.explanationText}>💡 Explanation: {currentQuestion.explanation.replace(/<[^>]+>/g, " ")}</Text>
+        /* <RenderHtml contentWidth={width} source={{ html: `<div>${currentQuestion.explanation}</div>` }} /> */
+   
       ) : null}
 
-
+</ScrollView>
       <View style={styles.navigationButtons}>
         {currentIndex > 0 && (
           <Button title="Previous" onPress={() => setCurrentIndex(prev => prev - 1)} />
