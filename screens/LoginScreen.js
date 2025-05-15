@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+import { View, TextInput, Button, Text, StyleSheet, Alert,TouchableOpacity,Image } from 'react-native';
 import { logoutUser } from '../cookiesApi';
 import CookieManager from '@react-native-cookies/cookies';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -47,6 +47,7 @@ export default function LoginScreen({ navigation }) {
 
         //  const storedUser = await AsyncStorage.getItem('user');
         // console.log('Stored user:', storedUser);
+        Alert.alert(`${username} you Login SuccessFully.`)
         navigation.navigate('Subjects');
       } else {
         setError(data.message || 'Login failed');
@@ -59,18 +60,39 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <TextInput placeholder="Username" value={username} onChangeText={setUsername} style={styles.input} />
-      <TextInput placeholder="Password" secureTextEntry value={password} onChangeText={setPassword} style={styles.input} />
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-      <Button title="Login" onPress={handleLogin} />
-      <Button title="Register" onPress={() => navigation.navigate('Register')} />
+     <Image source={require('../asstes/Login.jpg')} style={styles.image} resizeMode="contain" />
 
+      <TextInput  placeholder="Username" value={username} onChangeText={setUsername} style={styles.input} />
+      <TextInput  placeholder="Password" secureTextEntry value={password} onChangeText={setPassword} style={styles.input} />
+      {error ? <Text style={styles.error}>{error}</Text> : null}
+     
+      <Button title="Login" onPress={handleLogin} />
+      <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Register')}>
+          <Text style={styles.buttonText}>If You have not Registerd?  Register</Text>
+        </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20 },
-  input: { borderWidth: 1, padding: 10, marginVertical: 5 },
-  error: { color: 'red' }
+  container: { padding: 20,backgroundColor:"white"  },
+  input: {
+     borderWidth: 1,
+     padding: 10,
+     marginVertical: 5,
+     borderRadius:10
+     },
+  error: { color: 'red' },
+   buttonText:{
+   textAlign:"center",
+   margin:10,
+   color:"black",
+   fontSize:16,
+   fontWeight:400,
+   },
+     image: {
+    width: '100%',
+    height: 400,
+    
+  },
 });

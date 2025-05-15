@@ -18,8 +18,8 @@ export default function SubjectsScreen({ navigation }) {
   return (
     <View style={styles.container}>
       
-      {/* <Button title="Review" onPress={() => navigation.navigate("test")} /> */}
-      <Button title="Logout" onPress={handleLogout} />
+  
+      {/* <Button title="Logout" onPress={handleLogout} /> */}
       {subjects.map((subject, index) => (
         <TouchableOpacity
           key={subject}
@@ -37,9 +37,9 @@ export default function SubjectsScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    // flexDirection: 'row',
+    // flexWrap: 'wrap',
+    // justifyContent: 'space-between',
   },
 
   card: {
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 30,
     marginBottom: 20,
-    width: '47%',
+    width: '100%',
     alignItems: 'center',
     elevation: 3, // Android shadow
     shadowColor: '#000', // iOS shadow

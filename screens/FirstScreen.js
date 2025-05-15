@@ -1,16 +1,18 @@
 import React from 'react';
 import { Button, Text, View, StyleSheet } from 'react-native';
+import IntroCarousel from './IntroCarousel';
 
 
 const FirstScreen = ({ navigation }) => {
   return (
     <View style={styles.firstContainer}>
-      <Text style={styles.h1}>Study With Neetwala  👋</Text>
+      <IntroCarousel/>
+      {/* <Text style={styles.h1}>Study With Neetwala 👋</Text> */}
       <View style={{ marginTop: 10, }}>
-        <Button title="Login" onPress={() => navigation.navigate('Login')} />
+        {/* <Button title="Login" onPress={() => navigation.navigate('Login')} /> */}
       </View>
       <View style={{ marginTop: 10 }}>
-        <Button title="Register" onPress={() => navigation.navigate('Register')} />
+        {/* <Button title="Register" onPress={() => navigation.navigate('Register')} /> */}
       </View>
     </View>
   );
@@ -29,6 +31,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "yellow"
+   
   }
 })
