@@ -16,6 +16,8 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 
+ 
+
   const [initialRoute, setInitialRoute] = React.useState(null);
 
   useEffect(() => {
@@ -31,6 +33,8 @@ export default function App() {
     };
     checkUser();
   }, []);
+
+
 
   return (
     

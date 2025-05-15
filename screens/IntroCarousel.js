@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '80%',
-    height: 500,
+    height: 400,
     marginBottom: 20,
   },
   title: {
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   dotsContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 60,
+    marginBottom: 80,
   },
   dot: {
     width: 8,
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   padding:15,
   borderRadius: 6,
   alignSelf: 'center',
-  marginBottom: 60,
+  marginBottom: 120,
 },
 buttonText: {
   color: '#fff',

@@ -1,19 +1,20 @@
-import React from 'react';
+import React,{useLayoutEffect} from 'react';
 import { Button, Text, View, StyleSheet } from 'react-native';
 import IntroCarousel from './IntroCarousel';
 
 
 const FirstScreen = ({ navigation }) => {
+useLayoutEffect(() => {
+  navigation.setOptions({
+    headerBackVisible: false, // Hides back arrow in v6+
+  });
+}, [navigation]);
+
+
+
   return (
     <View style={styles.firstContainer}>
       <IntroCarousel/>
-      {/* <Text style={styles.h1}>Study With Neetwala 👋</Text> */}
-      <View style={{ marginTop: 10, }}>
-        {/* <Button title="Login" onPress={() => navigation.navigate('Login')} /> */}
-      </View>
-      <View style={{ marginTop: 10 }}>
-        {/* <Button title="Register" onPress={() => navigation.navigate('Register')} /> */}
-      </View>
     </View>
   );
 };
