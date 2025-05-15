@@ -9,18 +9,18 @@ const { width } = Dimensions.get('window');
 const slides = [
   {
     key: '1',
-    title: 'Welcome to Our App',
-    image: require('../asstes/intro1.png'),
+    title: 'Welcome to Study with Neetwala',
+    image: require('../asstes/intro11.jpg'),
   },
   {
     key: '2',
     title: 'Track Your Progress',
-    image: require('../asstes/intro1.png'),
+    image: require('../asstes/intro2.jpg'),
   },
   {
     key: '3',
     title: 'Achieve Your Goals',
-    image: require('../asstes/intro1.png'),
+    image: require('../asstes/intro3.jpg'),
   },
 ];
 
@@ -80,17 +80,18 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '80%',
-    height: 600,
+    height: 500,
     marginBottom: 20,
   },
   title: {
     fontSize: 22,
     textAlign: 'center',
+    fontWeight:500,
   },
   dotsContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 20,
+    marginBottom: 60,
   },
   dot: {
     width: 8,
@@ -105,17 +106,16 @@ const styles = StyleSheet.create({
     height: 12,
   },
     button: {
-  backgroundColor: 'blue',
-  paddingVertical: 12,
-  paddingHorizontal: 32,
+  backgroundColor: '#0063e5',
+  padding:15,
   borderRadius: 6,
   alignSelf: 'center',
-  marginBottom: 40,
+  marginBottom: 60,
 },
 buttonText: {
   color: '#fff',
   fontSize: 16,
-  fontWeight: 'bold',
+  fontWeight: '400',
 },
 
 });

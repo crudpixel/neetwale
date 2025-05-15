@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Alert,TouchableOpacity,Image } from 'react-native';
+import { View, TextInput, Button, Text, StyleSheet, Alert, TouchableOpacity, Image } from 'react-native';
 import { logoutUser } from '../cookiesApi';
 import CookieManager from '@react-native-cookies/cookies';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -60,39 +60,62 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-     <Image source={require('../asstes/Login.jpg')} style={styles.image} resizeMode="contain" />
+      <Image source={require('../asstes/Login.jpg')} style={styles.image} resizeMode="contain" />
 
-      <TextInput  placeholder="Username" value={username} onChangeText={setUsername} style={styles.input} />
-      <TextInput  placeholder="Password" secureTextEntry value={password} onChangeText={setPassword} style={styles.input} />
+      <TextInput placeholder="Username" value={username} onChangeText={setUsername} style={styles.input} />
+      <TextInput placeholder="Password" secureTextEntry value={password} onChangeText={setPassword} style={styles.input} />
       {error ? <Text style={styles.error}>{error}</Text> : null}
-     
-      <Button title="Login" onPress={handleLogin} />
-      <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Register')}>
-          <Text style={styles.buttonText}>If You have not Registerd?  Register</Text>
-        </TouchableOpacity>
+
+      {/* <Button title="Login" onPress={handleLogin} /> */}
+       <TouchableOpacity style={styles.button1} onPress={handleLogin}><Text style={styles.buttonText1}>Login</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Register')}>
+        <Text style={styles.buttonText}>
+          Don't have an account?{' '}
+          <Text style={styles.signUpText}>Sign Up</Text>
+        </Text>
+
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20,backgroundColor:"white"  },
+  container: {flex:1, padding: 20, backgroundColor: "white" },
   input: {
-     borderWidth: 1,
-     padding: 10,
-     marginVertical: 5,
-     borderRadius:10
-     },
+    borderWidth: 1,
+    padding: 15,
+    marginVertical: 5,
+    borderRadius: 10,
+    marginBottom: 10,
+    fontSize: 16
+  },
   error: { color: 'red' },
-   buttonText:{
-   textAlign:"center",
-   margin:10,
-   color:"black",
-   fontSize:16,
-   fontWeight:400,
-   },
-     image: {
+  buttonText: {
+    textAlign: "center",
+    margin: 10,
+    color: "black",
+    fontSize: 16,
+    fontWeight: 400,
+  },
+  image: {
     width: '100%',
     height: 400,
-    
+
   },
+  signUpText: {
+    color: "#0063e5",
+    fontWeight: 600
+  },
+  button1:{
+  backgroundColor:"#0063e5",
+  padding:15,
+  borderRadius:10
+  },
+  buttonText1:{
+     color:"white",
+    textAlign:"center",
+    fontSize:16,
+    fontWeight:400
+    
+  }
 });

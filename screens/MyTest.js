@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   title: { fontSize: 22, fontWeight: 'bold', marginBottom: 10 },
   testItem: {
     padding: 15,
-    backgroundColor: 'blue',
+    backgroundColor: '#0063e5',
     borderRadius: 8,
     color:'white',
     marginBottom: 10,
