@@ -16,7 +16,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  const [initialRoute, setInitialRoute] = React.useState('Home');
+  const [initialRoute, setInitialRoute] = React.useState(null);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -24,7 +24,10 @@ export default function App() {
       console.log(userData);
       if (userData) {
         setInitialRoute('Subjects');
+      }else{
+         setInitialRoute('Home');
       }
+      
     };
     checkUser();
   }, []);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{useLayoutEffect}from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Button } from 'react-native';
 import { logoutUser } from '../cookiesApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,13 +13,22 @@ export default function SubjectsScreen({ navigation }) {
     navigation.navigate('Home')
   }
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={handleLogout} style={{ marginRight: 15 }}>
+          <Text style={{ color: 'black', fontWeight: 'bold' }}>Logout</Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
 
 
   return (
     <View style={styles.container}>
       
   
-      {/* <Button title="Logout" onPress={handleLogout} /> */}
+
       {subjects.map((subject, index) => (
         <TouchableOpacity
           key={subject}
