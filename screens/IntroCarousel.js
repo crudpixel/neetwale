@@ -58,11 +58,11 @@ const IntroCarousel = () => {
           />
         ))}
       </View>
-          {currentIndex === slides.length - 1 && (
+         
   <TouchableOpacity style={styles.button} onPress={() =>navigation.navigate('Login')}>
     <Text style={styles.buttonText}>Get Started</Text>
   </TouchableOpacity>
-)}
+
 
     </View>
   );
