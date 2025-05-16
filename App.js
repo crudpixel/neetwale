@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ReviewScreen from './screens/ReviewScreen';
 import MyTestsScreen from './screens/MyTest';
 import DrawerNavigator from './screens/DrawerNavigator';
+import BottomTabNavigator from './screens/BottomTabNavigator';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,7 +26,7 @@ export default function App() {
       const userData = await AsyncStorage.getItem('user');
       console.log(userData);
       if (userData) {
-        setInitialRoute('Subjects');
+        setInitialRoute('Dashboard');
       }else{
          setInitialRoute('Home');
       }
@@ -40,12 +41,13 @@ export default function App() {
     
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRoute}>
-        <Stack.Screen name="Subjects" component={SubjectsScreen} />
+        <Stack.Screen name="TestSeries" component={SubjectsScreen} />
         <Stack.Screen name="Sets" component={SetsScreen} />
         <Stack.Screen name="Questions" component={QuestionsScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
          {/* <Stack.Screen name="MainDrawer" component={DrawerNavigator} /> */}
+        <Stack.Screen name="Dashboard" component={BottomTabNavigator} options={{ headerShown: false }}  />
         <Stack.Screen name="Home" component={FirstScreen} />
         <Stack.Screen name="test" component={MyTestsScreen} />
         <Stack.Screen name="review" component={ReviewScreen} />

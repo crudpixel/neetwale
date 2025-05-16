@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState ,useLayoutEffect} from 'react';
 import { View, Text, Button, ActivityIndicator, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -17,6 +17,12 @@ export default  function QuestionsScreen({ route, navigation }) {
   const [userSolvedId, setuserSolvedId] = useState("")
      
   console.log(setId)
+
+      // useLayoutEffect(() => {
+      //   navigation.setOptions({
+      //     headerBackVisible: false, // Hides back arrow in v6+
+      //   });
+      // }, [navigation]);
 
   useEffect(() => {
 

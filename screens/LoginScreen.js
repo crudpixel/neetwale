@@ -48,7 +48,7 @@ export default function LoginScreen({ navigation }) {
         //  const storedUser = await AsyncStorage.getItem('user');
         // console.log('Stored user:', storedUser);
         Alert.alert(`${username} you Login SuccessFully.`)
-        navigation.navigate('Subjects');
+        navigation.navigate('Dashboard');
       } else {
         setError(data.message || 'Login failed');
       }

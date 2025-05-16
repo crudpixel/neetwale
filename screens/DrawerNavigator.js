@@ -10,7 +10,7 @@ const Drawer = createDrawerNavigator();
 export default function DrawerNavigator() {
   return (
     <Drawer.Navigator initialRouteName="Subjects">
-      <Drawer.Screen name="Subjects" component={SubjectsScreen} />
+      <Drawer.Screen name="Dashboard" component={SubjectsScreen} />
       <Drawer.Screen name="Review" component={ReviewScreen} />
       <Drawer.Screen name="My Tests" component={MyTestsScreen} />
     </Drawer.Navigator>
