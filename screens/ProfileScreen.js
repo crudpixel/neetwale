@@ -39,7 +39,7 @@ export default function ProfileScreen({ navigation }) {
   const handleLogout = async () => {
     await AsyncStorage.removeItem('user');
     logoutUser();
-    navigation.replace('Login');
+    navigation.replace('Home');
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Alert, TouchableOpacity, Image } from 'react-native';
+import { View, TextInput, Button, Text, StyleSheet, Alert, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { logoutUser } from '../cookiesApi';
 import CookieManager from '@react-native-cookies/cookies';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -59,6 +59,7 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
+    <ScrollView style={styles.container}>
     <View style={styles.container}>
       <Image source={require('../asstes/Login.jpg')} style={styles.image} resizeMode="contain" />
 
@@ -76,6 +77,7 @@ export default function LoginScreen({ navigation }) {
 
       </TouchableOpacity>
     </View>
+    </ScrollView>
   );
 }
 

@@ -1,8 +1,8 @@
-import React, { useEffect, useState ,useLayoutEffect} from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { View, Text, Button, ActivityIndicator, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default  function QuestionsScreen({ route, navigation }) {
+export default function QuestionsScreen({ route, navigation }) {
   const { setId } = route.params; // Get the setId from route params
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,18 +11,18 @@ export default  function QuestionsScreen({ route, navigation }) {
   const [userAnswers, setUserAnswers] = useState({});
   const [score, setScore] = useState(0);
   const [paperSet, setPaperSet] = useState('');
-  const [timeLeft, setTimeLeft] = useState(60*60);
+  const [timeLeft, setTimeLeft] = useState(60 * 60);
   const [test, setTest] = useState('');
   const [userId, setUserId] = useState("")
   const [userSolvedId, setuserSolvedId] = useState("")
-     
-  console.log(setId)
 
-      // useLayoutEffect(() => {
-      //   navigation.setOptions({
-      //     headerBackVisible: false, // Hides back arrow in v6+
-      //   });
-      // }, [navigation]);
+  // console.log(setId)
+
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerBackVisible: false, // Hides back arrow in v6+
+  //   });
+  // }, [navigation]);
 
   useEffect(() => {
 
@@ -38,7 +38,7 @@ export default  function QuestionsScreen({ route, navigation }) {
 
 
 
-  
+
     // Fetch the questions data based on the setId
     fetch(`https://studyneet.crudpixel.tech/jsonapi/node/question?filter[field_subject_set.id]=${setId}`)
       .then(res => res.json())
@@ -59,14 +59,14 @@ export default  function QuestionsScreen({ route, navigation }) {
         setLoading(false);
       });
 
-      userData();
+    userData();
   }, [setId]);
 
-  const userData=async()=>{
-     const user = JSON.parse(await AsyncStorage.getItem('user'));
-      const user_id = user?.userid;
-      setUserId(user_id);
-      
+  const userData = async () => {
+    const user = JSON.parse(await AsyncStorage.getItem('user'));
+    const user_id = user?.userid;
+    setUserId(user_id);
+
   }
 
 
@@ -136,7 +136,7 @@ export default  function QuestionsScreen({ route, navigation }) {
         score: score,
         answer: JSON.stringify(userAnswers),
       };
-      console.log(testResult)
+      console.log(".....", testResult)
       const response = await fetch('https://studyneet.crudpixel.tech/api/submit-result', {
         method: 'POST',
         headers: {
@@ -145,7 +145,7 @@ export default  function QuestionsScreen({ route, navigation }) {
         body: JSON.stringify(testResult),
       });
 
-         try {
+      try {
         const res = await fetch(`https://studyneet.crudpixel.tech/api/student-result?user_id=${userId}`);
         const json = await res.json();
 
@@ -159,7 +159,7 @@ export default  function QuestionsScreen({ route, navigation }) {
         const solvedId = latestResult?.solved_id;
 
         setuserSolvedId(solvedId)
-        console.log("dfdfd",solvedId);
+        console.log("dfdfd", solvedId);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching tests:', err);
@@ -170,10 +170,26 @@ export default  function QuestionsScreen({ route, navigation }) {
       console.log("Result submitted:", data);
 
       if (response.ok) {
+ // Leaderboard data send
+        const knownSubjects = ['Physics', 'Chemistry', 'Biology'];
+        const subject = knownSubjects.find(s =>
+          paperSet.toLowerCase().includes(s.toLowerCase())
+        );
+
+        await fetch('https://studyneet.crudpixel.tech/neet-tracker/update-leaderboard-score', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_id: loginUser.userid,
+            subject: subject,
+            score: score
+          })
+        });
+
         Alert.alert(
           'Success',
           'Your test has been submitted successfully!',
-          [{ text: 'OK', onPress: () => navigation.navigate('test',{solved_id:userSolvedId}) }]
+          [{ text: 'OK', onPress: () => navigation.navigate('test', { solved_id: userSolvedId }) }]
         );
       } else {
         console.warn("Failed to submit result:", data);

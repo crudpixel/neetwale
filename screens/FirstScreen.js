@@ -22,6 +22,11 @@ useLayoutEffect(() => {
 export default FirstScreen;
 
 const styles = StyleSheet.create({
+  firstContainer: {
+  flex: 1,
+  backgroundColor: '#f8f9fc',
+}
+,
 
   h1: {
     fontSize: 24,

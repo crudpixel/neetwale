@@ -1,4 +1,4 @@
-import React ,{useEffect} from 'react';
+import React ,{useEffect,useState} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SubjectsScreen from './screens/SubjectsScreen';
@@ -13,28 +13,28 @@ import MyTestsScreen from './screens/MyTest';
 import DrawerNavigator from './screens/DrawerNavigator';
 import BottomTabNavigator from './screens/BottomTabNavigator';
 
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
 
  
-
-  const [initialRoute, setInitialRoute] = React.useState(null);
+  const [initialRoute, setInitialRoute] = useState(null);
 
   useEffect(() => {
     const checkUser = async () => {
       const userData = await AsyncStorage.getItem('user');
-      console.log(userData);
       if (userData) {
         setInitialRoute('Dashboard');
-      }else{
-         setInitialRoute('Home');
+      } else {
+        setInitialRoute('Home');
       }
-      
     };
     checkUser();
   }, []);
 
+  // Avoid rendering until the route is decided
+  if (!initialRoute) return null;
 
 
   return (
@@ -51,6 +51,8 @@ export default function App() {
         <Stack.Screen name="Home" component={FirstScreen} />
         <Stack.Screen name="test" component={MyTestsScreen} />
         <Stack.Screen name="review" component={ReviewScreen} />
+        
+
       </Stack.Navigator>
     </NavigationContainer>
 

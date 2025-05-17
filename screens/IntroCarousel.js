@@ -1,10 +1,16 @@
-// IntroCarousel.js
-
 import React, { useRef, useState } from 'react';
-import { View, Text, FlatList, Image, StyleSheet, Dimensions,TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const slides = [
   {
@@ -25,7 +31,7 @@ const slides = [
 ];
 
 const IntroCarousel = () => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const viewableItemsChanged = useRef(({ viewableItems }) => {
     setCurrentIndex(viewableItems[0]?.index || 0);
@@ -50,6 +56,7 @@ const IntroCarousel = () => {
         onViewableItemsChanged={viewableItemsChanged}
         viewabilityConfig={viewConfig}
       />
+
       <View style={styles.dotsContainer}>
         {slides.map((_, index) => (
           <View
@@ -58,12 +65,15 @@ const IntroCarousel = () => {
           />
         ))}
       </View>
-         
-  <TouchableOpacity style={styles.button} onPress={() =>navigation.navigate('Login')}>
-    <Text style={styles.buttonText}>Get Started</Text>
-  </TouchableOpacity>
 
 
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.replace('Login')}
+        >
+          <Text style={styles.buttonText}>Get Started</Text>
+        </TouchableOpacity>
+   
     </View>
   );
 };
@@ -71,53 +81,58 @@ const IntroCarousel = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f8f9fc',
   },
   slide: {
-    width: width,
+    width,
     alignItems: 'center',
-    padding: 20,
+    justifyContent: 'center',
+    paddingTop: 60,
+    paddingBottom: 20,
   },
   image: {
-    width: '80%',
-    height: 400,
-    marginBottom: 20,
+    width: '85%',
+    height: height * 0.45,
+    marginBottom: 30,
   },
   title: {
     fontSize: 22,
     textAlign: 'center',
-    fontWeight:500,
+    fontWeight: '600',
+    color: '#333',
+    paddingHorizontal: 20,
   },
   dotsContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 80,
+    marginBottom: 20,
   },
   dot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#aaa',
-    margin: 5,
+    backgroundColor: '#ccc',
+    marginHorizontal: 5,
   },
   dotActive: {
-    backgroundColor: '#000',
+    backgroundColor: '#0063e5',
     width: 12,
     height: 12,
   },
-    button: {
-  backgroundColor: '#0063e5',
-  padding:15,
-  borderRadius: 6,
-  alignSelf: 'center',
-  marginBottom: 120,
-},
-buttonText: {
-  color: '#fff',
-  fontSize: 16,
-  fontWeight: '400',
-},
-
+  button: {
+    backgroundColor: '#0063e5',
+    paddingVertical: 14,
+    paddingHorizontal: 60,
+    borderRadius: 30,
+    alignSelf: 'center',
+    marginBottom: 40,
+    elevation: 3,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
 });
 
 export default IntroCarousel;

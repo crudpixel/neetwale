@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Alert, StyleSheet,Image ,TouchableOpacity,Button} from 'react-native';
+import { View, TextInput, Alert, StyleSheet,Image ,TouchableOpacity,Button, ScrollView} from 'react-native';
 
 export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState('');
@@ -43,6 +43,7 @@ export default function RegisterScreen({ navigation }) {
   };
 
   return (
+    <ScrollView style={styles.container}>
     <View style={styles.container}>
       <Image source={require('../asstes/register.jpg')} style={styles.image} resizeMode="contain" />
       <TextInput placeholder="Username" value={name} onChangeText={setName} style={styles.input} />
@@ -53,6 +54,7 @@ export default function RegisterScreen({ navigation }) {
 </TouchableOpacity> */}
  <Button title="Register" onPress={handleRegister}/>
     </View>
+    </ScrollView>
   );
 }
 

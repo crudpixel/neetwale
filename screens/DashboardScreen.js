@@ -30,9 +30,9 @@ export default function DashboardScreen({ navigation }) {
   }, []);
 
   const subjects = [
-    { title: 'Physics' },
-    { title: 'Chemistry' },
-    { title: 'Biology' },
+    { title: 'Physics Test' },
+    { title: 'Chemistry Test' },
+    { title: 'Biology Test' },
     { title: 'Previous Year Papers' },
     { title: 'NCERT' },
     { title: 'Mock Test' },
@@ -112,9 +112,18 @@ export default function DashboardScreen({ navigation }) {
           <TouchableOpacity
             key={index}
             style={styles.subjectCard}
-            onPress={() => {
-              // navigation.navigate('YourTargetScreen', { subject: item.title });
-            }}
+      onPress={() => {
+        if (item.title === 'Physics Test') {
+          navigation.navigate('Sets', { subject:"Physics" })
+        }
+        if (item.title === 'Chemistry Test') {
+          navigation.navigate('Sets', { subject:"Chemistry" })
+        }
+        if (item.title === 'Biology Test') {
+          navigation.navigate('Sets', { subject:"Biology" })
+        }
+        
+      }}
           >
             <Text style={styles.subjectText}>{item.title}</Text>
           </TouchableOpacity>
