@@ -26,12 +26,7 @@ export default function SetsScreen({ route, navigation }) {
     <ScrollView>
     <View style={{ padding: 20 }}>
       {sets.map(set => (
-        // <Button
-        //   key={set.id}
-        //   title={set.name}
-        //   onPress={() => navigation.navigate('Questions', { setId: set.id })}
-        // />
-                <TouchableOpacity
+   <TouchableOpacity
                   key={set.id}
                   
                   style={styles.card}

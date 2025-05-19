@@ -178,11 +178,12 @@ export default function QuestionsScreen({ route, navigation }) {
 
         await fetch('https://studyneet.crudpixel.tech/neet-tracker/update-leaderboard-score', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json'},
           body: JSON.stringify({
             user_id: loginUser.userid,
             subject: subject,
-            score: score
+            score: score,
+            username:loginUser.name
           })
         });
 

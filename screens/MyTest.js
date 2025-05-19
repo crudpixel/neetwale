@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState ,useLayoutEffect} from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   StyleSheet,
+  Button
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -13,6 +14,12 @@ export default function MyTestsScreen({ route, navigation }) {
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
   const solved_id = route?.Params || ''; // fallback
+
+      useLayoutEffect(() => {
+          navigation.setOptions({
+              headerBackVisible: false, // Hides back arrow in v6+
+          });
+      }, [navigation]);
 
   useEffect(() => {
     const fetchTests = async () => {
@@ -84,7 +91,9 @@ export default function MyTestsScreen({ route, navigation }) {
                 onPress={() => navigation.navigate('review', { testData: item })}
               >
                 <Text style={styles.reviewBtn}>Review Your Test</Text>
+               
               </TouchableOpacity>
+              <Button title="go to dashboard" onPress={()=>navigation.navigate("Dashboard")}/>
             </View>
 
             {/* Leaderboard Card */}
@@ -109,99 +118,110 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     flex: 1,
-    backgroundColor: '#f2f2f2',
+    backgroundColor: '#f8f9fc',
   },
   title: {
-    fontSize: 22,
+    fontSize: 26,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 20,
+    color: '#333',
+    textAlign: 'center',
   },
   testCard: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 12,
-    marginBottom: 15,
-    elevation: 4,
+    backgroundColor: '#ffffff',
+    padding: 18,
+    borderRadius: 16,
+    marginBottom: 20,
     shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 3,
   },
   testTitle: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    color: '#333',
+    fontWeight: '700',
+    fontSize: 20,
+    color: '#2c3e50',
+    marginBottom: 10,
   },
   scoreBox: {
-    backgroundColor: '#e6f0ff',
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 10,
-    marginBottom: 10,
+    backgroundColor: '#e8f0fe',
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderRadius: 12,
     alignItems: 'center',
+    marginVertical: 12,
   },
   scoreText: {
-    fontSize: 16,
-    color: '#444',
+    fontSize: 15,
+    color: '#5c6b73',
   },
   scoreValue: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     color: '#0063e5',
     marginTop: 5,
   },
   attemptedText: {
     fontSize: 14,
-    color: '#666',
+    color: '#888',
     marginBottom: 10,
+    fontStyle: 'italic',
   },
   testItem: {
-    padding: 15,
+    padding: 14,
     backgroundColor: '#0063e5',
-    borderRadius: 8,
+    borderRadius: 10,
+    alignItems: 'center',
     marginTop: 10,
+    marginBottom:20
   },
   reviewBtn: {
     color: 'white',
-    textAlign: 'center',
     fontSize: 16,
     fontWeight: '600',
+    
   },
-
   leaderboardCard: {
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
     padding: 16,
-    borderRadius: 12,
-    marginBottom: 25,
-    elevation: 3,
+    borderRadius: 16,
+    marginBottom: 30,
+    marginTop: 5,
     shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 2,
   },
   leaderboardTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#333',
+    marginBottom: 12,
+    color: '#34495e',
   },
   leaderboardRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 6,
+    marginBottom: 8,
+    backgroundColor: '#f0f4f8',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
   },
   leaderboardRank: {
     width: 30,
-    fontWeight: '600',
-    color: '#666',
+    fontWeight: '700',
+    color: '#333',
   },
   leaderboardName: {
     flex: 1,
+    fontWeight: '500',
     color: '#444',
   },
   leaderboardScore: {
-    fontWeight: '600',
-    color: '#007bff',
+    fontWeight: '700',
+    color: '#27ae60',
   },
   centered: {
     flex: 1,
