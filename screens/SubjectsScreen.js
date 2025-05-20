@@ -2,7 +2,7 @@ import React ,{useLayoutEffect}from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Button } from 'react-native';
 import { logoutUser } from '../cookiesApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const subjects = ['Physics', 'Chemistry', 'Biology'];
+const subjects = ['Physics', 'Chemistry', 'Biology','Previous Year Paper','All Subject (Mock Test)'];
 
 export default function SubjectsScreen({ navigation }) {
 
@@ -33,7 +33,7 @@ export default function SubjectsScreen({ navigation }) {
         <TouchableOpacity
           key={subject}
           style={styles.card}
-          onPress={() => navigation.navigate('Sets', { subject })}
+          onPress={() => navigation.navigate('Question-sets', { subject })}
         >
           <Text style={styles.cardText}>{subject}</Text>
         </TouchableOpacity>

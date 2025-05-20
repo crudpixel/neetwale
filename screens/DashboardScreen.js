@@ -17,19 +17,26 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const { width: screenWidth } = Dimensions.get('window');
 
 export default function DashboardScreen({ navigation }) {
+
   const [user, setUser] = useState('');
   const [physicsAvg, setPhysicsAvg] = useState('0');
   const [chemistryAvg, setChemistryAvg] = useState('0');
   const [biologyAvg, setBiologyAvg] = useState('0');
+  const [previousYearAvg, setPreviousYearAvg] = useState('0');
+  const [mockTestAvg, setMockTestAvg] = useState('0');
   const [setsCountPerSubject, setSetsCountPerSubject] = useState({
     Physics: 0,
     Chemistry: 0,
     Biology: 0,
+    Previous:0,
+    Mock:0,
   });
   const [attemptedSetsPerSubject, setAttemptedSetsPerSubject] = useState({
     Physics: 0,
     Chemistry: 0,
     Biology: 0,
+     Previous:0,
+     Mock:0,
   });
   const [latestSubmissions, setLatestSubmissions] = useState({});
 
@@ -68,6 +75,8 @@ export default function DashboardScreen({ navigation }) {
                 Physics: [],
                 Chemistry: [],
                 Biology: [],
+                Previous:[],
+                Mock:[],
               };
 
               Object.values(tempLatestSubmissions).forEach((item) => {
@@ -80,7 +89,13 @@ export default function DashboardScreen({ navigation }) {
                   scores.Chemistry.push(score);
                 } else if (subject.includes('Biology')) {
                   scores.Biology.push(score);
-                }
+                } 
+                 else if (subject.includes('Previous')) {
+                  scores.Previous.push(score);
+                } 
+                 else if (subject.includes('Mock')) {
+                  scores.Mock.push(score);
+                } 
               });
 
               const average = (arr) =>
@@ -91,6 +106,8 @@ export default function DashboardScreen({ navigation }) {
               setPhysicsAvg(average(scores.Physics));
               setChemistryAvg(average(scores.Chemistry));
               setBiologyAvg(average(scores.Biology));
+              setPreviousYearAvg(average(scores.Previous));
+              setMockTestAvg(average(scores.Mock));
             }
           }
         } catch (error) {
@@ -112,6 +129,8 @@ export default function DashboardScreen({ navigation }) {
             Physics: 0,
             Chemistry: 0,
             Biology: 0,
+            Previous:0,
+            Mock:0,
           };
 
           sets.forEach((set) => {
@@ -119,6 +138,8 @@ export default function DashboardScreen({ navigation }) {
             if (name.includes('physics')) counts.Physics += 1;
             else if (name.includes('chemistry')) counts.Chemistry += 1;
             else if (name.includes('biology')) counts.Biology += 1;
+            else if (name.includes('previous')) counts.Previous += 1;
+            else if (name.includes('mock')) counts.Mock += 1;
           });
 
           setSetsCountPerSubject(counts);
@@ -138,6 +159,8 @@ export default function DashboardScreen({ navigation }) {
       Physics: new Set(),
       Chemistry: new Set(),
       Biology: new Set(),
+      Previous: new Set(),
+      Mock: new Set(),
     };
 
     Object.values(latestSubmissions).forEach((item) => {
@@ -145,12 +168,16 @@ export default function DashboardScreen({ navigation }) {
       if (subject.includes('Physics')) attemptedCounts.Physics.add(subject);
       else if (subject.includes('Chemistry')) attemptedCounts.Chemistry.add(subject);
       else if (subject.includes('Biology')) attemptedCounts.Biology.add(subject);
+      else if (subject.includes('Previous')) attemptedCounts.Previous.add(subject);
+      else if (subject.includes('Mock')) attemptedCounts.Mock.add(subject);
     });
 
     setAttemptedSetsPerSubject({
       Physics: attemptedCounts.Physics.size,
       Chemistry: attemptedCounts.Chemistry.size,
       Biology: attemptedCounts.Biology.size,
+      Previous: attemptedCounts.Previous.size,
+      Mock: attemptedCounts.Mock.size,
     });
   }, [latestSubmissions]);
 
@@ -159,7 +186,7 @@ export default function DashboardScreen({ navigation }) {
     { title: 'Chemistry Test' },
     { title: 'Biology Test' },
     { title: 'Previous Year Papers' },
-    { title: 'NCERT' },
+    { title: 'Notes' },
     { title: 'Mock Test' },
   ];
 
@@ -202,18 +229,28 @@ export default function DashboardScreen({ navigation }) {
         <View style={styles.scoreRankContainer}>
           <View style={[styles.card, { backgroundColor: '#dbeafe' }]}>
             <Text style={styles.cardTitle}>Physics</Text>
-            <Text style={styles.cardValue}>{physicsAvg}</Text>
-            <Text style={styles.cardValue}>{attemptedSetsPerSubject.Physics}/{setsCountPerSubject.Physics - 1} sets</Text>
+            <Text style={styles.cardValue}>Your Score: {physicsAvg} / </Text>
+            <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Physics}/{setsCountPerSubject.Physics - 1} sets</Text>
           </View>
           <View style={[styles.card, { backgroundColor: '#0d9488' }]}>
             <Text style={styles.cardTitle}>Chemistry</Text>
-            <Text style={styles.cardValue}>{chemistryAvg}</Text>
-            <Text style={styles.cardValue}>{attemptedSetsPerSubject.Chemistry}/{setsCountPerSubject.Chemistry - 1} sets</Text>
+            <Text style={styles.cardValue}>Your Score: {chemistryAvg} /  </Text>
+            <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Chemistry}/{setsCountPerSubject.Chemistry - 1} sets</Text>
           </View>
           <View style={[styles.card, { backgroundColor: '#15803d' }]}>
             <Text style={styles.cardTitle}>Biology</Text>
-            <Text style={styles.cardValue}>{biologyAvg}</Text>
-            <Text style={styles.cardValue}>{attemptedSetsPerSubject.Biology}/{setsCountPerSubject.Biology - 1} sets</Text>
+            <Text style={styles.cardValue}>Your Score: {biologyAvg}</Text>
+            <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Biology}/{setsCountPerSubject.Biology - 1} sets</Text>
+          </View>
+          <View style={[styles.card, { backgroundColor: 'orange' }]}>
+            <Text style={styles.cardTitle}>Previou Year set </Text>
+            <Text style={styles.cardValue}>Your Score: {previousYearAvg}</Text>
+            <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Previous}/{setsCountPerSubject.Previous - 1} sets</Text>
+          </View>
+          <View style={[styles.card, { backgroundColor: 'red' }]}>
+            <Text style={styles.cardTitle}>Mock Test </Text>
+            <Text style={styles.cardValue}>Your Score: {mockTestAvg}</Text>
+            <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Mock}/{setsCountPerSubject.Mock - 1} sets</Text>
           </View>
         </View>
       </View>
@@ -238,13 +275,22 @@ export default function DashboardScreen({ navigation }) {
             style={styles.subjectCard}
             onPress={() => {
               if (item.title === 'Physics Test') {
-                navigation.navigate('Sets', { subject: "Physics" });
+                navigation.navigate('Question-sets', { subject: "Physics" });
               }
               if (item.title === 'Chemistry Test') {
-                navigation.navigate('Sets', { subject: "Chemistry" });
+                navigation.navigate('Question-sets', { subject: "Chemistry" });
               }
               if (item.title === 'Biology Test') {
-                navigation.navigate('Sets', { subject: "Biology" });
+                navigation.navigate('Question-sets', { subject: "Biology" });
+              }
+              if (item.title === 'Previous Year Papers') {
+                navigation.navigate('Question-sets', { subject: "Previous Year Paper" });
+              }
+              if (item.title === 'Mock Test') {
+                navigation.navigate('Question-sets', { subject: "All Subject (Mock Test)" });
+              }
+              if (item.title === 'Notes') {
+                navigation.navigate('studymaterial');
               }
             }}
           >

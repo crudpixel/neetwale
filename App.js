@@ -45,7 +45,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRoute}>
         <Stack.Screen name="TestSeries" component={SubjectsScreen} />
-        <Stack.Screen name="Sets" component={SetsScreen} />
+        <Stack.Screen name="Question-sets" component={SetsScreen} />
         <Stack.Screen name="Questions" component={QuestionsScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />

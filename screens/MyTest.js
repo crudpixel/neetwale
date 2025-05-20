@@ -14,6 +14,7 @@ export default function MyTestsScreen({ route, navigation }) {
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
   const solved_id = route?.Params || ''; // fallback
+  const questionLength = route?.Params;
 
       useLayoutEffect(() => {
           navigation.setOptions({
@@ -93,7 +94,7 @@ export default function MyTestsScreen({ route, navigation }) {
                 <Text style={styles.reviewBtn}>Review Your Test</Text>
                
               </TouchableOpacity>
-              <Button title="go to dashboard" onPress={()=>navigation.navigate("Dashboard")}/>
+              <Button title="go to dashboard" onPress={()=>navigation.navigate("Dashboard",{questionLength:questionLength})}/>
             </View>
 
             {/* Leaderboard Card */}

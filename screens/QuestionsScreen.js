@@ -61,6 +61,7 @@ export default function QuestionsScreen({ route, navigation }) {
 
     userData();
   }, [setId]);
+  //console.log("total question",questions.length)
 
   const userData = async () => {
     const user = JSON.parse(await AsyncStorage.getItem('user'));
@@ -190,7 +191,7 @@ export default function QuestionsScreen({ route, navigation }) {
         Alert.alert(
           'Success',
           'Your test has been submitted successfully!',
-          [{ text: 'OK', onPress: () => navigation.navigate('test', { solved_id: userSolvedId }) }]
+          [{ text: 'OK', onPress: () => navigation.navigate('test', { solved_id: userSolvedId, questionLength:questions.length }) }]
         );
       } else {
         console.warn("Failed to submit result:", data);
