@@ -5,11 +5,9 @@ import SubjectsScreen from './SubjectsScreen';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ProfileScreen from './ProfileScreen';
 import DashboardScreen from './DashboardScreen';
+import StudyMaterial from './StudyMaterial';
 // Dummy Screens
 
-function TestScreen() {
-    return <View><Text>Test</Text></View>;
-}
 
 
 const Tab = createBottomTabNavigator();
@@ -31,7 +29,7 @@ export default function BottomTabNavigator({ navigation }) {
                     } else if (route.name === 'Profile') {
                         iconName = 'person';
                     } else if (route.name === 'Study Material') {
-                        iconName = 'Result';
+                        iconName = 'picture-as-pdf';
                     } else if (route.name === 'TestSeries') {
                         iconName = 'book';
                     }
@@ -47,7 +45,7 @@ export default function BottomTabNavigator({ navigation }) {
 
             <Tab.Screen  name="TestSeries" component={SubjectsScreen} />
             <Tab.Screen   name="Profile" component={ProfileScreen} />
-            <Tab.Screen    name="Study Material" component={TestScreen} />
+            <Tab.Screen    name="Study Material" component={StudyMaterial} />
         </Tab.Navigator>
     );
 }

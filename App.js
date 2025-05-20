@@ -12,6 +12,9 @@ import ReviewScreen from './screens/ReviewScreen';
 import MyTestsScreen from './screens/MyTest';
 import DrawerNavigator from './screens/DrawerNavigator';
 import BottomTabNavigator from './screens/BottomTabNavigator';
+import StudyMaterial from './screens/StudyMaterial';
+import PDFScreen from './screens/PDFScreen';
+import ChapterList from './screens/ChapterList';
 
 
 const Stack = createNativeStackNavigator();
@@ -51,6 +54,9 @@ export default function App() {
         <Stack.Screen name="Home" component={FirstScreen} />
         <Stack.Screen name="test" component={MyTestsScreen} />
         <Stack.Screen name="review" component={ReviewScreen} />
+        <Stack.Screen name="studymaterial" component={StudyMaterial} />
+        <Stack.Screen name="PDFScreen" component={PDFScreen} />
+        <Stack.Screen name="ChapterList" component={ChapterList} />
         
 
       </Stack.Navigator>
