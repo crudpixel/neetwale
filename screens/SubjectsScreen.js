@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const subjects = ['Physics', 'Chemistry', 'Biology','Previous Year Paper','All Subject (Mock Test)'];
 
 export default function SubjectsScreen({ navigation }) {
-
+const subjectsIcon = ['🧲', '⚗️', '🧬', '📝', '🩺'];
   const handleLogout = async () => {
     
     await AsyncStorage.removeItem('user');
@@ -35,7 +35,7 @@ export default function SubjectsScreen({ navigation }) {
           style={styles.card}
           onPress={() => navigation.navigate('Question-sets', { subject })}
         >
-          <Text style={styles.cardText}>{subject}</Text>
+          <Text style={styles.cardText}>{subjectsIcon[index]} {subject}</Text>
         </TouchableOpacity>
 
       ))}
@@ -45,14 +45,16 @@ export default function SubjectsScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
+    flex:1,
     padding: 20,
+    backgroundColor:'#e9edf0',
     // flexDirection: 'row',
     // flexWrap: 'wrap',
     // justifyContent: 'space-between',
   },
 
   card: {
-    backgroundColor: '#f2f2f2',
+     backgroundColor:'yellow',
     borderRadius: 12,
     paddingVertical: 20,
     paddingHorizontal: 30,
@@ -68,5 +70,6 @@ const styles = StyleSheet.create({
   cardText: {
     fontSize: 18,
     fontWeight: 'bold',
+   
   },
 });

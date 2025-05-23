@@ -17,6 +17,7 @@ import PDFScreen from './screens/PDFScreen';
 import ChapterList from './screens/ChapterList';
 
 
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -41,7 +42,7 @@ export default function App() {
 
 
   return (
-    
+  
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRoute}>
         <Stack.Screen name="TestSeries" component={SubjectsScreen} />

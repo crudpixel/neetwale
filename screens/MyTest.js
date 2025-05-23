@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useLayoutEffect} from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import {
   View,
   Text,
@@ -6,27 +6,51 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   StyleSheet,
-  Button
+  Button,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const TopicStatsTable = ({ stats }) => {
+  if (!stats || stats.length === 0) return null;
+
+  return (
+    <View style={styles.tableCard}>
+      <Text style={styles.leaderboardTitle}>📊 Topic-wise Performance</Text>
+      <View style={styles.row}>
+        <Text style={[styles.cell, styles.headerCell]}>Topic</Text>
+        <Text style={[styles.cell, styles.headerCell]}>Correct</Text>
+        <Text style={[styles.cell, styles.headerCell]}>Wrong</Text>
+        <Text style={[styles.cell, styles.headerCell]}>%</Text>
+      </View>
+      {stats.map((item, index) => (
+        <View key={index} style={styles.row}>
+          <Text style={styles.cell}>{item.topic}</Text>
+          <Text style={styles.cell}>{item.correct}</Text>
+          <Text style={styles.cell}>{item.wrong}</Text>
+          <Text style={styles.cell}>{item.percentage}%</Text>
+        </View>
+      ))}
+    </View>
+  );
+};
 
 export default function MyTestsScreen({ route, navigation }) {
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
-  const solved_id = route?.Params || ''; // fallback
+  const solved_id = route?.Params || '';
   const questionLength = route?.Params;
+  const topicStats = route?.params?.topicStats || [];
 
-      useLayoutEffect(() => {
-          navigation.setOptions({
-              headerBackVisible: false, // Hides back arrow in v6+
-          });
-      }, [navigation]);
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerBackVisible: false,
+    });
+  }, [navigation]);
 
   useEffect(() => {
     const fetchTests = async () => {
       const user = JSON.parse(await AsyncStorage.getItem('user'));
       const userId = user?.userid;
-
       if (!userId) return;
 
       try {
@@ -34,8 +58,8 @@ export default function MyTestsScreen({ route, navigation }) {
           `https://studyneet.crudpixel.tech/api/student-result?user_id=${userId}${solved_id}`
         );
         const json = await res.json();
-
         const allResults = json.data || [];
+
         const userResults = allResults
           .filter((t) => t.user_id == userId)
           .map((item) => ({
@@ -60,14 +84,11 @@ export default function MyTestsScreen({ route, navigation }) {
     fetchTests();
   }, []);
 
- 
-
-  if (loading)
-    return <ActivityIndicator size="large" style={styles.centered} />;
+  if (loading) return <ActivityIndicator size="large" style={styles.centered} />;
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>📄 My Submitted Tests</Text>
+      <Text style={styles.title}> 🧠My Submitted Tests</Text>
 
       <FlatList
         data={tests}
@@ -92,10 +113,16 @@ export default function MyTestsScreen({ route, navigation }) {
                 onPress={() => navigation.navigate('review', { testData: item })}
               >
                 <Text style={styles.reviewBtn}>Review Your Test</Text>
-               
               </TouchableOpacity>
-              <Button title="go to dashboard" onPress={()=>navigation.navigate("Dashboard",{questionLength:questionLength})}/>
+
+              <Button
+                title="Go to Dashboard"
+                onPress={() => navigation.navigate('Dashboard', { questionLength })}
+              />
             </View>
+
+            {/* Topic Stats Table */}
+            <TopicStatsTable stats={topicStats} />
 
             {/* Leaderboard Card */}
             <View style={styles.leaderboardCard}>
@@ -175,13 +202,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     marginTop: 10,
-    marginBottom:20
+    marginBottom: 20,
   },
   reviewBtn: {
     color: 'white',
     fontSize: 16,
     fontWeight: '600',
-    
   },
   leaderboardCard: {
     backgroundColor: '#ffffff',
@@ -228,5 +254,33 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  // Topic Stats Table Styles
+  tableCard: {
+    backgroundColor: '#ffffff',
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.04,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 2,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 6,
+  },
+  cell: {
+    flex: 1,
+    fontSize: 13,
+    textAlign: 'center',
+    color: '#2c3e50',
+  },
+  headerCell: {
+    fontWeight: 'bold',
+    color: '#34495e',
+    fontSize: 14,
   },
 });

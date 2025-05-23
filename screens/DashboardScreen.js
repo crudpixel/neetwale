@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,9 @@ import {
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
 
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ScoreContext } from '../src/contexts/ScoreContext';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -72,9 +74,6 @@ export default function DashboardScreen({ navigation }) {
               setLatestSubmissions(tempLatestSubmissions);
 
               const scores = {
-                Physics: [],
-                Chemistry: [],
-                Biology: [],
                 Previous:[],
                 Mock:[],
               };
@@ -83,17 +82,9 @@ export default function DashboardScreen({ navigation }) {
                 const subject = item.question_paper_id;
                 const score = Number(item.score);
 
-                if (subject.includes('Physics')) {
-                  scores.Physics.push(score);
-                } else if (subject.includes('Chemistry')) {
-                  scores.Chemistry.push(score);
-                } else if (subject.includes('Biology')) {
-                  scores.Biology.push(score);
-                } 
-                 else if (subject.includes('Previous')) {
+                if (subject.includes('Previous')) {
                   scores.Previous.push(score);
-                } 
-                 else if (subject.includes('Mock')) {
+                } else if (subject.includes('Mock')) {
                   scores.Mock.push(score);
                 } 
               });
@@ -103,9 +94,15 @@ export default function DashboardScreen({ navigation }) {
                   ? (arr.reduce((sum, val) => sum + val, 0) / arr.length).toFixed(2)
                   : '0';
 
-              setPhysicsAvg(average(scores.Physics));
-              setChemistryAvg(average(scores.Chemistry));
-              setBiologyAvg(average(scores.Biology));
+           const response2 = await fetch(
+              `https://studyneet.crudpixel.tech/api/neet/get-all-average-scores?user_id=${userId}`
+            );
+            const result2 = await response2.json();
+            console.log(result2)
+
+              setPhysicsAvg(result2.data.physics_score);
+              setChemistryAvg(result2.data.chemistry_score);
+              setBiologyAvg(result2.data.biology_score);
               setPreviousYearAvg(average(scores.Previous));
               setMockTestAvg(average(scores.Mock));
             }
@@ -228,27 +225,27 @@ export default function DashboardScreen({ navigation }) {
       <View style={styles.profileRow}>
         <View style={styles.scoreRankContainer}>
           <View style={[styles.card, { backgroundColor: '#dbeafe' }]}>
-            <Text style={styles.cardTitle}>Physics</Text>
+            <Text style={styles.cardTitle}>🧲 Physics </Text>
             <Text style={styles.cardValue}>Your Score: {physicsAvg} / </Text>
             <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Physics}/{setsCountPerSubject.Physics - 1} sets</Text>
           </View>
           <View style={[styles.card, { backgroundColor: '#0d9488' }]}>
-            <Text style={styles.cardTitle}>Chemistry</Text>
+            <Text style={styles.cardTitle}>⚗️ Chemistry </Text>
             <Text style={styles.cardValue}>Your Score: {chemistryAvg} /  </Text>
             <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Chemistry}/{setsCountPerSubject.Chemistry - 1} sets</Text>
           </View>
           <View style={[styles.card, { backgroundColor: '#15803d' }]}>
-            <Text style={styles.cardTitle}>Biology</Text>
+            <Text style={styles.cardTitle}>🧬 Biology </Text>
             <Text style={styles.cardValue}>Your Score: {biologyAvg}</Text>
             <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Biology}/{setsCountPerSubject.Biology - 1} sets</Text>
           </View>
           <View style={[styles.card, { backgroundColor: 'orange' }]}>
-            <Text style={styles.cardTitle}>Previou Year set </Text>
+            <Text style={styles.cardTitle}>📝 Previou Year set </Text>
             <Text style={styles.cardValue}>Your Score: {previousYearAvg}</Text>
             <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Previous}/{setsCountPerSubject.Previous - 1} sets</Text>
           </View>
           <View style={[styles.card, { backgroundColor: 'red' }]}>
-            <Text style={styles.cardTitle}>Mock Test </Text>
+            <Text style={styles.cardTitle}>	🗒️ Mock Test </Text>
             <Text style={styles.cardValue}>Your Score: {mockTestAvg}</Text>
             <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Mock}/{setsCountPerSubject.Mock - 1} sets</Text>
           </View>

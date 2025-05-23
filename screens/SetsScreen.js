@@ -7,18 +7,24 @@ export default function SetsScreen({ route, navigation }) {
   const [sets, setSets] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch(`https://studyneet.crudpixel.tech/jsonapi/taxonomy_term/subjects?filter[parent.name]=${subject}`)
-      .then(res => res.json())
-      .then(data => {
-        const formatted = data.data.map(item => ({
+useEffect(() => {
+  fetch(`https://studyneet.crudpixel.tech/jsonapi/taxonomy_term/subjects?filter[parent.name]=${subject}`)
+    .then(res => res.json())
+    .then(data => {
+      const formatted = data.data.map(item => {
+        const rawDesc = item.attributes.description?.value || '';
+        const timer = rawDesc.replace(/<\/?[^>]+(>|$)/g, ""); // Strip HTML tags
+        return {
           id: item.id,
-          name: item.attributes.name
-        }));
-        setSets(formatted);
-        setLoading(false);
+          name: item.attributes.name,
+          timer: timer.trim(),
+        };
       });
-  }, [subject]);
+      setSets(formatted);
+      setLoading(false);
+    });
+}, [subject]);
+
 
   if (loading) return <ActivityIndicator />;
 
@@ -30,9 +36,10 @@ export default function SetsScreen({ route, navigation }) {
                   key={set.id}
                   
                   style={styles.card}
-                  onPress={() => navigation.navigate('Questions', { setId: set.id })}
+                  onPress={() => navigation.navigate('Questions', { setId: set.id ,timer: set.timer})}
                 >
                   <Text style={styles.cardText}>{set.name}</Text>
+                  
                 </TouchableOpacity>
       ))}
     </View>

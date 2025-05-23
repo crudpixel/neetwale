@@ -12,24 +12,41 @@ export default function ReviewScreen({ route, navigation }) {
   console.log(testData)
   useEffect(() => {
     // Fetch the actual questions from backend based on question_paper_id
-    fetch(`https://studyneet.crudpixel.tech/jsonapi/node/question?filter[field_subject_set.name]=${encodeURIComponent(testData.question_paper_id)}`)
-      .then(res => res.json())
-      .then(data => {
-        const optionLabels = ['A', 'B', 'C', 'D'];
-        const formatted = data.data.map((q, idx) => {
-          const correctIndex = optionLabels.indexOf(q.attributes.field_correct_answer);
-          return {
-            title: q.attributes.title,
-            options: q.attributes.field_option,
-            correct: q.attributes.field_option[correctIndex],
-            explanation: q.attributes.field_answer_explanation?.processed || '',
-            qKey: `Q${idx + 1}`,
-          };
-        });
+   fetch(`https://studyneet.crudpixel.tech/jsonapi/node/question?filter[field_subject_set.name]=${encodeURIComponent(testData.question_paper_id)}&include=field_subject_topics`)
 
-        setQuestions(formatted);
-        setLoading(false);
-      })
+      .then(res => res.json())
+.then(data => {
+  const optionLabels = ['A', 'B', 'C', 'D'];
+
+  // Create a map of topic ID => topic name
+  const topicMap = {};
+  data.included?.forEach(item => {
+    if (item.type === 'taxonomy_term--subject_topic') {
+      topicMap[item.id] = item.attributes.name;
+    }
+  });
+
+  const formatted = data.data.map((q, idx) => {
+    const correctIndex = optionLabels.indexOf(q.attributes.field_correct_answer);
+
+    // Get topic ID from relationships
+    const topicId = q.relationships.field_subject_topics?.data?.id;
+    const topicName = topicMap[topicId] || 'Unknown Topic';
+    console.log(topicMap);
+    return {
+      title: q.attributes.field_question?.value || '',
+      options: q.attributes.field_option,
+      correct: q.attributes.field_option[correctIndex],
+      explanation: q.attributes.field_answer_explanation?.processed || '',
+      qKey: `Q${idx + 1}`,
+      topicName,
+    };
+  });
+
+  setQuestions(formatted);
+  setLoading(false);
+})
+
       .catch(err => {
         console.error("Error loading questions:", err);
         setLoading(false);
@@ -47,8 +64,28 @@ export default function ReviewScreen({ route, navigation }) {
     <View style={styles.container}>
       <Text style={styles.title}>Reviewing: {testData.question_paper_id}</Text>
 
-      <Text style={styles.questionText}>{currentIndex + 1}. {currentQuestion.title}</Text>
+      {/* <Text style={styles.questionText}>{currentIndex + 1}. {currentQuestion.title}</Text> */}
 
+                <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                  <Text style={{ fontSize: 18, fontWeight: 'bold', marginRight: 5 }}>
+                    {currentIndex + 1}.
+                  </Text>
+                  <View style={{ flex: 1 }}>
+                    <RenderHTML
+                      contentWidth={width}
+                      tagsStyles={{
+                        p: { fontSize: 18, color: 'black', marginBottom: 10 },
+                        img: {
+                          maxWidth: '100%',
+                          height: undefined,
+                          display: 'flex', // ensures proper layout
+                          resizeMode: 'contain'
+                        }
+                      }}
+                      source={{ html: currentQuestion.title }}
+                    />
+                  </View>
+                </View>
       {currentQuestion.options.map((option, idx) => {
         const isSelected = selectedAnswer === option;
         return (
@@ -65,6 +102,7 @@ export default function ReviewScreen({ route, navigation }) {
       })}
        <ScrollView>
       <Text style={styles.correctAnswer}>✅ Correct Answer: {currentQuestion.correct}</Text>
+      <Text style={styles.topicText}>📘 Topic: {currentQuestion.topicName}</Text>
       {currentQuestion.explanation ? (
      
        // <Text style={styles.explanationText}>💡 Explanation: {currentQuestion.explanation.replace(/<[^>]+>/g, " ")}</Text>
