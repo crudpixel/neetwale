@@ -220,7 +220,10 @@ export default function DashboardScreen({ navigation }) {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Hello {user}!</Text>
-      <Text style={styles.sectionTitle}>Your Progress</Text>
+      {/* <Text style={styles.sectionTitle}>Your Progress</Text> */}
+      <TouchableOpacity onPress={() => navigation.navigate("recommendation")} style={styles.button}>
+  <Text style={styles.buttonText}>View Recommendation</Text>
+</TouchableOpacity>
 
       <View style={styles.profileRow}>
         <View style={styles.scoreRankContainer}>
@@ -240,7 +243,7 @@ export default function DashboardScreen({ navigation }) {
             <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Biology}/{setsCountPerSubject.Biology - 1} sets</Text>
           </View>
           <View style={[styles.card, { backgroundColor: 'orange' }]}>
-            <Text style={styles.cardTitle}>📝 Previou Year set </Text>
+            <Text style={styles.cardTitle}>📝 Previous Year set </Text>
             <Text style={styles.cardValue}>Your Score: {previousYearAvg}</Text>
             <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Previous}/{setsCountPerSubject.Previous - 1} sets</Text>
           </View>
@@ -400,7 +403,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   subjectCard: {
-    width: '30%',
+     width: '30%',
     aspectRatio: 1,
     backgroundColor: '#fff',
     marginBottom: 15,
@@ -419,4 +422,15 @@ const styles = StyleSheet.create({
     color: '#0063e5',
     textAlign: 'center',
   },
+
+  buttonText:{
+    color:"white",
+    backgroundColor:"black",
+     margin:"auto",
+    padding:10,
+    fontSize:16,
+    marginBottom:10,
+    borderRadius:10,
+    fontWeight:600
+  }
 });

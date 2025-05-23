@@ -20,7 +20,7 @@ const TopicStatsTable = ({ stats }) => {
         <Text style={[styles.cell, styles.headerCell]}>Topic</Text>
         <Text style={[styles.cell, styles.headerCell]}>Correct</Text>
         <Text style={[styles.cell, styles.headerCell]}>Wrong</Text>
-        <Text style={[styles.cell, styles.headerCell]}>%</Text>
+        <Text style={[styles.cell, styles.headerCell]}>Percentage</Text>
       </View>
       {stats.map((item, index) => (
         <View key={index} style={styles.row}>

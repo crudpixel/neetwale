@@ -15,6 +15,7 @@ import BottomTabNavigator from './screens/BottomTabNavigator';
 import StudyMaterial from './screens/StudyMaterial';
 import PDFScreen from './screens/PDFScreen';
 import ChapterList from './screens/ChapterList';
+import SubjectRecommendations from './screens/SubjctRecommendations';
 
 
 
@@ -58,6 +59,7 @@ export default function App() {
         <Stack.Screen name="studymaterial" component={StudyMaterial} />
         <Stack.Screen name="PDFScreen" component={PDFScreen} />
         <Stack.Screen name="ChapterList" component={ChapterList} />
+        <Stack.Screen name="recommendation" component={SubjectRecommendations} />
         
 
       </Stack.Navigator>

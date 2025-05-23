@@ -428,7 +428,7 @@ console.log('📊 Topic Stats:', topicStats);
 
       const data = await response.json();
       if (response.ok) {
-        const knownSubjects = ['Physics', 'Chemistry', 'Biology'];
+        const knownSubjects = ["Physics", "Chemistry", "Biology","Previous Year Set","Mock"];
         const subject = knownSubjects.find(s =>
           paperSet.toLowerCase().includes(s.toLowerCase())
         );
@@ -458,6 +458,27 @@ console.log('📊 Topic Stats:', topicStats);
 
           }),
         });
+
+
+
+        await fetch('https://studyneet.crudpixel.tech/api/submit-recommendation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_id: loginUser.userid,
+            subject: subject,
+            recommendation_topic:topicStats,
+            status:"pending",
+
+
+          }),
+        });
+
+
+
+
+
+
         fetchUserResults();
 
         Alert.alert(
