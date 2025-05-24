@@ -220,37 +220,59 @@ export default function DashboardScreen({ navigation }) {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Hello {user}!</Text>
-      {/* <Text style={styles.sectionTitle}>Your Progress</Text> */}
-      <TouchableOpacity onPress={() => navigation.navigate("recommendation")} style={styles.button}>
-  <Text style={styles.buttonText}>View Recommendation</Text>
-</TouchableOpacity>
+      <Text style={styles.sectionTitle}>Your Progress</Text>
 
       <View style={styles.profileRow}>
         <View style={styles.scoreRankContainer}>
           <View style={[styles.card, { backgroundColor: '#dbeafe' }]}>
             <Text style={styles.cardTitle}>🧲 Physics </Text>
             <Text style={styles.cardValue}>Your Score: {physicsAvg} / </Text>
+            <View style={styles.recommWraper}>
             <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Physics}/{setsCountPerSubject.Physics - 1} sets</Text>
+             <TouchableOpacity onPress={() => navigation.navigate("Recommendation",{ subject: "Physics" })} style={styles.button}>
+             <Text style={styles.buttonText}>View Recommendation</Text>
+             </TouchableOpacity>
+           </View>
           </View>
           <View style={[styles.card, { backgroundColor: '#0d9488' }]}>
             <Text style={styles.cardTitle}>⚗️ Chemistry </Text>
             <Text style={styles.cardValue}>Your Score: {chemistryAvg} /  </Text>
+            <View style={styles.recommWraper}>
             <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Chemistry}/{setsCountPerSubject.Chemistry - 1} sets</Text>
+                         <TouchableOpacity onPress={() => navigation.navigate("Recommendation",{ subject: "Chemistry" })} style={styles.button}>
+             <Text style={styles.buttonText}>View Recommendation</Text>
+             </TouchableOpacity>
+             </View>
           </View>
           <View style={[styles.card, { backgroundColor: '#15803d' }]}>
             <Text style={styles.cardTitle}>🧬 Biology </Text>
             <Text style={styles.cardValue}>Your Score: {biologyAvg}</Text>
+             <View style={styles.recommWraper}>
             <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Biology}/{setsCountPerSubject.Biology - 1} sets</Text>
+                         <TouchableOpacity onPress={() => navigation.navigate("Recommendation",{ subject: "Biology" })} style={styles.button}>
+             <Text style={styles.buttonText}>View Recommendation</Text>
+             </TouchableOpacity>
+             </View>
           </View>
           <View style={[styles.card, { backgroundColor: 'orange' }]}>
             <Text style={styles.cardTitle}>📝 Previous Year set </Text>
             <Text style={styles.cardValue}>Your Score: {previousYearAvg}</Text>
+             <View style={styles.recommWraper}>
             <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Previous}/{setsCountPerSubject.Previous - 1} sets</Text>
+                         <TouchableOpacity onPress={() => navigation.navigate("Recommendation",{ subject: "Previous Year" })} style={styles.button}>
+             <Text style={styles.buttonText}>View Recommendation</Text>
+             </TouchableOpacity>
+             </View>
           </View>
           <View style={[styles.card, { backgroundColor: 'red' }]}>
             <Text style={styles.cardTitle}>	🗒️ Mock Test </Text>
             <Text style={styles.cardValue}>Your Score: {mockTestAvg}</Text>
+            <View style={styles.recommWraper}>
             <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Mock}/{setsCountPerSubject.Mock - 1} sets</Text>
+                         <TouchableOpacity onPress={() => navigation.navigate("Recommendation",{ subject: "Mock" })} style={styles.button}>
+             <Text style={styles.buttonText}>View Recommendation</Text>
+             </TouchableOpacity>
+             </View>
           </View>
         </View>
       </View>
@@ -329,6 +351,12 @@ const styles = StyleSheet.create({
     flex: 1,
      justifyContent: 'space-between',
      gap:10
+     
+  },
+  recommWraper:{
+     flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems:"center"
   },
 
   card: {
@@ -424,13 +452,13 @@ const styles = StyleSheet.create({
   },
 
   buttonText:{
-    color:"white",
-    backgroundColor:"black",
-     margin:"auto",
-    padding:10,
+    color:"black",
+    //backgroundColor:"black",   
     fontSize:16,
-    marginBottom:10,
+   // marginBottom:10,
     borderRadius:10,
-    fontWeight:600
+    fontWeight:600,
+    width:150,
+    textAlign:"center"
   }
 });

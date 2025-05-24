@@ -57,9 +57,9 @@ export default function App() {
         <Stack.Screen name="test" component={MyTestsScreen} />
         <Stack.Screen name="review" component={ReviewScreen} />
         <Stack.Screen name="studymaterial" component={StudyMaterial} />
-        <Stack.Screen name="PDFScreen" component={PDFScreen} />
+        <Stack.Screen name="PDFScreen" component={PDFScreen} options={{ headerShown: false }} />
         <Stack.Screen name="ChapterList" component={ChapterList} />
-        <Stack.Screen name="recommendation" component={SubjectRecommendations} />
+        <Stack.Screen name="Recommendation" component={SubjectRecommendations} />
         
 
       </Stack.Navigator>

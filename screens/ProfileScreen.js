@@ -9,32 +9,78 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { logoutUser } from '../cookiesApi';
 
+const subjects = ['Physics', 'Chemistry', 'Biology'];
+
 export default function ProfileScreen({ navigation }) {
   const [username, setUsername] = useState('Guest');
-  const [score, setScore] = useState(0);
-  const [leaderboard, setLeaderboard] = useState([]);
+  const [userId, setUserId] = useState(null);
+  const [selectedSubject, setSelectedSubject] = useState('Physics');
+  const [leaderboardData, setLeaderboardData] = useState([]);
+
+
+
+  const fetchLeaderboard = async () => {
+    try {
+      const res = await fetch('https://studyneet.crudpixel.tech/api/neet/get-all-average-scores');
+      const json = await res.json();
+      if (json.status === 'success') {
+        setLeaderboardData(json.data);
+      }
+    } catch (err) {
+      console.error('Leaderboard fetch failed:', err);
+    }
+  };
+
+
+  const fetchUser = async () => {
+    const user = await AsyncStorage.getItem('user');
+    if (user) {
+      const parsedUser = JSON.parse(user);
+      setUsername(parsedUser.name || 'Guest');
+      setUserId(parsedUser.userid?.toString());
+    }
+  };
 
   useEffect(() => {
-    const getUserData = async () => {
-      const userData = await AsyncStorage.getItem('user');
-      if (userData) {
-        const user = JSON.parse(userData);
-        setUsername(user.name || 'Guest');
-        setScore(user.score || 85); // use dummy score
-      }
-
-      // Dummy leaderboard
-      setLeaderboard([
-        { name: 'Vikash', score: 85 },
-        { name: 'Anjali', score: 82 },
-        { name: 'Ravi', score: 78 },
-        { name: 'Meena', score: 75 },
-        { name: 'Karan', score: 70 },
-      ]);
-    };
-
-    getUserData();
+    fetchUser();
+    fetchLeaderboard();
   }, []);
+
+  const getSortedLeaderboard = (subjectKey) => {
+    const sorted = [...leaderboardData].sort(
+      (a, b) => parseFloat(b[subjectKey]) - parseFloat(a[subjectKey])
+    );
+
+    const top3 = sorted.slice(0, 3);
+    const currentUserIndex = sorted.findIndex(u => u.uid === userId);
+
+    let userEntry = null;
+    if (currentUserIndex !== -1 && currentUserIndex >= 3) {
+      userEntry = {
+        ...sorted[currentUserIndex],
+        actualRank: currentUserIndex + 1,
+      };
+    }
+
+    return [...top3, ...(userEntry ? [userEntry] : [])];
+  };
+
+  const renderTable = (subject) => {
+    const key = `${subject.toLowerCase()}_score`;
+    const data = getSortedLeaderboard(key);
+
+    return data.map((item, idx) => {
+      const rank = item.actualRank || idx + 1;
+      const isCurrentUser = item.uid === userId;
+      return (
+        <View key={rank} style={[styles.row, isCurrentUser && styles.highlightRow]}>
+          <Text style={styles.cell}>{rank}</Text>
+          <Text style={styles.cell}>{item.username}</Text>
+          <Text style={styles.cell}>{parseFloat(item[key]).toFixed(1)}</Text>
+        </View>
+      );
+    });
+  };
 
   const handleLogout = async () => {
     await AsyncStorage.removeItem('user');
@@ -48,19 +94,27 @@ export default function ProfileScreen({ navigation }) {
         <View style={styles.avatar} />
         <Text style={styles.label}>Welcome,</Text>
         <Text style={styles.username}>{username}</Text>
-        <Text style={styles.score}>Your Score: <Text style={styles.scoreValue}>{score}</Text></Text>
       </View>
 
-      <View style={styles.leaderboardCard}>
-        <Text style={styles.leaderboardTitle}>🏆 Leaderboard</Text>
-        {leaderboard.map((entry, index) => (
-          <View key={index} style={styles.leaderboardRow}>
-            <Text style={styles.leaderboardRank}>{index + 1}.</Text>
-            <Text style={styles.leaderboardName}>{entry.name}</Text>
-            <Text style={styles.leaderboardScore}>{entry.score}</Text>
-          </View>
+      <View style={styles.tabContainer}>
+        {subjects.map((sub) => (
+          <TouchableOpacity
+            key={sub}
+            style={[styles.tab, selectedSubject === sub && styles.activeTab]}
+            onPress={() => setSelectedSubject(sub)}
+          >
+            <Text style={styles.tabText}>{sub}</Text>
+          </TouchableOpacity>
         ))}
       </View>
+
+      <View style={styles.tableHeader}>
+        <Text style={styles.headerCell}>Rank</Text>
+        <Text style={styles.headerCell}>Username</Text>
+        <Text style={styles.headerCell}>Score</Text>
+      </View>
+
+      {renderTable(selectedSubject)}
 
       <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
         <Text style={styles.logoutText}>Logout</Text>
@@ -71,7 +125,7 @@ export default function ProfileScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 24,
+    padding: 16,
     backgroundColor: '#f2f2f2',
     flexGrow: 1,
     alignItems: 'center',
@@ -84,10 +138,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     elevation: 3,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 3 },
   },
   avatar: {
     width: 80,
@@ -105,46 +155,54 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
   },
-  score: {
-    marginTop: 10,
-    fontSize: 16,
-    color: '#555',
-  },
-  scoreValue: {
-    fontWeight: 'bold',
-    color: '#007bff',
-  },
-  leaderboardCard: {
-    width: '100%',
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 20,
-    elevation: 3,
-  },
-  leaderboardTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 12,
-    color: '#333',
-  },
-  leaderboardRow: {
+  tabContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
+    marginBottom: 12,
+    width: '100%',
+  },
+  tab: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: '#dcdde1',
+    borderRadius: 8,
+  },
+  activeTab: {
+    backgroundColor: '#0984e3',
+  },
+  tabText: {
+    color: '#fff',
+    fontWeight: '600',
+  },
+  tableHeader: {
+    flexDirection: 'row',
+    borderBottomWidth: 2,
+    borderBottomColor: '#ccc',
+    paddingBottom: 8,
     marginBottom: 8,
+    width: '100%',
   },
-  leaderboardRank: {
-    width: 30,
-    fontWeight: '600',
-    color: '#666',
-  },
-  leaderboardName: {
+  headerCell: {
     flex: 1,
-    color: '#444',
+    fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'center',
   },
-  leaderboardScore: {
-    fontWeight: '600',
-    color: '#007bff',
+  row: {
+    flexDirection: 'row',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    width: '100%',
+  },
+  cell: {
+    flex: 1,
+    color: '#2f3640',
+    textAlign: 'center',
+  },
+  highlightRow: {
+    backgroundColor: '#dff9fb',
+    borderRadius: 6,
   },
   logoutButton: {
     width: '100%',
@@ -152,6 +210,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 10,
     alignItems: 'center',
+    marginTop: 20,
   },
   logoutText: {
     color: '#fff',

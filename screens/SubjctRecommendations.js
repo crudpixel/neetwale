@@ -10,30 +10,26 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const knownSubjects = ["Physics", "Chemistry", "Biology", "Previous Year Set", "Mock"];
+const knownSubjects = ["Physics", "Chemistry", "Biology", "Previous Year", "Mock"];
 
-export default function SubjectRecommendations() {
+export default function SubjectRecommendations({ route }) {
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [topicStats, setTopicStats] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [completedTopics, setCompletedTopics] = useState({}); // { 'topic name': true }
 
-  // Load completed topics from AsyncStorage
   useEffect(() => {
-    const loadCompleted = async () => {
-      const stored = await AsyncStorage.getItem('completedTopics');
-      if (stored) {
-        setCompletedTopics(JSON.parse(stored));
+    const loadInitialSubject = async () => {
+      const initialSubject = route?.params?.subject;
+      if (initialSubject) {
+        handleSubjectPress(initialSubject);
       }
     };
-    loadCompleted();
+    loadInitialSubject();
   }, []);
 
-  const saveCompleted = async (newCompleted) => {
-    await AsyncStorage.setItem('completedTopics', JSON.stringify(newCompleted));
-  };
-
   const handleSubjectPress = async (subject) => {
+    if (subject === selectedSubject && topicStats.length > 0) return;
+
     setSelectedSubject(subject);
     setLoading(true);
     const user = JSON.parse(await AsyncStorage.getItem('user'));
@@ -43,25 +39,27 @@ export default function SubjectRecommendations() {
       const response = await fetch(
         `https://studyneet.crudpixel.tech/api/get-recommendations?user_id=${userId}&subject=${subject}`
       );
-      const json = await response.json();
+      const result = await response.json();
+      const rawTopics = result?.data || [];
 
-      // Merge all topic data by summing correct/wrong across responses
-      const mergedTopics = {};
-      json?.data?.forEach(entry => {
-        entry.recommendation_topic.forEach(topic => {
-          const key = topic.topic;
-          if (!mergedTopics[key]) {
-            mergedTopics[key] = { ...topic, correct: 0, wrong: 0 };
-          }
-          mergedTopics[key].correct += parseInt(topic.correct);
-          mergedTopics[key].wrong += parseInt(topic.wrong);
-        });
-      });
+const formattedTopics = rawTopics.map(item => {
+  const correct = Number(item.recommendation_topic?.correct || 0);
+  const wrong = Number(item.recommendation_topic?.wrong || 0);
+  const total = correct + wrong;
+  const percentage = total > 0 ? ((correct / total) * 100).toFixed(2) : '0.00';
 
-      const mergedArray = Object.values(mergedTopics);
-      mergedArray.sort((a, b) => b.wrong - a.wrong); // Sort by most wrongs
+  return {
+    topic: item.recommendation_topic?.topic || 'Unknown',
+    correct,
+    wrong,
+    percentage,
+    status: item.status || 'pending',
+  };
+});
 
-      setTopicStats(mergedArray);
+
+      formattedTopics.sort((a, b) => b.wrong - a.wrong);
+      setTopicStats(formattedTopics);
     } catch (error) {
       console.error(`Error fetching ${subject} data:`, error);
       setTopicStats([]);
@@ -70,22 +68,57 @@ export default function SubjectRecommendations() {
     setLoading(false);
   };
 
-  const handleMarkCompleted = (topicName) => {
-    const updated = { ...completedTopics, [topicName]: true };
-    setCompletedTopics(updated);
-    saveCompleted(updated);
+  const markTopicCompleted = async (topicName) => {
+    const user = JSON.parse(await AsyncStorage.getItem('user'));
+    const userId = user?.userid;
+
+    const topicToUpdate = topicStats.find(topic => topic.topic === topicName);
+    if (!topicToUpdate) return;
+
+    try {
+      const res = await fetch('https://studyneet.crudpixel.tech/api/submit-recommendation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: userId,
+          subject: selectedSubject,
+          recommendation_topic: {
+            topic: topicToUpdate.topic,
+            correct: topicToUpdate.correct,
+            wrong: topicToUpdate.wrong
+          },
+          status: "completed"
+        }),
+      });
+
+      const result = await res.json();
+      if (result.status === "success") {
+        const updatedTopics = topicStats.map(topic =>
+          topic.topic === topicName ? { ...topic, status: 'completed' } : topic
+        );
+        setTopicStats(updatedTopics);
+      } else {
+        Alert.alert("Error", "Failed to update topic status.");
+      }
+    } catch (error) {
+      console.error("API error:", error);
+      Alert.alert("Error", "Something went wrong while updating.");
+    }
   };
 
   const confirmMarkCompleted = (topicName) => {
     Alert.alert(
-      "Confirm Completion",
-      `Have you really completed "${topicName}"?`,
+      "Mark Completed",
+      `Are you sure you've completed "${topicName}"?`,
       [
         { text: "Cancel", style: "cancel" },
-        { text: "Yes", onPress: () => handleMarkCompleted(topicName) },
+        { text: "Yes", onPress: () => markTopicCompleted(topicName) },
       ]
     );
   };
+
+  const pendingTopics = topicStats.filter(t => t.status !== 'completed');
+  const completedTopics = topicStats.filter(t => t.status === 'completed');
 
   return (
     <ScrollView style={styles.container}>
@@ -106,10 +139,10 @@ export default function SubjectRecommendations() {
         <ActivityIndicator size="large" style={styles.centered} />
       ) : (
         <View>
-          <TouchableOpacity onPress={() => setSelectedSubject(null)}>
-            <Text style={styles.backBtn}>⬅ Back to Subjects</Text>
-          </TouchableOpacity>
           <Text style={styles.subjectTitle}>{selectedSubject}</Text>
+
+          {/* 🕓 Pending Topics */}
+          <Text style={styles.sectionTitle}>⏳ Pending </Text>
           <View style={styles.tableHeader}>
             <Text style={styles.cellHeader}>Topic</Text>
             <Text style={styles.cellHeader}>Correct</Text>
@@ -117,28 +150,40 @@ export default function SubjectRecommendations() {
             <Text style={styles.cellHeader}>%</Text>
             <Text style={styles.cellHeader}>Status</Text>
           </View>
-          {topicStats.map((topic, idx) => {
-            const correct = topic.correct;
-            const wrong = topic.wrong;
-            const percent = ((correct / (correct + wrong || 1)) * 100).toFixed(2);
-            const isCompleted = completedTopics[topic.topic];
-
-            return (
-              <View key={idx} style={styles.tableRow}>
-                <Text style={styles.cell}>{topic.topic}</Text>
-                <Text style={styles.cell}>{correct}</Text>
-                <Text style={styles.cell}>{wrong}</Text>
-                <Text style={styles.cell}>{percent}%</Text>
-                {isCompleted ? (
-                  <Text style={[styles.cell, { color: 'green' }]}>✔ Completed</Text>
-                ) : (
-                  <TouchableOpacity onPress={() => confirmMarkCompleted(topic.topic)}>
-                    <Text style={[styles.cell, { color: 'blue' }]}>Mark Completed</Text>
-                  </TouchableOpacity>
-                )}
+          {pendingTopics.map((topic, idx) => (
+            <View key={idx} style={styles.tableRow}>
+              <Text style={styles.cell}>{topic.topic}</Text>
+              <Text style={styles.cell}>{topic.correct}</Text>
+              <Text style={styles.cell}>{topic.wrong}</Text>
+              <Text style={styles.cell}>{topic.percentage}%</Text>
+              <View style={styles.cell}>
+                <TouchableOpacity onPress={() => confirmMarkCompleted(topic.topic)}>
+                  <Text style={{ color: 'blue' }}>Mark Completed</Text>
+                </TouchableOpacity>
               </View>
-            );
-          })}
+            </View>
+          ))}
+
+          {/* ✅ Completed Topics */}
+          <Text style={styles.sectionTitle}>✅ Completed </Text>
+          <View style={styles.tableHeader}>
+            <Text style={styles.cellHeader}>Topic</Text>
+            <Text style={styles.cellHeader}>Correct</Text>
+            <Text style={styles.cellHeader}>Wrong</Text>
+            <Text style={styles.cellHeader}>%</Text>
+            <Text style={styles.cellHeader}>Status</Text>
+          </View>
+          {completedTopics.map((topic, idx) => (
+            <View key={idx} style={styles.tableRow}>
+              <Text style={styles.cell}>{topic.topic}</Text>
+              <Text style={styles.cell}>{topic.correct}</Text>
+              <Text style={styles.cell}>{topic.wrong}</Text>
+              <Text style={styles.cell}>{topic.percentage}%</Text>
+              <View style={styles.cell}>
+                <Text style={{ color: 'green' }}>✔ Completed</Text>
+              </View>
+            </View>
+          ))}
         </View>
       )}
     </ScrollView>
@@ -168,12 +213,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  backBtn: {
-    color: '#0984e3',
-    fontSize: 16,
-    marginBottom: 10,
-    fontWeight: '600',
-  },
   subjectTitle: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -204,7 +243,13 @@ const styles = StyleSheet.create({
   },
   cell: {
     flex: 1,
-    color: '#2f3640',
     fontSize: 13,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#636e72',
+    marginTop: 20,
+    marginBottom: 8,
   },
 });

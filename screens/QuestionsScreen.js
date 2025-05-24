@@ -428,10 +428,11 @@ console.log('📊 Topic Stats:', topicStats);
 
       const data = await response.json();
       if (response.ok) {
-        const knownSubjects = ["Physics", "Chemistry", "Biology","Previous Year Set","Mock"];
+        const knownSubjects = ["Physics", "Chemistry", "Biology","Previous Year","Mock"];
         const subject = knownSubjects.find(s =>
           paperSet.toLowerCase().includes(s.toLowerCase())
         );
+        console.log("Akkkk",subject)
 
         await fetch('https://studyneet.crudpixel.tech/neet-tracker/update-leaderboard-score', {
           method: 'POST',
@@ -461,18 +462,18 @@ console.log('📊 Topic Stats:', topicStats);
 
 
 
-        await fetch('https://studyneet.crudpixel.tech/api/submit-recommendation', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            user_id: loginUser.userid,
-            subject: subject,
-            recommendation_topic:topicStats,
-            status:"pending",
-
-
-          }),
-        });
+  for (const perTopic of topicStats) {
+  await fetch('https://studyneet.crudpixel.tech/api/submit-recommendation', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      user_id: loginUser.userid,
+      subject: subject,
+      recommendation_topic: perTopic, 
+      status: "pending",
+    }),
+  });
+}
 
 
 

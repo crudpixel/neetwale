@@ -64,13 +64,6 @@ export default function MyTestsScreen({ route, navigation }) {
           .filter((t) => t.user_id == userId)
           .map((item) => ({
             ...item,
-            leaderboard: [
-              { name: 'Vikash', score: 85 },
-              { name: 'Anjali', score: 82 },
-              { name: 'Ravi', score: 78 },
-              { name: 'Meena', score: 75 },
-              { name: 'Karan', score: 70 },
-            ],
           }));
 
         setTests(userResults);
@@ -124,17 +117,6 @@ export default function MyTestsScreen({ route, navigation }) {
             {/* Topic Stats Table */}
             <TopicStatsTable stats={topicStats} />
 
-            {/* Leaderboard Card */}
-            <View style={styles.leaderboardCard}>
-              <Text style={styles.leaderboardTitle}>🏆 Leaderboard</Text>
-              {(item.leaderboard || []).slice(0, 5).map((entry, index) => (
-                <View key={index} style={styles.leaderboardRow}>
-                  <Text style={styles.leaderboardRank}>{index + 1}.</Text>
-                  <Text style={styles.leaderboardName}>{entry.name}</Text>
-                  <Text style={styles.leaderboardScore}>{entry.score}</Text>
-                </View>
-              ))}
-            </View>
           </>
         )}
       />
