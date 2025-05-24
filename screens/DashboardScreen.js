@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -30,15 +30,15 @@ export default function DashboardScreen({ navigation }) {
     Physics: 0,
     Chemistry: 0,
     Biology: 0,
-    Previous:0,
-    Mock:0,
+    Previous: 0,
+    Mock: 0,
   });
   const [attemptedSetsPerSubject, setAttemptedSetsPerSubject] = useState({
     Physics: 0,
     Chemistry: 0,
     Biology: 0,
-     Previous:0,
-     Mock:0,
+    Previous: 0,
+    Mock: 0,
   });
   const [latestSubmissions, setLatestSubmissions] = useState({});
 
@@ -74,8 +74,8 @@ export default function DashboardScreen({ navigation }) {
               setLatestSubmissions(tempLatestSubmissions);
 
               const scores = {
-                Previous:[],
-                Mock:[],
+                Previous: [],
+                Mock: [],
               };
 
               Object.values(tempLatestSubmissions).forEach((item) => {
@@ -86,7 +86,7 @@ export default function DashboardScreen({ navigation }) {
                   scores.Previous.push(score);
                 } else if (subject.includes('Mock')) {
                   scores.Mock.push(score);
-                } 
+                }
               });
 
               const average = (arr) =>
@@ -94,11 +94,11 @@ export default function DashboardScreen({ navigation }) {
                   ? (arr.reduce((sum, val) => sum + val, 0) / arr.length).toFixed(2)
                   : '0';
 
-           const response2 = await fetch(
-              `https://studyneet.crudpixel.tech/api/neet/get-all-average-scores?user_id=${userId}`
-            );
-            const result2 = await response2.json();
-            console.log(result2)
+              const response2 = await fetch(
+                `https://studyneet.crudpixel.tech/api/neet/get-all-average-scores?user_id=${userId}`
+              );
+              const result2 = await response2.json();
+              console.log(result2)
 
               setPhysicsAvg(result2.data.physics_score);
               setChemistryAvg(result2.data.chemistry_score);
@@ -126,8 +126,8 @@ export default function DashboardScreen({ navigation }) {
             Physics: 0,
             Chemistry: 0,
             Biology: 0,
-            Previous:0,
-            Mock:0,
+            Previous: 0,
+            Mock: 0,
           };
 
           sets.forEach((set) => {
@@ -219,60 +219,83 @@ export default function DashboardScreen({ navigation }) {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Hello {user}!</Text>
       <Text style={styles.sectionTitle}>Your Progress</Text>
 
       <View style={styles.profileRow}>
         <View style={styles.scoreRankContainer}>
-          <View style={[styles.card, { backgroundColor: '#dbeafe' }]}>
-            <Text style={styles.cardTitle}>🧲 Physics </Text>
-            <Text style={styles.cardValue}>Your Score: {physicsAvg} / </Text>
-            <View style={styles.recommWraper}>
-            <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Physics}/{setsCountPerSubject.Physics - 1} sets</Text>
-             <TouchableOpacity onPress={() => navigation.navigate("Recommendation",{ subject: "Physics" })} style={styles.button}>
-             <Text style={styles.buttonText}>View Recommendation</Text>
-             </TouchableOpacity>
-           </View>
+          <View style={[styles.card, { backgroundColor: '#E3F2FD' }]}>
+             <Image source={require('../asstes/physics.png')} style={styles.iconImg} />
+            <View>
+              <Text style={styles.cardTitle}> Physics </Text>
+
+
+              <Text style={styles.cardValue}>Your Score: {physicsAvg} / </Text>
+
+              <Text style={styles.cardValue}>Completed: {attemptedSetsPerSubject.Physics}/{setsCountPerSubject.Physics - 1} sets</Text>
+
+              <TouchableOpacity onPress={() => navigation.navigate("Recommendation", { subject: "Physics" })} style={styles.button}>
+                <Text style={styles.buttonText}>View Recommendation</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={[styles.card, { backgroundColor: '#0d9488' }]}>
-            <Text style={styles.cardTitle}>⚗️ Chemistry </Text>
-            <Text style={styles.cardValue}>Your Score: {chemistryAvg} /  </Text>
-            <View style={styles.recommWraper}>
-            <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Chemistry}/{setsCountPerSubject.Chemistry - 1} sets</Text>
-                         <TouchableOpacity onPress={() => navigation.navigate("Recommendation",{ subject: "Chemistry" })} style={styles.button}>
-             <Text style={styles.buttonText}>View Recommendation</Text>
-             </TouchableOpacity>
-             </View>
+          <View style={[styles.card, { backgroundColor: '#F3E5F5' }]}>
+            <Image source={require('../asstes/chemistry.png')} style={styles.iconImg} />
+            <View>
+              <Text style={styles.cardTitle}> Chemistry </Text>
+
+
+              <Text style={styles.cardValue}>Your Score: {chemistryAvg} /  </Text>
+
+              <Text style={styles.cardValue}>Completed: {attemptedSetsPerSubject.Chemistry}/{setsCountPerSubject.Chemistry - 1} sets</Text>
+
+              <TouchableOpacity onPress={() => navigation.navigate("Recommendation", { subject: "Chemistry" })} style={styles.button}>
+                <Text style={styles.buttonText}>View Recommendation</Text>
+              </TouchableOpacity>
+            </View>
+
           </View>
-          <View style={[styles.card, { backgroundColor: '#15803d' }]}>
-            <Text style={styles.cardTitle}>🧬 Biology </Text>
-            <Text style={styles.cardValue}>Your Score: {biologyAvg}</Text>
-             <View style={styles.recommWraper}>
-            <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Biology}/{setsCountPerSubject.Biology - 1} sets</Text>
-                         <TouchableOpacity onPress={() => navigation.navigate("Recommendation",{ subject: "Biology" })} style={styles.button}>
-             <Text style={styles.buttonText}>View Recommendation</Text>
-             </TouchableOpacity>
-             </View>
+          <View style={[styles.card, { backgroundColor: '#F1F8E9' }]}>
+             <Image source={require('../asstes/molecular.png')} style={styles.iconImg} />
+            <View>
+              <Text style={styles.cardTitle}> Biology </Text>
+
+              <Text style={styles.cardValue}>Your Score: {biologyAvg}</Text>
+
+              <Text style={styles.cardValue}>Completed: {attemptedSetsPerSubject.Biology}/{setsCountPerSubject.Biology - 1} sets</Text>
+
+              <TouchableOpacity onPress={() => navigation.navigate("Recommendation", { subject: "Biology" })} style={styles.button}>
+                <Text style={styles.buttonText}>View Recommendation</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={[styles.card, { backgroundColor: 'orange' }]}>
-            <Text style={styles.cardTitle}>📝 Previous Year set </Text>
-            <Text style={styles.cardValue}>Your Score: {previousYearAvg}</Text>
-             <View style={styles.recommWraper}>
-            <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Previous}/{setsCountPerSubject.Previous - 1} sets</Text>
-                         <TouchableOpacity onPress={() => navigation.navigate("Recommendation",{ subject: "Previous Year" })} style={styles.button}>
-             <Text style={styles.buttonText}>View Recommendation</Text>
-             </TouchableOpacity>
-             </View>
+          <View style={[styles.card, { backgroundColor: '#EFEBE9' }]}>
+             <Image source={require('../asstes/test.png')} style={styles.iconImg} />
+            <View>
+              <Text style={styles.cardTitle}>Previous Year Set </Text>
+
+
+              <Text style={styles.cardValue}>Your Score: {previousYearAvg}</Text>
+
+              <Text style={styles.cardValue}>Completed: {attemptedSetsPerSubject.Previous}/{setsCountPerSubject.Previous - 1} sets</Text>
+
+              <TouchableOpacity onPress={() => navigation.navigate("Recommendation", { subject: "Previous Year" })} style={styles.button}>
+                <Text style={styles.buttonText}>View Recommendation</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={[styles.card, { backgroundColor: 'red' }]}>
-            <Text style={styles.cardTitle}>	🗒️ Mock Test </Text>
-            <Text style={styles.cardValue}>Your Score: {mockTestAvg}</Text>
-            <View style={styles.recommWraper}>
-            <Text style={styles.cardValue}>completed: {attemptedSetsPerSubject.Mock}/{setsCountPerSubject.Mock - 1} sets</Text>
-                         <TouchableOpacity onPress={() => navigation.navigate("Recommendation",{ subject: "Mock" })} style={styles.button}>
-             <Text style={styles.buttonText}>View Recommendation</Text>
-             </TouchableOpacity>
-             </View>
+          <View style={[styles.card, { backgroundColor: '#FFF8E1' }]}>
+             <Image source={require('../asstes/exam-time.png')} style={styles.iconImg} />
+            <View>
+              <Text style={styles.cardTitle}>	 Mock Test </Text>
+
+              <Text style={styles.cardValue}>Your Score: {mockTestAvg}</Text>
+
+              <Text style={styles.cardValue}>Completed: {attemptedSetsPerSubject.Mock}/{setsCountPerSubject.Mock - 1} sets</Text>
+
+              <TouchableOpacity onPress={() => navigation.navigate("Recommendation", { subject: "Mock" })} style={styles.button}>
+                <Text style={styles.buttonText}>View Recommendation</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
@@ -327,81 +350,75 @@ export default function DashboardScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#f2f2f2',
+    backgroundColor: '#f9fafb',
     flexGrow: 1,
   },
   title: {
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 20,
+    color: '#1e293b',
+    marginBottom: 10,
+  },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: '600',
+    color: '#334155',
+    marginVertical: 15,
   },
   profileRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 30,
-  },
-  profileImage: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-    marginRight: 15,
+    marginBottom: 20,
   },
   scoreRankContainer: {
     flex: 1,
-     justifyContent: 'space-between',
-     gap:10
-     
+    gap: 12,
   },
-  recommWraper:{
-     flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems:"center"
-  },
-
   card: {
-    flex: 1,
-   // flexDirection:"row",
-    backgroundColor: '#ffffff',
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-    marginHorizontal: 5,
-    borderRadius: 10,
-   // alignItems: 'center',
-    justifyContent: 'space-between',
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 3 },
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-  },
+    flexDirection: 'row',
+    justifyContent: "flex-start",
+    gap: 20,
+    borderRadius: 5,
+    padding: 16,
 
+  },
   cardTitle: {
-    fontSize: 16,
-    color: '#1e3a8a',
-    marginBottom: 6,
-    fontWeight: '600',
-   
-  },
-
-  cardValue: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#ffffff',
+    fontWeight: '700',
+    color: 'black',
   },
-  sectionTitle: {
-    fontSize: 20,
+  cardValue: {
+    fontSize: 16,
+    color: 'black',
+    marginBottom: 4,
+  },
+  recommWraper: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  button: {
+    backgroundColor: '#facc15',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+     marginTop:8,
+  },
+  buttonText: {
+    fontSize: 14,
     fontWeight: 'bold',
-    color: '#444',
-    marginBottom: 10,
+    color: '#1e293b',
+   
   },
   carouselItem: {
     width: screenWidth * 0.8,
     marginRight: 15,
     backgroundColor: '#fff',
-    borderRadius: 10,
+    borderRadius: 12,
     overflow: 'hidden',
     elevation: 3,
     shadowColor: '#000',
@@ -412,17 +429,19 @@ const styles = StyleSheet.create({
   carouselImage: {
     width: '100%',
     height: 150,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
   },
   carouselText: {
     padding: 10,
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: '#334155',
   },
   quickAccessTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#444',
+    color: '#475569',
     marginVertical: 15,
   },
   subjectsContainer: {
@@ -431,15 +450,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   subjectCard: {
-     width: '30%',
+    width: '30%',
     aspectRatio: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f1f5f9',
     marginBottom: 15,
-    borderRadius: 10,
+    borderRadius: 12,
     elevation: 2,
     shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
     alignItems: 'center',
     justifyContent: 'center',
@@ -447,18 +466,12 @@ const styles = StyleSheet.create({
   subjectText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#0063e5',
+    color: '#1d4ed8',
     textAlign: 'center',
   },
-
-  buttonText:{
-    color:"black",
-    //backgroundColor:"black",   
-    fontSize:16,
-   // marginBottom:10,
-    borderRadius:10,
-    fontWeight:600,
-    width:150,
-    textAlign:"center"
+  iconImg: {
+    height: 80,
+    width: 80,
+    borderRadius: 10
   }
 });

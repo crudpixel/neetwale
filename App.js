@@ -52,7 +52,7 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
          {/* <Stack.Screen name="MainDrawer" component={DrawerNavigator} /> */}
-        <Stack.Screen name="Dashboard" component={BottomTabNavigator} options={{ headerShown: false }}  />
+        <Stack.Screen name="Dashboard" component={BottomTabNavigator} options={{ headerShown: true }}   />
         <Stack.Screen name="Home" component={FirstScreen} />
         <Stack.Screen name="test" component={MyTestsScreen} />
         <Stack.Screen name="review" component={ReviewScreen} />

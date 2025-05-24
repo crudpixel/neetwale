@@ -1,51 +1,81 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text, View } from 'react-native';
-import SubjectsScreen from './SubjectsScreen';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import SubjectsScreen from './SubjectsScreen';
 import ProfileScreen from './ProfileScreen';
 import DashboardScreen from './DashboardScreen';
 import StudyMaterial from './StudyMaterial';
-// Dummy Screens
-
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabNavigator({ navigation }) {
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerBackVisible: false, // Hides back arrow in v6+
-        });
-    }, [navigation]);
-    return (
-        <Tab.Navigator
-            screenOptions={({ route }) => ({
-                tabBarIcon: ({ color, size }) => {
-                    let iconName;
+  const [username, setUsername] = useState('');
 
-                    if (route.name === 'Dashboard') {
-                        iconName = 'house';
-                    } else if (route.name === 'Profile') {
-                        iconName = 'person';
-                    } else if (route.name === 'Study Material') {
-                        iconName = 'picture-as-pdf';
-                    } else if (route.name === 'TestSeries') {
-                        iconName = 'book';
-                    }
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await AsyncStorage.getItem('user');
+        if (userData) {
+          const user = JSON.parse(userData);
+          setUsername(user?.name || 'User');
+        }
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+    };
 
-                    return <MaterialIcons name={iconName} size={size} color={color} />;
-                },
-                tabBarActiveTintColor: '#0063e5',
-                tabBarInactiveTintColor: 'black',
-                headerShown: true,
-            })}
-        >
-            <Tab.Screen name="Dashboard" component={DashboardScreen} />
+    fetchUser();
+  }, []);
 
-            <Tab.Screen  name="TestSeries" component={SubjectsScreen} />
-            <Tab.Screen   name="Profile" component={ProfileScreen} />
-            <Tab.Screen    name="Study Material" component={StudyMaterial} />
-        </Tab.Navigator>
-    );
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerBackVisible: false,
+      headerShown: false,
+    });
+  }, [navigation]);
+
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+
+          if (route.name === 'Dashboard') iconName = 'house';
+          else if (route.name === 'Profile') iconName = 'person';
+          else if (route.name === 'Study Material') iconName = 'picture-as-pdf';
+          else if (route.name === 'TestSeries') iconName = 'book';
+
+          return <MaterialIcons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: 'white',
+        tabBarInactiveTintColor: 'white',
+        tabBarStyle: {
+          backgroundColor: '#3949AB',
+          borderTopWidth: 0,
+          height: 60,
+        },
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: '#3949AB',
+        },
+        headerTintColor: 'white',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          fontSize: 20,
+        },
+      })}
+    >
+      <Tab.Screen
+        name="Dashboard"
+        component={DashboardScreen}
+        options={{
+          headerTitle: `Hello! ${username}`,
+        }}
+      />
+      <Tab.Screen name="TestSeries" component={SubjectsScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Study Material" component={StudyMaterial} />
+    </Tab.Navigator>
+  );
 }
