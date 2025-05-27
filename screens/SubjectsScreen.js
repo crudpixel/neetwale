@@ -1,17 +1,23 @@
-import React ,{useLayoutEffect}from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Button } from 'react-native';
+import React, { useLayoutEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { logoutUser } from '../cookiesApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const subjects = ['Physics', 'Chemistry', 'Biology','Previous Year Paper','All Subject (Mock Test)'];
+
+const subjects = ['Physics', 'Chemistry', 'Biology', 'Previous Year Paper', 'All Subject (Mock Test)'];
+const subjectsIcon = [
+  require('../asstes/physics.png'),
+  require('../asstes/chemistry.png'),
+  require('../asstes/molecular.png'),
+  require('../asstes/test.png'),
+  require('../asstes/exam-time.png'),
+];
 
 export default function SubjectsScreen({ navigation }) {
-const subjectsIcon = ['🧲', '⚗️', '🧬', '📝', '🩺'];
   const handleLogout = async () => {
-    
     await AsyncStorage.removeItem('user');
     logoutUser();
-    navigation.navigate('Home')
-  }
+    navigation.navigate('Home');
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -23,21 +29,19 @@ const subjectsIcon = ['🧲', '⚗️', '🧬', '📝', '🩺'];
     });
   }, [navigation]);
 
-
   return (
     <View style={styles.container}>
-      
-  
-
       {subjects.map((subject, index) => (
         <TouchableOpacity
           key={subject}
           style={styles.card}
           onPress={() => navigation.navigate('Question-sets', { subject })}
         >
-          <Text style={styles.cardText}>{subjectsIcon[index]} {subject}</Text>
+          <View style={styles.cardContent}>
+            <Image source={subjectsIcon[index]} style={styles.icon} />
+            <Text style={styles.cardText}>{subject}</Text>
+          </View>
         </TouchableOpacity>
-
       ))}
     </View>
   );
@@ -45,31 +49,31 @@ const subjectsIcon = ['🧲', '⚗️', '🧬', '📝', '🩺'];
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
-    padding: 20,
-    backgroundColor:'#e9edf0',
-    // flexDirection: 'row',
-    // flexWrap: 'wrap',
-    // justifyContent: 'space-between',
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#fff',
   },
-
   card: {
-     backgroundColor:'yellow',
     borderRadius: 12,
     paddingVertical: 20,
-    paddingHorizontal: 30,
-    marginBottom: 20,
+    paddingHorizontal: 20,
+    marginBottom: 10,
     width: '100%',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  cardContent: {
+    flexDirection: 'row',
     alignItems: 'center',
-    elevation: 3, // Android shadow
-    shadowColor: '#000', // iOS shadow
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+  },
+  icon: {
+    width: 30,
+    height: 30,
+    marginRight: 15,
+    resizeMode: 'contain',
   },
   cardText: {
     fontSize: 18,
     fontWeight: 'bold',
-   
   },
 });

@@ -16,6 +16,7 @@ import StudyMaterial from './screens/StudyMaterial';
 import PDFScreen from './screens/PDFScreen';
 import ChapterList from './screens/ChapterList';
 import SubjectRecommendations from './screens/SubjctRecommendations';
+import PayNowScreen from './screens/PayNowScreen';
 
 
 
@@ -60,6 +61,7 @@ export default function App() {
         <Stack.Screen name="PDFScreen" component={PDFScreen} options={{ headerShown: false }} />
         <Stack.Screen name="ChapterList" component={ChapterList} />
         <Stack.Screen name="Recommendation" component={SubjectRecommendations} />
+        <Stack.Screen name="PayNow" component={PayNowScreen} />
         
 
       </Stack.Navigator>

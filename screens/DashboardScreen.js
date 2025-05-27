@@ -8,6 +8,7 @@ import {
   Image,
   FlatList,
   Dimensions,
+  Button
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
@@ -224,52 +225,65 @@ export default function DashboardScreen({ navigation }) {
       <View style={styles.profileRow}>
         <View style={styles.scoreRankContainer}>
           <View style={[styles.card, { backgroundColor: '#E3F2FD' }]}>
-             <Image source={require('../asstes/physics.png')} style={styles.iconImg} />
-            <View>
-              <Text style={styles.cardTitle}> Physics </Text>
-
-
-              <Text style={styles.cardValue}>Your Score: {physicsAvg} / </Text>
-
-              <Text style={styles.cardValue}>Completed: {attemptedSetsPerSubject.Physics}/{setsCountPerSubject.Physics - 1} sets</Text>
-
+            <View style={styles.card1}>
+              <Image source={require('../asstes/physics.png')} style={styles.iconImg} />
+              <View>
+                <Text style={styles.cardTitle}>Physics</Text>
+                <Text style={styles.cardValue}>Your Score: {physicsAvg} / </Text>
+                <Text style={styles.cardValue}>Completed: {attemptedSetsPerSubject.Physics}/{setsCountPerSubject.Physics - 1} sets</Text>
+              </View>
+            </View>
+            <View style={styles.btn1}>
+              <TouchableOpacity onPress={() => navigation.navigate('Question-sets', { subject: "Physics" })} style={styles.button}>
+                <Text style={styles.buttonText}>Test Series</Text>
+              </TouchableOpacity>
               <TouchableOpacity onPress={() => navigation.navigate("Recommendation", { subject: "Physics" })} style={styles.button}>
-                <Text style={styles.buttonText}>View Recommendation</Text>
+                <Text style={styles.buttonText}>Recommendations</Text>
               </TouchableOpacity>
             </View>
           </View>
+
           <View style={[styles.card, { backgroundColor: '#F3E5F5' }]}>
-            <Image source={require('../asstes/chemistry.png')} style={styles.iconImg} />
-            <View>
-              <Text style={styles.cardTitle}> Chemistry </Text>
-
-
-              <Text style={styles.cardValue}>Your Score: {chemistryAvg} /  </Text>
-
-              <Text style={styles.cardValue}>Completed: {attemptedSetsPerSubject.Chemistry}/{setsCountPerSubject.Chemistry - 1} sets</Text>
-
+            <View style={styles.card1}>
+              <Image source={require('../asstes/chemistry.png')} style={styles.iconImg} />
+              <View>
+                <Text style={styles.cardTitle}>Chemistry</Text>
+                <Text style={styles.cardValue}>Your Score: {chemistryAvg} /  </Text>
+                <Text style={styles.cardValue}>Completed: {attemptedSetsPerSubject.Chemistry}/{setsCountPerSubject.Chemistry - 1} sets</Text>
+              </View>
+            </View>
+            <View style={styles.btn1}>
+              <TouchableOpacity onPress={() => navigation.navigate("Question-sets", { subject: "Chemistry" })} style={styles.button}>
+                <Text style={styles.buttonText}>Test Series</Text>
+              </TouchableOpacity>
               <TouchableOpacity onPress={() => navigation.navigate("Recommendation", { subject: "Chemistry" })} style={styles.button}>
-                <Text style={styles.buttonText}>View Recommendation</Text>
+                <Text style={styles.buttonText}>Recommendations</Text>
               </TouchableOpacity>
             </View>
-
           </View>
           <View style={[styles.card, { backgroundColor: '#F1F8E9' }]}>
-             <Image source={require('../asstes/molecular.png')} style={styles.iconImg} />
-            <View>
-              <Text style={styles.cardTitle}> Biology </Text>
+            <View style={styles.card1}>
+              <Image source={require('../asstes/molecular.png')} style={styles.iconImg} />
+              <View>
+                <Text style={styles.cardTitle}>Biology </Text>
 
-              <Text style={styles.cardValue}>Your Score: {biologyAvg}</Text>
+                <Text style={styles.cardValue}>Your Score: {biologyAvg}</Text>
 
-              <Text style={styles.cardValue}>Completed: {attemptedSetsPerSubject.Biology}/{setsCountPerSubject.Biology - 1} sets</Text>
-
+                <Text style={styles.cardValue}>Completed: {attemptedSetsPerSubject.Biology}/{setsCountPerSubject.Biology - 1} sets</Text>
+              </View>
+            </View>
+            <View style={styles.btn1}>
+              <TouchableOpacity onPress={() => navigation.navigate("Question-sets", { subject: "Biology" })} style={styles.button}>
+                <Text style={styles.buttonText}>Test Series</Text>
+              </TouchableOpacity>
               <TouchableOpacity onPress={() => navigation.navigate("Recommendation", { subject: "Biology" })} style={styles.button}>
-                <Text style={styles.buttonText}>View Recommendation</Text>
+                <Text style={styles.buttonText}>Recommendations</Text>
               </TouchableOpacity>
             </View>
           </View>
           <View style={[styles.card, { backgroundColor: '#EFEBE9' }]}>
-             <Image source={require('../asstes/test.png')} style={styles.iconImg} />
+            <View style={styles.card1}>
+            <Image source={require('../asstes/test.png')} style={styles.iconImg} />
             <View>
               <Text style={styles.cardTitle}>Previous Year Set </Text>
 
@@ -277,25 +291,36 @@ export default function DashboardScreen({ navigation }) {
               <Text style={styles.cardValue}>Your Score: {previousYearAvg}</Text>
 
               <Text style={styles.cardValue}>Completed: {attemptedSetsPerSubject.Previous}/{setsCountPerSubject.Previous - 1} sets</Text>
-
-              <TouchableOpacity onPress={() => navigation.navigate("Recommendation", { subject: "Previous Year" })} style={styles.button}>
-                <Text style={styles.buttonText}>View Recommendation</Text>
-              </TouchableOpacity>
+          </View>
             </View>
+             <View style={styles.btn1}>
+             <TouchableOpacity onPress={() => navigation.navigate("Question-sets", { subject: "Previous Year Paper" })} style={styles.button}>
+                <Text style={styles.buttonText}>Test Series</Text>
+              </TouchableOpacity>
+             <TouchableOpacity onPress={() => navigation.navigate("Recommendation", { subject: "Previous Year" })} style={styles.button}>
+                <Text style={styles.buttonText}>Recommendations</Text>
+              </TouchableOpacity>
+              </View>
           </View>
           <View style={[styles.card, { backgroundColor: '#FFF8E1' }]}>
-             <Image source={require('../asstes/exam-time.png')} style={styles.iconImg} />
+             <View style={styles.card1}>
+            <Image source={require('../asstes/exam-time.png')} style={styles.iconImg} />
             <View>
-              <Text style={styles.cardTitle}>	 Mock Test </Text>
+              <Text style={styles.cardTitle}>Mock Test</Text>
 
               <Text style={styles.cardValue}>Your Score: {mockTestAvg}</Text>
 
               <Text style={styles.cardValue}>Completed: {attemptedSetsPerSubject.Mock}/{setsCountPerSubject.Mock - 1} sets</Text>
-
-              <TouchableOpacity onPress={() => navigation.navigate("Recommendation", { subject: "Mock" })} style={styles.button}>
-                <Text style={styles.buttonText}>View Recommendation</Text>
-              </TouchableOpacity>
+           </View>
             </View>
+            <View style={styles.btn1}>
+                         <TouchableOpacity onPress={() => navigation.navigate("Question-sets", { subject: "All Subject (Mock Test)" })} style={styles.button}>
+                <Text style={styles.buttonText}>Test Series</Text>
+              </TouchableOpacity>
+                         <TouchableOpacity onPress={() => navigation.navigate("Recommendation", { subject: "Mock" })} style={styles.button}>
+                <Text style={styles.buttonText}>Recommendations</Text>
+              </TouchableOpacity>
+              </View>
           </View>
         </View>
       </View>
@@ -313,6 +338,8 @@ export default function DashboardScreen({ navigation }) {
       />
 
       <Text style={styles.quickAccessTitle}>Quick Access</Text>
+      <Button title="Purchase our plan" onPress={() => navigation.navigate('PayNow')} />
+
       <View style={styles.subjectsContainer}>
         {subjects.map((item, index) => (
           <TouchableOpacity
@@ -341,7 +368,10 @@ export default function DashboardScreen({ navigation }) {
           >
             <Text style={styles.subjectText}>{item.title}</Text>
           </TouchableOpacity>
+
         ))}
+
+
       </View>
     </ScrollView>
   );
@@ -349,8 +379,8 @@ export default function DashboardScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    backgroundColor: '#f9fafb',
+    padding: 10,
+    backgroundColor: '#fff',
     flexGrow: 1,
   },
   title: {
@@ -374,17 +404,33 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   card: {
-    flexDirection: 'row',
+
     justifyContent: "flex-start",
     gap: 20,
     borderRadius: 5,
     padding: 16,
 
   },
+  card1: {
+    flexDirection: 'row',
+    justifyContent: "flex-start",
+    gap: 20,
+  },
+
+  btn1: {
+    flexDirection: 'row',
+    justifyContent: "center",
+    gap: 10,
+
+
+  },
+
   cardTitle: {
     fontSize: 18,
     fontWeight: '700',
     color: 'black',
+    marginBottom: 8,
+    marginTop: 0,
   },
   cardValue: {
     fontSize: 16,
@@ -398,21 +444,27 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   button: {
-    backgroundColor: '#facc15',
+    // backgroundColor: '#facc15',
     paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 10,
+    paddingHorizontal: 4,
+    borderRadius: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
-     marginTop:8,
+    marginTop: 8,
+    width: 175,
+    borderWidth: 1,
+    borderColor: "#ccc"
+
+
   },
   buttonText: {
-    fontSize: 14,
-    fontWeight: 'bold',
+    fontSize: 16,
+
     color: '#1e293b',
-   
+    textAlign: "center"
+
   },
   carouselItem: {
     width: screenWidth * 0.8,
@@ -470,8 +522,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   iconImg: {
-    height: 80,
-    width: 80,
+    height: 60,
+    width: 60,
     borderRadius: 10
   }
 });
