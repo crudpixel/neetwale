@@ -7,7 +7,9 @@ import {
   ActivityIndicator,
   StyleSheet,
   Button,
+  BackHandler
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TopicStatsTable = ({ stats }) => {
@@ -46,6 +48,23 @@ export default function MyTestsScreen({ route, navigation }) {
       headerBackVisible: false,
     });
   }, [navigation]);
+
+
+useFocusEffect(
+  React.useCallback(() => {
+    const onBackPress = () => {
+      navigation.navigate('Dashboard');
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+    return () => backHandler.remove(); // ✅ correct way to clean up
+  }, [navigation])
+);
+
+
+
 
   useEffect(() => {
     const fetchTests = async () => {

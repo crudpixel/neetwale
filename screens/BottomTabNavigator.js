@@ -73,9 +73,9 @@ export default function BottomTabNavigator({ navigation }) {
           headerTitle: `Hello! ${username}`,
         }}
       />
+      <Tab.Screen name="Study Material" component={StudyMaterial} />
       <Tab.Screen name="TestSeries" component={SubjectsScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
-      <Tab.Screen name="Study Material" component={StudyMaterial} />
     </Tab.Navigator>
   );
 }

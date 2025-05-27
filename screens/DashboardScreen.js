@@ -220,6 +220,19 @@ export default function DashboardScreen({ navigation }) {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+
+      {/* <Text style={styles.sectionTitle}>Explore</Text> */}
+      <FlatList
+        data={carouselItems}
+        renderItem={renderCarouselItem}
+        keyExtractor={(item, index) => index.toString()}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        snapToAlignment="center"
+        pagingEnabled
+        decelerationRate="fast"
+      />
+
       <Text style={styles.sectionTitle}>Your Progress</Text>
 
       <View style={styles.profileRow}>
@@ -325,22 +338,12 @@ export default function DashboardScreen({ navigation }) {
         </View>
       </View>
 
-      <Text style={styles.sectionTitle}>Explore</Text>
-      <FlatList
-        data={carouselItems}
-        renderItem={renderCarouselItem}
-        keyExtractor={(item, index) => index.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        snapToAlignment="center"
-        pagingEnabled
-        decelerationRate="fast"
-      />
 
-      <Text style={styles.quickAccessTitle}>Quick Access</Text>
-      <Button title="Purchase our plan" onPress={() => navigation.navigate('PayNow')} />
 
-      <View style={styles.subjectsContainer}>
+      {/* <Text style={styles.quickAccessTitle}>Quick Access</Text> */}
+      {/* <Button title="Purchase our plan" onPress={() => navigation.navigate('PayNow')} /> */}
+
+      {/* <View style={styles.subjectsContainer}>
         {subjects.map((item, index) => (
           <TouchableOpacity
             key={index}
@@ -372,7 +375,7 @@ export default function DashboardScreen({ navigation }) {
         ))}
 
 
-      </View>
+      </View> */}
     </ScrollView>
   );
 }
