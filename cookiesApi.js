@@ -1,34 +1,31 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-// Create a base API instance
 const api = axios.create({
   baseURL: 'https://studyneet.crudpixel.tech',
-  withCredentials: true, // Send cookies
+  withCredentials: true,
 });
 
-export const logoutUser = async () => {
-  console.log("i am running");
-
+export const logoutUser = async ({ navigation }) => {
   try {
-    // 1. Get CSRF token
-    const tokenRes = await api.get('/session/token');
-    const csrfToken = tokenRes.data;
+    const userData = await AsyncStorage.getItem('user');
+    const userObj = JSON.parse(userData);
 
-    console.log(csrfToken)
+    const logoutToken = userObj?.logout_token;
 
-    // 2. Send logout with token in query string
-    await api.post(`/user/logout?csrf_token=${csrfToken}`, null, {
-      headers: {
-        // Optionally include the token here too
-        'X-CSRF-Token': csrfToken,
-      },
-    });
+    if (!logoutToken) {
+      throw new Error('Logout token missing');
+    }
+
+    // Logout using token
+    await api.post(`/user/logout?_format=json&token=${logoutToken}`);
 
     console.log('Logged out and session cleared');
+    await AsyncStorage.removeItem('user');
+    navigation.replace('Home');
   } catch (err) {
-    console.warn('Logout failed', err.response?.data || err.message);
+    console.warn('Logout failed:', err.response?.data || err.message);
   }
 };
-
 
 export default api;

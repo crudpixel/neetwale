@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Alert, StyleSheet,Image ,TouchableOpacity,Button, ScrollView} from 'react-native';
+import { View, TextInput, Alert, StyleSheet,Image ,TouchableOpacity,Button, ScrollView,Text} from 'react-native';
 
 export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState('');
@@ -45,45 +45,67 @@ export default function RegisterScreen({ navigation }) {
   return (
     <ScrollView style={styles.container}>
     <View style={styles.container}>
-      <Image source={require('../asstes/register.jpg')} style={styles.image} resizeMode="contain" />
+      <Image source={require('../asstes/register.png')} style={styles.image} resizeMode="contain" />
       <TextInput placeholder="Username" value={name} onChangeText={setName} style={styles.input} />
       <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={styles.input} />
       <TextInput placeholder="Password" value={pass} onChangeText={setPass} secureTextEntry style={styles.input} />
-     {/* <TouchableOpacity style={styles.button1} onPress={handleRegister}>
-  <Text style={styles.buttonText1}>Register</Text>
-</TouchableOpacity> */}
- <Button title="Register" onPress={handleRegister}/>
+     <TouchableOpacity style={styles.button1} onPress={handleRegister}>
+  <Text style={styles.buttonText1}>SignUp</Text>
+</TouchableOpacity>
+       <TouchableOpacity onPress={() => navigation.replace('Login')}>
+        <Text style={styles.buttonText}>
+          Already have an account?{" "}
+          <Text style={styles.signUpText}> Login</Text>
+        </Text>
+      </TouchableOpacity>
     </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {flex:1, padding: 20, backgroundColor: "white" },
+  container: {flex:1, padding: 10, backgroundColor: "white"},
    input: {
-    borderWidth: 1,
+     borderWidth: 1,
     padding: 15,
     marginVertical: 5,
-    borderRadius: 10,
-    marginBottom: 10,
+    borderRadius: 5,
+    marginBottom: 15,
     fontSize: 16
   },
    image: {
-    width: '100%',
-    height: 400,
+    width: '60%',
+    height: 350,
+    marginTop:120,
+    margin:'auto'
 
   },
     button1:{
   backgroundColor:"#0063e5",
   padding:15,
-  borderRadius:10
+  borderRadius:5,
+  marginTop:5,
+
   },
   buttonText1:{
-     color:"white",
+    color:"white",
     textAlign:"center",
     fontSize:16,
     fontWeight:400
     
-  }
+  },
+    buttonText: {
+    textAlign: "center",
+    margin: 10,
+    color: "black",
+    fontSize: 16,
+    fontWeight: 400,
+  },
+    signUpText: {
+    color: "#0063e5",
+    fontWeight: 600,
+    textAlign:"center",
+    fontSize:16,
+  },
 
 });

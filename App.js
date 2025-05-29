@@ -17,6 +17,10 @@ import PDFScreen from './screens/PDFScreen';
 import ChapterList from './screens/ChapterList';
 import SubjectRecommendations from './screens/SubjctRecommendations';
 import PayNowScreen from './screens/PayNowScreen';
+import FacultyDashboard from './screens/FacultyDashboard';
+import CreateLiveSession from './screens/CreateLiveSession';
+import FacultyTabs from './screens/FacultyTab';
+import EditSessionForm from './screens/EditSessionForm';
 
 
 
@@ -27,17 +31,54 @@ export default function App() {
  
   const [initialRoute, setInitialRoute] = useState(null);
 
-  useEffect(() => {
-    const checkUser = async () => {
+useEffect(() => {
+  const checkUser = async () => {
+    try {
       const userData = await AsyncStorage.getItem('user');
-      if (userData) {
-        setInitialRoute('Dashboard');
-      } else {
+
+      if (!userData) {
+        // User not logged in
         setInitialRoute('Home');
+        return;
       }
-    };
-    checkUser();
-  }, []);
+
+      const userObj = JSON.parse(userData);
+      console.log(userObj)
+      const userDetailsRes = await fetch(
+        `https://studyneet.crudpixel.tech/api/user/${userObj.userid}/roles`
+      );
+
+      if (!userDetailsRes.ok) {
+        throw new Error('Failed to fetch user roles');
+      }
+
+      const userDetails = await userDetailsRes.json();
+
+      const facultyRoles = [
+        'physics_faculty',
+        'chemistry_faculty',
+        'biology_faculty',
+      ];
+
+      const isFaculty = userDetails.roles?.some(role =>
+        facultyRoles.includes(role)
+      );
+
+      if (isFaculty) {
+        setInitialRoute('FacultyDashboard');
+      } else {
+        setInitialRoute('Dashboard');
+      }
+
+    } catch (error) {
+      console.error('Error checking user:', error);
+      Alert.alert('Error', 'Something went wrong. Redirecting to login.');
+      setInitialRoute('Home');
+    }
+  };
+
+  checkUser();
+}, []);
 
   // Avoid rendering until the route is decided
   if (!initialRoute) return null;
@@ -50,11 +91,11 @@ export default function App() {
         <Stack.Screen name="TestSeries" component={SubjectsScreen} />
         <Stack.Screen name="Question-sets" component={SetsScreen} />
         <Stack.Screen name="Questions" component={QuestionsScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}  />
+        <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }}/>
          {/* <Stack.Screen name="MainDrawer" component={DrawerNavigator} /> */}
         <Stack.Screen name="Dashboard" component={BottomTabNavigator} options={{ headerShown: true }}   />
-        <Stack.Screen name="Home" component={FirstScreen} />
+        <Stack.Screen name="Home" component={FirstScreen} options={{ headerShown: false }} />
         <Stack.Screen name="test" component={MyTestsScreen} />
         <Stack.Screen name="review" component={ReviewScreen} />
         <Stack.Screen name="studymaterial" component={StudyMaterial} />
@@ -62,6 +103,9 @@ export default function App() {
         <Stack.Screen name="ChapterList" component={ChapterList} />
         <Stack.Screen name="Recommendation" component={SubjectRecommendations} />
         <Stack.Screen name="PayNow" component={PayNowScreen} />
+        <Stack.Screen name="FacultyDashboard" component={FacultyTabs} options={{ headerShown: false }} />
+        <Stack.Screen name="CreateLiveSession" component={CreateLiveSession} options={{ title: 'Create Live Session' }}/>
+        <Stack.Screen name="EditSessionForm" component={EditSessionForm} />
         
 
       </Stack.Navigator>

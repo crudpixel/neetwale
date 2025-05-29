@@ -7,7 +7,8 @@ import {
   ScrollView,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { logoutUser } from '../cookiesApi';
+import axios from 'axios';
+//import { logoutUser } from '../cookiesApi';
 
 const subjects = ['Physics', 'Chemistry', 'Biology'];
 
@@ -16,8 +17,35 @@ export default function ProfileScreen({ navigation }) {
   const [userId, setUserId] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState('Physics');
   const [leaderboardData, setLeaderboardData] = useState([]);
+  const [isFacultyUser, setIsFacultyUser] = useState(false);
 
+  const Facultyuser = false;
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      const userData = await AsyncStorage.getItem('user');
+      if (userData) {
+        const userObj = JSON.parse(userData);
+        setUsername(userObj.name || 'Guest');
+        setUserId(userObj.userid?.toString());
+
+        const userDetailsRes = await fetch(
+          `https://studyneet.crudpixel.tech/api/user/${userObj.userid}/roles`
+        );
+        const userDetails = await userDetailsRes.json();
+
+        const isFaculty = userDetails.roles?.some(role =>
+          ['physics_faculty', 'chemistry_faculty', 'biology_faculty'].includes(role)
+        );
+
+        setIsFacultyUser(isFaculty); // ✅ update state
+      }
+    };
+
+    fetchUser();
+    fetchLeaderboard();
+  }, []);
+  
 
   const fetchLeaderboard = async () => {
     try {
@@ -83,44 +111,79 @@ export default function ProfileScreen({ navigation }) {
   };
 
   const handleLogout = async () => {
+   // await AsyncStorage.removeItem('user');
+
+   const api = axios.create({
+  baseURL: 'https://studyneet.crudpixel.tech',
+  withCredentials: true,
+});
+   const logoutUser = async () => {
+  try {
+    const userData = await AsyncStorage.getItem('user');
+    const userObj = JSON.parse(userData);
+          const userDetailsRes = await fetch(
+        `https://studyneet.crudpixel.tech/api/user/${userObj.userid}/roles`
+      );
+
+    const logoutToken = userObj?.logout_token;
+
+    if (!logoutToken) {
+      throw new Error('Logout token missing');
+    }
+
+    // Logout using token
+    await api.post(`/user/logout?_format=json&token=${logoutToken}`);
+
+    console.log('Logged out and session cleared');
     await AsyncStorage.removeItem('user');
-    logoutUser();
     navigation.replace('Home');
+  } catch (err) {
+    console.warn('Logout failed:', err.response?.data || err.message);
+  }
+};
+    logoutUser();
+  navigation.replace('Home');
   };
 
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.card}>
-        <View style={styles.avatar} />
-        <Text style={styles.label}>Welcome,</Text>
-        <Text style={styles.username}>{username}</Text>
-      </View>
+ return (
+  <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.card}>
+      <View style={styles.avatar} />
+      <Text style={styles.label}>Hello!</Text>
+      <Text style={styles.username}>{username}</Text>
+    </View>
 
-      <View style={styles.tabContainer}>
-        {subjects.map((sub) => (
-          <TouchableOpacity
-            key={sub}
-            style={[styles.tab, selectedSubject === sub && styles.activeTab]}
-            onPress={() => setSelectedSubject(sub)}
-          >
-            <Text style={styles.tabText}>{sub}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+    {/* ✅ Only show leaderboard for students */}
+    {!isFacultyUser && (
+      <>
+        <View style={styles.tabContainer}>
+          {subjects.map((sub) => (
+            <TouchableOpacity
+              key={sub}
+              style={[styles.tab, selectedSubject === sub && styles.activeTab]}
+              onPress={() => setSelectedSubject(sub)}
+            >
+              <Text style={styles.tabText}>{sub}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
 
-      <View style={styles.tableHeader}>
-        <Text style={styles.headerCell}>Rank</Text>
-        <Text style={styles.headerCell}>Username</Text>
-        <Text style={styles.headerCell}>Score</Text>
-      </View>
+        <View style={styles.tableHeader}>
+          <Text style={styles.headerCell}>Rank</Text>
+          <Text style={styles.headerCell}>Username</Text>
+          <Text style={styles.headerCell}>Score</Text>
+        </View>
 
-      {renderTable(selectedSubject)}
+        {renderTable(selectedSubject)}
+      </>
+    )}
 
-      <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-        <Text style={styles.logoutText}>Logout</Text>
-      </TouchableOpacity>
-    </ScrollView>
-  );
+    {/* ✅ Logout button for everyone */}
+    <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+      <Text style={styles.logoutText}>Logout</Text>
+    </TouchableOpacity>
+  </ScrollView>
+);
 }
 
 const styles = StyleSheet.create({
