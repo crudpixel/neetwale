@@ -6,6 +6,7 @@ import ProfileScreen from './ProfileScreen';
 import DashboardScreen from './DashboardScreen';
 import StudyMaterial from './StudyMaterial';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TouchableOpacity } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -71,6 +72,14 @@ export default function BottomTabNavigator({ navigation }) {
         component={DashboardScreen}
         options={{
           headerTitle: `Hello! ${username}`,
+          headerRight: () => (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Notifications')}
+            style={{ marginRight: 15 }}
+          >
+            <MaterialIcons name="notifications" size={24} color="white" />
+          </TouchableOpacity>
+        ),
         }}
       />
       <Tab.Screen name="Study Material" component={StudyMaterial} />

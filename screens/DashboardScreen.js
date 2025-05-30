@@ -45,6 +45,7 @@ export default function DashboardScreen({ navigation }) {
 
 
 const [carouselItems, setCarouselItems] = useState([]);
+const [activeSlide, setActiveSlide] = useState(0);
 
 useEffect(() => {
   const fetchScheduledSessions = async () => {
@@ -121,11 +122,11 @@ useEffect(() => {
               const result2 = await response2.json();
               console.log(result2)
 
-              setPhysicsAvg(result2.data.physics_score);
-              setChemistryAvg(result2.data.chemistry_score);
-              setBiologyAvg(result2.data.biology_score);
-              setPreviousYearAvg(average(scores.Previous));
-              setMockTestAvg(average(scores.Mock));
+              setPhysicsAvg(result2.data.physics_score ?? '0');
+              setChemistryAvg(result2.data.chemistry_score ?? '0');
+              setBiologyAvg(result2.data.biology_score ?? '0');
+              setPreviousYearAvg(average(scores.Previous ?? '0'));
+              setMockTestAvg(average(scores.Mock ?? '0'));
             }
           }
         } catch (error) {
@@ -208,13 +209,27 @@ useEffect(() => {
     { title: 'Mock Test' },
   ];
 
+  function handleBooking(item){
+    console.log(item.field_meeting_link,item.field_fees,item.title,item.author_name);
+      navigation.navigate('PayNow', {
+    title: item.title,
+    fees: item.field_fees,
+    meetingLink: item.field_meeting_link,
+    author: item.author_name,
+  });
+  }
 
 
 const renderCarouselItem = ({ item }) => (
   <View style={styles.carouselItem}>
     <Text style={styles.sessionTitle}>{item.title}</Text>
     <Text style={styles.sessionDetail}>By: {item.author_name} Sir</Text>
+  <View style={styles.feeRow}>
     <Text style={styles.sessionDetail}>Fees: ₹{item.field_fees}</Text>
+    <TouchableOpacity style={styles.bookNowButton} onPress={() => handleBooking(item)}>
+      <Text style={styles.bookNowText}>Book Now</Text>
+    </TouchableOpacity>
+  </View>
     <Text style={styles.sessionDetail}>Date: {item.field_session_date}</Text>
     <Text style={styles.sessionDescription}>{item.field_description}</Text>
   </View>
@@ -222,11 +237,14 @@ const renderCarouselItem = ({ item }) => (
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-
+ <View style={styles.ViewAll}>
 <Text style={styles.sectionTitle}>Upcoming Live Sessions</Text>
-
+    <TouchableOpacity style={styles.bookNowButton1} onPress={() => navigation.navigate("AllSession")}>
+      <Text style={styles.bookNowText1}>View All Session  ▶︎ </Text>
+    </TouchableOpacity>
+</View>
 <FlatList
-  data={carouselItems}
+  data={carouselItems.slice(0,5)}
   renderItem={renderCarouselItem}
   keyExtractor={(item, index) => index.toString()}
   horizontal
@@ -234,7 +252,27 @@ const renderCarouselItem = ({ item }) => (
   snapToAlignment="center"
   pagingEnabled
   decelerationRate="fast"
+    contentContainerStyle={{ paddingHorizontal: 16 }}
+    ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+      onScroll={e => {
+    const slide = Math.round(
+      e.nativeEvent.contentOffset.x / (screenWidth - 32) // 90% + 16px padding
+    );
+    setActiveSlide(slide);
+  }}
+  scrollEventThrottle={16}
 />
+<View style={styles.pagination}>
+  {carouselItems.slice(0, 5).map((_, index) => (
+    <View
+      key={index}
+      style={[
+        styles.dot,
+        { backgroundColor: index === activeSlide ? '#333' : '#ccc' },
+      ]}
+    />
+  ))}
+</View>
 
 
       <Text style={styles.sectionTitle}>Your Progress</Text>
@@ -247,7 +285,7 @@ const renderCarouselItem = ({ item }) => (
               <View>
                 <Text style={styles.cardTitle}>Physics</Text>
                 <Text style={styles.cardValue}>Your Score: {physicsAvg} / </Text>
-                <Text style={styles.cardValue}>Completed: {attemptedSetsPerSubject.Physics}/{setsCountPerSubject.Physics - 1} sets</Text>
+                <Text style={styles.cardValue}>Completed: {attemptedSetsPerSubject.Physics-1}/{setsCountPerSubject.Physics - 1} sets</Text>
               </View>
             </View>
             <View style={styles.btn1}>
@@ -435,20 +473,21 @@ const styles = StyleSheet.create({
     textAlign: "center"
 
   },
-  carouselItem: {
-    width: screenWidth*0.8,
-    marginRight: 15,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    overflow: 'hidden',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    shadowOffset: { width: 0, height: 2 },
-    padding:20,
-    borderWidth:1
-  },
+carouselItem: {
+  width: screenWidth - 42, // Full screen width
+  backgroundColor: '#fff',
+  borderRadius: 12,
+  overflow: 'hidden',
+  elevation: 3,
+  shadowColor: '#000',
+  shadowOpacity: 0.1,
+  shadowRadius: 5,
+  shadowOffset: { width: 0, height: 2 },
+  padding: 20,
+  borderWidth: 1,
+  marginRight:15
+},
+
   carouselImage: {
     width: '100%',
     height: 150,
@@ -512,6 +551,50 @@ sessionDescription: {
   fontSize: 14,
   color: '#64748b',
   marginTop: 4,
+},
+feeRow: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  marginVertical: 8,
+},
+
+bookNowButton: {
+  backgroundColor: 'green',
+  paddingVertical: 6,
+  paddingHorizontal: 12,
+  borderRadius: 6,
+},
+
+bookNowText: {
+  color: 'white',
+  fontWeight: 'bold',
+},
+bookNowText1:{
+ color: 'black',
+  fontWeight: 'bold',
+  borderBottomWidth:1
+},
+
+ViewAll:{
+  flexDirection:"row",
+  justifyContent:"center",
+  alignItems:"center",
+  gap:10
+},
+pagination: {
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: 10,
+},
+
+dot: {
+  width: 8,
+  height: 8,
+  borderRadius: 4,
+  marginHorizontal: 4,
+  backgroundColor: '#ccc',
 },
   
 });

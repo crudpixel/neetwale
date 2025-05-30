@@ -95,6 +95,7 @@ const handleDelete = (nid) => {
       <Text>Fees: ₹{session.field_fees}</Text>
       <Text>Date: {session.field_session_date}</Text>
       <Text>Status: {session.field_status || 'N/A'}</Text>
+      <Text>Session Link: {session.field_meeting_link || 'N/A'}</Text>
 
       <View style={styles.buttonRow}>
 <TouchableOpacity
@@ -106,6 +107,7 @@ const handleDelete = (nid) => {
       field_fees: session.field_fees,
       field_session_date: session.field_session_date,
       field_status: session.field_status,
+      field_meeting_link: session.field_meeting_link,
     })
   }
 >

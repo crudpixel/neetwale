@@ -21,6 +21,8 @@ import FacultyDashboard from './screens/FacultyDashboard';
 import CreateLiveSession from './screens/CreateLiveSession';
 import FacultyTabs from './screens/FacultyTab';
 import EditSessionForm from './screens/EditSessionForm';
+import NotificationScreen from './screens/NotificationScreen';
+import AllSessions from './screens/AllSession';
 
 
 
@@ -94,7 +96,7 @@ useEffect(() => {
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}  />
         <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }}/>
          {/* <Stack.Screen name="MainDrawer" component={DrawerNavigator} /> */}
-        <Stack.Screen name="Dashboard" component={BottomTabNavigator} options={{ headerShown: true }}   />
+        <Stack.Screen name="Dashboard" component={BottomTabNavigator} options={{ headerShown: true ,}}   />
         <Stack.Screen name="Home" component={FirstScreen} options={{ headerShown: false }} />
         <Stack.Screen name="test" component={MyTestsScreen} />
         <Stack.Screen name="review" component={ReviewScreen} />
@@ -106,6 +108,8 @@ useEffect(() => {
         <Stack.Screen name="FacultyDashboard" component={FacultyTabs} options={{ headerShown: false }} />
         <Stack.Screen name="CreateLiveSession" component={CreateLiveSession} options={{ title: 'Create Live Session' }}/>
         <Stack.Screen name="EditSessionForm" component={EditSessionForm} />
+        <Stack.Screen name="Notifications" component={NotificationScreen} />
+        <Stack.Screen name="AllSession" component={AllSessions} />
         
 
       </Stack.Navigator>

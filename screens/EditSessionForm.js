@@ -6,13 +6,14 @@ const EditSessionForm = () => {
   const route = useRoute();
   const navigation = useNavigation();
 
-  const { nid, title, field_fees, field_session_date, field_status } = route.params;
+  const { nid, title, field_fees, field_session_date, field_status,field_meeting_link } = route.params;
 
   const [sessionTitle, setSessionTitle] = useState(title);
   const [fees, setFees] = useState(field_fees);
   const [date, setDate] = useState(field_session_date);
   const [status, setStatus] = useState(field_status);
-  console.log(nid, title, field_fees, field_session_date, field_status)
+  const [meetingLink, setMeetingLink] = useState(field_meeting_link);
+  console.log(nid, title, field_fees, field_session_date, field_status,field_meeting_link)
 
   const handleUpdate = async () => {
     try {
@@ -27,6 +28,7 @@ const EditSessionForm = () => {
           field_fees: fees,
           field_session_date: date,
           field_status: status,
+          field_meeting_link: meetingLink,
         }),
       });
 
@@ -57,6 +59,8 @@ const EditSessionForm = () => {
 
       <Text style={styles.label}>Status</Text>
       <TextInput value={status} onChangeText={setStatus} style={styles.input} />
+            <Text style={styles.label}>Meeting Link</Text>
+      <TextInput value={meetingLink} onChangeText={setMeetingLink} style={styles.input} /> 
 
       <Button title="Update Session" onPress={handleUpdate} />
     </View>
