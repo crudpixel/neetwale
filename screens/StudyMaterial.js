@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet ,Image} from 'react-native';
 import { materials } from './SubjectData';
 
 export default function StudyMaterial({ navigation }) {
@@ -12,11 +12,15 @@ export default function StudyMaterial({ navigation }) {
           onPress={() =>
             navigation.navigate('ChapterList', {
               title: item.title,
+              rightArrow:item.arrow,
               chapters: item.chapters,
             })
           }
         >
+          <View style={styles.subject}>
           <Text style={styles.text}>{item.title}</Text>
+          <Image source={item.arrow} style={styles.Arrow}/>
+          </View>
         </TouchableOpacity>
       ))}
     </View>
@@ -24,12 +28,20 @@ export default function StudyMaterial({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#fff' },
+  container: { flex: 1, padding: 10, backgroundColor: '#fff' },
   item: {
-    backgroundColor: '#d6eaff',
     padding: 15,
     marginBottom: 10,
-    borderRadius: 10,
+    borderBottomWidth:1,
+     borderBottomColor: '#eee',
   },
-  text: { fontSize: 18 },
+  text: { fontSize: 18,fontWeight:"bold" },
+  subject:{
+  flexDirection:"row",
+  justifyContent:"space-between"
+  },
+ Arrow:{
+  width:30,
+  height:30
+ }
 });

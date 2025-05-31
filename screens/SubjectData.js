@@ -1,8 +1,9 @@
 
-
+import ArrowIcon from "../asstes/chevron.png"
 export const materials = [
   {
-    title: '🧲 Physics Class 11',
+    title: 'Physics Class 11',
+    arrow: ArrowIcon,
     chapters: [
       {
         name: 'Chapter 1 (Motion)',
@@ -15,7 +16,8 @@ export const materials = [
     ],
   },
   {
-    title: '🔭 Physics Class 12',
+    title: 'Physics Class 12',
+    arrow: ArrowIcon,
     chapters: [
       {
         name: 'Electrostatics',
@@ -24,7 +26,8 @@ export const materials = [
     ],
   },
   {
-    title: '⚗️ Chemistry Class 11',
+    title: 'Chemistry Class 11',
+    arrow: ArrowIcon,
     chapters: [
       {
         name: 'Electrostatics',
@@ -33,7 +36,8 @@ export const materials = [
     ],
   },
   {
-    title: '🧪 Chemistry Class 12',
+    title: 'Chemistry Class 12',
+    arrow: ArrowIcon,
     chapters: [
       {
         name: 'Electrostatics',
@@ -42,7 +46,8 @@ export const materials = [
     ],
   },
   {
-    title: '🧬 Biology Class 11',
+    title: 'Biology Class 11',
+    arrow: ArrowIcon,
     chapters: [
       {
         name: 'Electrostatics',
@@ -51,7 +56,8 @@ export const materials = [
     ],
   },
   {
-    title: '🦠 Biology Class 12',
+    title: 'Biology Class 12',
+    arrow: ArrowIcon,
     chapters: [
       {
         name: 'Electrostatics',

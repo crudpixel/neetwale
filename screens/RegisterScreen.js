@@ -64,7 +64,7 @@ export default function RegisterScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {flex:1, padding: 10, backgroundColor: "white"},
+  container: {flex:1, padding: 10, backgroundColor: "white",paddingTop:"60"},
    input: {
      borderWidth: 1,
     padding: 15,
@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
    image: {
     width: '60%',
     height: 350,
-    marginTop:120,
     margin:'auto'
 
   },

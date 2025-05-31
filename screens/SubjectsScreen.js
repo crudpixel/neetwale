@@ -19,15 +19,15 @@ export default function SubjectsScreen({ navigation }) {
     navigation.navigate('Home');
   };
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity onPress={handleLogout} style={{ marginRight: 15 }}>
-          <Text style={{ color: 'black', fontWeight: 'bold' }}>Logout</Text>
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation]);
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerRight: () => (
+  //       <TouchableOpacity onPress={handleLogout} style={{ marginRight: 15 }}>
+  //         <Text style={{ color: 'black', fontWeight: 'bold' }}>Logout</Text>
+  //       </TouchableOpacity>
+  //     ),
+  //   });
+  // }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -38,8 +38,11 @@ export default function SubjectsScreen({ navigation }) {
           onPress={() => navigation.navigate('Question-sets', { subject })}
         >
           <View style={styles.cardContent}>
+            <View style={styles.cardContent1}>
             <Image source={subjectsIcon[index]} style={styles.icon} />
             <Text style={styles.cardText}>{subject}</Text>
+            </View>
+              <Image source={require('../asstes/chevron.png')} style={styles.rightArrow}/>
           </View>
         </TouchableOpacity>
       ))}
@@ -65,12 +68,22 @@ const styles = StyleSheet.create({
   cardContent: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent:"space-between",
+  },
+  cardContent1: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   icon: {
     width: 30,
     height: 30,
     marginRight: 15,
     resizeMode: 'contain',
+  },
+  rightArrow:{
+    width: 30,
+    height: 30,
+  
   },
   cardText: {
     fontSize: 18,

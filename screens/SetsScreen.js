@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet, ScrollView ,Image} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -52,8 +52,8 @@ export default function SetsScreen({ route, navigation }) {
   if (loading) return <ActivityIndicator style={{ marginTop: 40 }} />;
 
   return (
-    <ScrollView>
-      <View style={{ padding: 20 }}>
+    <ScrollView style={styles.container}>
+      <View  >
         {sets.map((set, index) => {
           const isLocked = !hasPaid && index > 0;
 
@@ -77,10 +77,13 @@ export default function SetsScreen({ route, navigation }) {
               }}
             >
               <View style={styles.cardContent}>
-                {isLocked && <Icon name="lock" size={40} color="#999" />}
+                <View style={styles.sets}>
+                {isLocked && <Image source={require('../asstes/padlock.png')} style={styles.icon}/>}
                 <Text style={[styles.cardText, isLocked && styles.lockedText]}>
                   {set.name}
                 </Text>
+                </View>
+                <Image source={require('../asstes/chevron.png')} style={styles.icon}/>
 
               </View>
             </TouchableOpacity>
@@ -92,19 +95,27 @@ export default function SetsScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+  container:{
+   backgroundColor:"#fff",
+   padding:10
+  },
   card: {
-    backgroundColor: '#f2f2f2',
-    borderRadius: 12,
+
     paddingVertical: 20,
     paddingHorizontal: 30,
-    marginBottom: 20,
+    marginBottom: 10,
     width: '100%',
-    alignItems: 'center',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    borderBottomWidth:1,
+    borderBottomColor: '#eee',
+    
+  },
+  sets:{
+  flexDirection:"row",
+  gap:20
+  },
+  icon:{
+  width:30,
+  height:30
   },
   cardText: {
     fontSize: 18,
@@ -112,7 +123,8 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    justifyContent:"space-between",
+
   }
 });

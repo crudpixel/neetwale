@@ -321,28 +321,66 @@ console.log( topic);
 
   const currentQuestion = questions[currentIndex];
 
+  // const handleOptionPress = (option) => {
+  //   if (selectedOption !== null) return;
+
+  //   const qKey = `Q${currentIndex + 1}`;
+  //   setUserAnswers(prev => ({
+  //     ...prev,
+  //     [qKey]: option,
+  //   }));
+
+  //   if (option === currentQuestion.correct) {
+  //     setScore(prev => prev + 4);
+  //   } else {
+  //     setScore(prev => prev - 1);
+  //   }
+
+  //   setSelectedOption(option);
+  //   setMarkedForReview(prev => {
+  //     const updated = { ...prev };
+  //     delete updated[currentIndex];
+  //     return updated;
+  //   });
+  // };
+
   const handleOptionPress = (option) => {
-    if (selectedOption !== null) return;
+  const qKey = `Q${currentIndex + 1}`;
+  const previousOption = userAnswers[qKey];
 
-    const qKey = `Q${currentIndex + 1}`;
-    setUserAnswers(prev => ({
-      ...prev,
-      [qKey]: option,
-    }));
+  // If the selected option is the same, do nothing
+  if (option === previousOption) return;
 
-    if (option === currentQuestion.correct) {
-      setScore(prev => prev + 4);
+  // Adjust score: remove previous effect
+  if (previousOption) {
+    if (previousOption === currentQuestion.correct) {
+      setScore(prev => prev - 4);
     } else {
-      setScore(prev => prev - 1);
+      setScore(prev => prev + 1);
     }
+  }
 
-    setSelectedOption(option);
-    setMarkedForReview(prev => {
-      const updated = { ...prev };
-      delete updated[currentIndex];
-      return updated;
-    });
-  };
+  // Add new score based on current option
+  if (option === currentQuestion.correct) {
+    setScore(prev => prev + 4);
+  } else {
+    setScore(prev => prev - 1);
+  }
+
+  // Save selected option
+  setSelectedOption(option);
+  setUserAnswers(prev => ({
+    ...prev,
+    [qKey]: option,
+  }));
+
+  // Remove from marked for review
+  setMarkedForReview(prev => {
+    const updated = { ...prev };
+    delete updated[currentIndex];
+    return updated;
+  });
+};
 
   useEffect(() => {
     const qKey = `Q${currentIndex + 1}`;
@@ -527,7 +565,7 @@ console.log('📊 Topic Stats:', topicStats);
                           ? '#4CAF50'
                           : markedForReview[index]
                             ? 'orange'
-                            : 'transparent',
+                            : '#ccc',
 
                     },
                   ]}
@@ -545,16 +583,19 @@ console.log('📊 Topic Stats:', topicStats);
         </View>
       ) : (
         <>
-          <Text style={{ fontSize: 18, textAlign: 'center', marginBottom: 10 }}>
+          <Text style={{ fontSize: 18, textAlign: 'right', marginBottom: 20 }}>
             Time Left: {formatTime(timeLeft)}
+          </Text>
+          <Text style={{ fontSize: 18, textAlign: 'center', marginBottom: 10 }}>
+             {currentIndex + 1}/ out of {questions.length}
           </Text>
 
           {/* <Text style={styles.title}>
             {currentIndex + 1}. {currentQuestion.title}
           </Text> */}
 
-          <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', marginRight: 5 }}>
+          <View style={styles.questionTitle}>
+            <Text style={{ fontSize: 18, marginRight: 5 }}>
               {currentIndex + 1}.
             </Text>
             <View style={{ flex: 1 }}>
@@ -576,42 +617,50 @@ console.log('📊 Topic Stats:', topicStats);
 
 
           {currentQuestion.options.map((opt, idx) => (
-            <View key={idx} style={styles.optionBtn}>
-              <Button
-                title={opt}
-                color={selectedOption === opt ? 'blue' : undefined}
-                onPress={() => handleOptionPress(opt)}
-              />
-            </View>
-          ))}
+        <TouchableOpacity
+          key={idx}
+          style={[
+            styles.optionBtn,
+            selectedOption === opt && styles.selectedOption
+          ]}
+          onPress={() => handleOptionPress(opt)}
+        >
+          <Text style={styles.optionText}>{opt}</Text>
+        </TouchableOpacity>
+      ))}
 
-          <View style={styles.navigationButtons}>
-            {/* Previous Button */}
-            {currentIndex > 0 && (
-              <Button title="Previous" onPress={() => setCurrentIndex(prev => prev - 1)} />
-            )}
+         <View style={styles.navigationContainer}>
+  {/* Previous Button */}
+  {currentIndex > 0 && (
+    <TouchableOpacity style={styles.navButton} onPress={() => setCurrentIndex(prev => prev - 1)}>
+      <Text style={styles.buttonText}>Previous</Text>
+    </TouchableOpacity>
+  )}
 
-            {/* Mark for Review Button in the center */}
-            <Button
-              title="Mark for Review"
+  {/* Mark for Review Button */}
+  <TouchableOpacity
+    style={styles.navButton}
+    onPress={() =>
+      setMarkedForReview(prev => ({
+        ...prev,
+        [currentIndex]: true,
+      }))
+    }
+  >
+    <Text style={styles.buttonText}>Mark for Review</Text>
+  </TouchableOpacity>
 
-              onPress={() =>
-                setMarkedForReview(prev => ({
-                  ...prev,
-                  [currentIndex]: true,
-                }))
-              }
-            />
-
-
-            {/* Next or Submit Button */}
-            {currentIndex < questions.length - 1 ? (
-              <Button title="Next" onPress={() => setCurrentIndex(prev => prev + 1)} />
-            ) : (
-              <Button title="Submit" onPress={SubmitTest} />
-            )}
-          </View>
-
+  {/* Next or Submit Button */}
+  {currentIndex < questions.length - 1 ? (
+    <TouchableOpacity style={styles.navButton} onPress={() => setCurrentIndex(prev => prev + 1)}>
+      <Text style={styles.buttonText}>Next</Text>
+    </TouchableOpacity>
+  ) : (
+    <TouchableOpacity style={styles.navButton} onPress={SubmitTest}>
+      <Text style={styles.buttonText}>Submit</Text>
+    </TouchableOpacity>
+  )}
+</View>
 
         </>
       )}
@@ -620,7 +669,7 @@ console.log('📊 Topic Stats:', topicStats);
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20, flex: 1, justifyContent: 'center' },
+  container: { padding: 20, flex: 1,backgroundColor:"#fff"  },
   title: { fontSize: 20, marginBottom: 20, fontWeight: 'bold' },
   optionBtn: { marginVertical: 5 },
   result: { marginTop: 20, alignItems: 'center' },
@@ -629,6 +678,15 @@ const styles = StyleSheet.create({
     marginTop: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  questionTitle:{
+    flexDirection: 'row',
+     marginBottom: 10 ,
+     borderWidth:1,
+     padding:10,
+     borderRadius:10,
+     borderColor:"#ccc",
+    
   },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   reviewPanel: {
@@ -658,5 +716,45 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     lineHeight: 35,
+  },
+  optionBtn: {
+    padding: 12,
+    backgroundColor: '#f2f2f2',
+    borderRadius: 8,
+    marginVertical: 8,
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+  selectedOption: {
+    backgroundColor: 'green',
+    borderColor: 'darkgreen',
+  },
+  optionText: {
+    fontSize: 16,
+    color: '#000',
+  },
+   navigationContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderColor: '#ccc',
+  },
+  navButton: {
+    backgroundColor: '#007bff',
+    paddingVertical: 10,
+    paddingHorizontal: 18,
+    borderRadius: 8,
+    marginHorizontal: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });

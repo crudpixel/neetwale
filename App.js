@@ -23,6 +23,9 @@ import FacultyTabs from './screens/FacultyTab';
 import EditSessionForm from './screens/EditSessionForm';
 import NotificationScreen from './screens/NotificationScreen';
 import AllSessions from './screens/AllSession';
+import StudentAskQuery from './screens/StudentAskQuery';
+import QuestionDetails from './screens/QuestionDetails';
+import AuthorNodesList from './screens/AuthorNodeList';
 
 
 
@@ -90,7 +93,7 @@ useEffect(() => {
   
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRoute}>
-        <Stack.Screen name="TestSeries" component={SubjectsScreen} />
+        <Stack.Screen name="Test Series" component={SubjectsScreen} />
         <Stack.Screen name="Question-sets" component={SetsScreen} />
         <Stack.Screen name="Questions" component={QuestionsScreen} />
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}  />
@@ -110,6 +113,9 @@ useEffect(() => {
         <Stack.Screen name="EditSessionForm" component={EditSessionForm} />
         <Stack.Screen name="Notifications" component={NotificationScreen} />
         <Stack.Screen name="AllSession" component={AllSessions} />
+        <Stack.Screen name="StudentAskQuery" component={StudentAskQuery} />
+        <Stack.Screen name="QuestionDetails" component={QuestionDetails} />
+        <Stack.Screen name="AllRaiseQuestion" component={AuthorNodesList} />
         
 
       </Stack.Navigator>

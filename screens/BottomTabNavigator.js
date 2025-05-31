@@ -45,7 +45,7 @@ export default function BottomTabNavigator({ navigation }) {
           if (route.name === 'Dashboard') iconName = 'house';
           else if (route.name === 'Profile') iconName = 'person';
           else if (route.name === 'Study Material') iconName = 'picture-as-pdf';
-          else if (route.name === 'TestSeries') iconName = 'book';
+          else if (route.name === 'Test Series') iconName = 'book';
 
           return <MaterialIcons name={iconName} size={size} color={color} />;
         },
@@ -62,7 +62,6 @@ export default function BottomTabNavigator({ navigation }) {
         },
         headerTintColor: 'white',
         headerTitleStyle: {
-          fontWeight: 'bold',
           fontSize: 20,
         },
       })}
@@ -71,7 +70,7 @@ export default function BottomTabNavigator({ navigation }) {
         name="Dashboard"
         component={DashboardScreen}
         options={{
-          headerTitle: `Hello! ${username}`,
+          headerTitle: `Hello, ${username}`,
           headerRight: () => (
           <TouchableOpacity
             onPress={() => navigation.navigate('Notifications')}
@@ -83,7 +82,7 @@ export default function BottomTabNavigator({ navigation }) {
         }}
       />
       <Tab.Screen name="Study Material" component={StudyMaterial} />
-      <Tab.Screen name="TestSeries" component={SubjectsScreen} />
+      <Tab.Screen name="Test Series" component={SubjectsScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );

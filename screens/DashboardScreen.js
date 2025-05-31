@@ -8,7 +8,8 @@ import {
   Image,
   FlatList,
   Dimensions,
-  Button
+  Button,
+
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
@@ -223,24 +224,26 @@ useEffect(() => {
 const renderCarouselItem = ({ item }) => (
   <View style={styles.carouselItem}>
     <Text style={styles.sessionTitle}>{item.title}</Text>
-    <Text style={styles.sessionDetail}>By: {item.author_name} Sir</Text>
-  <View style={styles.feeRow}>
-    <Text style={styles.sessionDetail}>Fees: ₹{item.field_fees}</Text>
-    <TouchableOpacity style={styles.bookNowButton} onPress={() => handleBooking(item)}>
-      <Text style={styles.bookNowText}>Book Now</Text>
-    </TouchableOpacity>
-  </View>
+    <View style={styles.feeRow}>
+    <Text style={styles.sessionDetail}>Faculty: {item.author_name}</Text>
+    <Text style={styles.sessionDetail}>Fees: ₹ {item.field_fees}</Text>
+    </View>
+     <View style={styles.feeRow}>
     <Text style={styles.sessionDetail}>Date: {item.field_session_date}</Text>
     <Text style={styles.sessionDescription}>{item.field_description}</Text>
+    </View>
+        <TouchableOpacity style={styles.bookNowButton} onPress={() => handleBooking(item)}>
+      <Text style={styles.bookNowText}>Book Now</Text>
+    </TouchableOpacity>
   </View>
 );
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
  <View style={styles.ViewAll}>
-<Text style={styles.sectionTitle}>Upcoming Live Sessions</Text>
+    <Text style={styles.sectionTitle}>Upcoming Live Sessions</Text>
     <TouchableOpacity style={styles.bookNowButton1} onPress={() => navigation.navigate("AllSession")}>
-      <Text style={styles.bookNowText1}>View All Session  ▶︎ </Text>
+      <Text style={styles.bookNowText1}>View All Sessions</Text>
     </TouchableOpacity>
 </View>
 <FlatList
@@ -285,7 +288,7 @@ const renderCarouselItem = ({ item }) => (
               <View>
                 <Text style={styles.cardTitle}>Physics</Text>
                 <Text style={styles.cardValue}>Your Score: {physicsAvg} / </Text>
-                <Text style={styles.cardValue}>Completed: {attemptedSetsPerSubject.Physics-1}/{setsCountPerSubject.Physics - 1} sets</Text>
+                <Text style={styles.cardValue}>Completed: {attemptedSetsPerSubject.Physics}/{setsCountPerSubject.Physics - 1} sets</Text>
               </View>
             </View>
             <View style={styles.btn1}>
@@ -377,6 +380,7 @@ const renderCarouselItem = ({ item }) => (
               </TouchableOpacity>
               </View>
           </View>
+          <Button title='Raise Question doubt' onPress={()=>navigation.navigate("StudentAskQuery")}/>
         </View>
       </View>
 
@@ -391,24 +395,27 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   title: {
-    fontSize: 28,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#1e293b',
     marginBottom: 10,
   },
   sectionTitle: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: '600',
     color: '#334155',
     marginVertical: 15,
+     paddingLeft:5,
   },
   profileRow: {
     flexDirection: 'row',
     marginBottom: 20,
+
   },
   scoreRankContainer: {
     flex: 1,
     gap: 12,
+    margin:3
   },
   card: {
 
@@ -474,18 +481,15 @@ const styles = StyleSheet.create({
 
   },
 carouselItem: {
-  width: screenWidth - 42, // Full screen width
+  width:screenWidth-30, // Full screen width
   backgroundColor: '#fff',
-  borderRadius: 12,
+  borderRadius: 5,
   overflow: 'hidden',
-  elevation: 3,
-  shadowColor: '#000',
-  shadowOpacity: 0.1,
-  shadowRadius: 5,
-  shadowOffset: { width: 0, height: 2 },
-  padding: 20,
+  paddingHorizontal: 20,
+  paddingVertical:10,
   borderWidth: 1,
-  marginRight:15
+  marginRight:8,
+  borderColor:"#ccc"
 },
 
   carouselImage: {
@@ -536,51 +540,61 @@ carouselItem: {
     width: 60,
     borderRadius: 10
   },
+  rightArrow:{
+    height: 20,
+    width: 20,
+  },
   sessionTitle: {
   fontSize: 18,
   fontWeight: 'bold',
   color: '#1e293b',
-  marginBottom: 6,
 },
 sessionDetail: {
-  fontSize: 14,
-  color: '#475569',
-  marginBottom: 4,
+  fontSize: 16,
+  color: 'black',
+  marginTop:8
 },
 sessionDescription: {
-  fontSize: 14,
-  color: '#64748b',
-  marginTop: 4,
+  fontSize: 16,
+  color: 'black',
+  marginTop:8
 },
 feeRow: {
   flexDirection: 'row',
   alignItems: 'center',
-  justifyContent: 'space-between',
-  marginVertical: 8,
+  gap:20
 },
 
 bookNowButton: {
-  backgroundColor: 'green',
-  paddingVertical: 6,
-  paddingHorizontal: 12,
-  borderRadius: 6,
+  paddingVertical: 8,
+  //paddingHorizontal: 12,
+  marginTop:15,
+  color:"blue",
+  borderTopWidth:1,
+  borderColor:"#ccc",
 },
 
 bookNowText: {
-  color: 'white',
-  fontWeight: 'bold',
+  color: '#3949AB',
+  fontSize:16,
+  fontWeight:600,
+  textDecorationLine:1
 },
 bookNowText1:{
- color: 'black',
-  fontWeight: 'bold',
-  borderBottomWidth:1
+ color: '#3949AB',
+  fontSize:16,
+  fontWeight:600,
+  borderBottomWidth:1,
+  borderBottomColor:"#3949AB"
 },
 
 ViewAll:{
   flexDirection:"row",
-  justifyContent:"center",
   alignItems:"center",
-  gap:10
+ 
+  gap:10,
+
+
 },
 pagination: {
   flexDirection: 'row',
