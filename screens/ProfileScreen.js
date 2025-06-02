@@ -154,7 +154,7 @@ export default function ProfileScreen({ navigation }) {
   <Text style={styles.avatarText}>{username?.charAt(0)}</Text>
 </View>
 
-      <Text style={styles.label}>Hello!</Text>
+      <Text style={styles.label}>Hello</Text>
       <Text style={styles.username}>{username}</Text>
     </View>
 
