@@ -32,9 +32,9 @@ export default function AllSessions({ navigation }) {
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <Text style={styles.title}>{item.title}</Text>
-      <Text style={styles.detail}>👨‍🏫 {item.author_name} Sir</Text>
-      <Text style={styles.detail}>📅 {item.field_session_date}</Text>
-      <Text style={styles.detail}>💰 ₹{item.field_fees}</Text>
+      <Text style={styles.detail}>Faculty: {item.author_name} Sir</Text>
+      <Text style={styles.detail}>Date: {item.field_session_date}</Text>
+      <Text style={styles.detail}>Price: ₹{item.field_fees}</Text>
       <Text style={styles.description}>{item.field_description}</Text>
       <TouchableOpacity style={styles.button} onPress={() => handleBooking(item)}>
         <Text style={styles.buttonText}>Book Now</Text>

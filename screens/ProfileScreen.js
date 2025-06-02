@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -118,6 +119,7 @@ export default function ProfileScreen({ navigation }) {
   withCredentials: true,
 });
    const logoutUser = async () => {
+  
   try {
     const userData = await AsyncStorage.getItem('user');
     const userObj = JSON.parse(userData);
@@ -148,7 +150,10 @@ export default function ProfileScreen({ navigation }) {
  return (
   <ScrollView contentContainerStyle={styles.container}>
     <View style={styles.card}>
-      <View style={styles.avatar} />
+      <View style={styles.avatar}>
+  <Text style={styles.avatarText}>{username?.charAt(0)}</Text>
+</View>
+
       <Text style={styles.label}>Hello!</Text>
       <Text style={styles.username}>{username}</Text>
     </View>
@@ -179,9 +184,30 @@ export default function ProfileScreen({ navigation }) {
     )}
 
     {/* ✅ Logout button for everyone */}
-    <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-      <Text style={styles.logoutText}>Logout</Text>
-    </TouchableOpacity>
+<TouchableOpacity
+  onPress={() => {
+    Alert.alert(
+      'Confirm Logout',
+      'Are you sure you want to logout?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Logout',
+          style: 'destructive',
+          onPress: handleLogout,
+        },
+      ],
+      { cancelable: true }
+    );
+  }}
+  style={styles.logoutButton}
+>
+  <Text style={styles.logoutText}>Logout</Text>
+</TouchableOpacity>
+
   </ScrollView>
 );
 }
@@ -202,13 +228,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     elevation: 3,
   },
-  avatar: {
-    width: 80,
-    height: 80,
-    backgroundColor: '#ccc',
-    borderRadius: 40,
-    marginBottom: 16,
-  },
+ avatar: {
+  width: 80,
+  height: 80,
+  backgroundColor: '#0984e3',
+  borderRadius: 40,
+  marginBottom: 16,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+  avatarText: {
+  fontSize: 32,
+  fontWeight: 'bold',
+  color: '#fff',
+},
   label: {
     fontSize: 18,
     color: '#555',

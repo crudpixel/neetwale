@@ -586,8 +586,8 @@ console.log('📊 Topic Stats:', topicStats);
           <Text style={{ fontSize: 18, textAlign: 'right', marginBottom: 20 }}>
             Time Left: {formatTime(timeLeft)}
           </Text>
-          <Text style={{ fontSize: 18, textAlign: 'center', marginBottom: 10 }}>
-             {currentIndex + 1}/ out of {questions.length}
+          <Text style={{ fontSize: 18, textAlign: 'center', marginBottom: 20 }}>
+             {currentIndex + 1} out of {questions.length}
           </Text>
 
           {/* <Text style={styles.title}>
@@ -595,14 +595,14 @@ console.log('📊 Topic Stats:', topicStats);
           </Text> */}
 
           <View style={styles.questionTitle}>
-            <Text style={{ fontSize: 18, marginRight: 5 }}>
+            {/* <Text style={{ fontSize: 18, marginRight: 5 }}>
               {currentIndex + 1}.
-            </Text>
+            </Text> */}
             <View style={{ flex: 1 }}>
               <RenderHTML
                 contentWidth={width}
                 tagsStyles={{
-                  p: { fontSize: 18, color: 'black', marginBottom: 10 },
+                  p: { fontSize: 18, color: 'black', marginBottom: 20 ,  fontWeight:600,lineHeight:25},
                   img: {
                     maxWidth: '100%',
                     height: undefined,
@@ -629,13 +629,25 @@ console.log('📊 Topic Stats:', topicStats);
         </TouchableOpacity>
       ))}
 
-         <View style={styles.navigationContainer}>
-  {/* Previous Button */}
-  {currentIndex > 0 && (
-    <TouchableOpacity style={styles.navButton} onPress={() => setCurrentIndex(prev => prev - 1)}>
-      <Text style={styles.buttonText}>Previous</Text>
-    </TouchableOpacity>
-  )}
+<View style={styles.navigationContainer}>
+  {/* Previous Button - Always visible, disabled at index 0 */}
+  <TouchableOpacity
+    style={[
+      styles.navButton,
+      currentIndex === 0 && styles.disabledButton
+    ]}
+    onPress={() => currentIndex > 0 && setCurrentIndex(prev => prev - 1)}
+    disabled={currentIndex === 0}
+  >
+    <Text
+      style={[
+        styles.buttonText,
+        currentIndex === 0 && styles.disabledButtonText
+      ]}
+    >
+      Previous
+    </Text>
+  </TouchableOpacity>
 
   {/* Mark for Review Button */}
   <TouchableOpacity
@@ -652,15 +664,22 @@ console.log('📊 Topic Stats:', topicStats);
 
   {/* Next or Submit Button */}
   {currentIndex < questions.length - 1 ? (
-    <TouchableOpacity style={styles.navButton} onPress={() => setCurrentIndex(prev => prev + 1)}>
-      <Text style={styles.buttonText}>Next</Text>
+    <TouchableOpacity
+      style={styles.navButton}
+      onPress={() => setCurrentIndex(prev => prev + 1)}
+    >
+      <Text style={styles.buttonText2}>Next</Text>
     </TouchableOpacity>
   ) : (
-    <TouchableOpacity style={styles.navButton} onPress={SubmitTest}>
+    <TouchableOpacity
+      style={styles.navButton}
+      onPress={SubmitTest}
+    >
       <Text style={styles.buttonText}>Submit</Text>
     </TouchableOpacity>
   )}
 </View>
+
 
         </>
       )}
@@ -682,10 +701,10 @@ const styles = StyleSheet.create({
   questionTitle:{
     flexDirection: 'row',
      marginBottom: 10 ,
-     borderWidth:1,
-     padding:10,
-     borderRadius:10,
-     borderColor:"#ccc",
+
+
+   
+   
     
   },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
@@ -719,19 +738,18 @@ const styles = StyleSheet.create({
   },
   optionBtn: {
     padding: 12,
-    backgroundColor: '#f2f2f2',
+   // backgroundColor: '#f2f2f2',
     borderRadius: 8,
     marginVertical: 8,
     borderWidth: 1,
     borderColor: '#ccc',
   },
   selectedOption: {
-    backgroundColor: 'green',
-    borderColor: 'darkgreen',
+    backgroundColor: '#f2f2f2',
   },
   optionText: {
     fontSize: 16,
-    color: '#000',
+  
   },
    navigationContainer: {
     position: 'absolute',
@@ -747,14 +765,33 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
   },
   navButton: {
-    backgroundColor: '#007bff',
+    //backgroundColor: '#007bff',
     paddingVertical: 10,
     paddingHorizontal: 18,
-    borderRadius: 8,
     marginHorizontal: 5,
+    position:"fixed"
   },
   buttonText: {
-    color: '#fff',
+    color: 'black',
     fontWeight: 'bold',
+    borderWidth:1,
+    padding:10,
+    borderRadius:10
   },
+  buttonText2: {
+    color: 'black',
+    fontWeight: 'bold',
+    borderWidth:1,
+    padding:10,
+    borderRadius:10,
+    minWidth:"80",
+    textAlign:"center"
+  },
+  disabledButton: {
+  //backgroundColor: '#ccc', // grey background
+},
+
+disabledButtonText: {
+  color: '#888', // light grey text
+},
 });

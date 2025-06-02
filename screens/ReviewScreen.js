@@ -131,7 +131,7 @@ export default function ReviewScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20, flex: 1 },
+  container: { padding: 20, flex: 1 ,backgroundColor:"#fff"},
   title: { fontSize: 20, fontWeight: 'bold', marginBottom: 10 },
   questionText: { fontSize: 16, marginBottom: 15 },
   option: {

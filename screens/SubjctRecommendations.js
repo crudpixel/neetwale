@@ -42,20 +42,20 @@ export default function SubjectRecommendations({ route }) {
       const result = await response.json();
       const rawTopics = result?.data || [];
 
-const formattedTopics = rawTopics.map(item => {
-  const correct = Number(item.recommendation_topic?.correct || 0);
-  const wrong = Number(item.recommendation_topic?.wrong || 0);
-  const total = correct + wrong;
-  const percentage = total > 0 ? ((correct / total) * 100).toFixed(2) : '0.00';
+      const formattedTopics = rawTopics.map(item => {
+        const correct = Number(item.recommendation_topic?.correct || 0);
+        const wrong = Number(item.recommendation_topic?.wrong || 0);
+        const total = correct + wrong;
+        const percentage = total > 0 ? ((correct / total) * 100).toFixed(2) : '0.00';
 
-  return {
-    topic: item.recommendation_topic?.topic || 'Unknown',
-    correct,
-    wrong,
-    percentage,
-    status: item.status || 'pending',
-  };
-});
+        return {
+          topic: item.recommendation_topic?.topic || 'Unknown',
+          correct,
+          wrong,
+          percentage,
+          status: item.status || 'pending',
+        };
+      });
 
 
       formattedTopics.sort((a, b) => b.wrong - a.wrong);
@@ -143,46 +143,55 @@ const formattedTopics = rawTopics.map(item => {
 
           {/* 🕓 Pending Topics */}
           <Text style={styles.sectionTitle}>⏳ Pending </Text>
-          <View style={styles.tableHeader}>
-            <Text style={styles.cellHeader}>Topic</Text>
-            <Text style={styles.cellHeader}>Correct</Text>
-            <Text style={styles.cellHeader}>Wrong</Text>
-            <Text style={styles.cellHeader}>%</Text>
-            <Text style={styles.cellHeader}>Status</Text>
-          </View>
           {pendingTopics.map((topic, idx) => (
-            <View key={idx} style={styles.tableRow}>
-              <Text style={styles.cell}>{topic.topic}</Text>
-              <Text style={styles.cell}>{topic.correct}</Text>
-              <Text style={styles.cell}>{topic.wrong}</Text>
-              <Text style={styles.cell}>{topic.percentage}%</Text>
-              <View style={styles.cell}>
+            <View key={idx} style={styles.card}>
+              <Text style={styles.topicTitle}>{topic.topic}</Text>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardLabel}>Correct:</Text>
+                <Text>{topic.correct}</Text>
+              </View>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardLabel}>Wrong:</Text>
+                <Text>{topic.wrong}</Text>
+              </View>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardLabel}>Percentage:</Text>
+                <Text>{topic.percentage}%</Text>
+              </View>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardLabel}>Status:</Text>
                 <TouchableOpacity onPress={() => confirmMarkCompleted(topic.topic)}>
                   <Text style={{ color: 'blue' }}>Mark Completed</Text>
                 </TouchableOpacity>
               </View>
             </View>
+
           ))}
 
           {/* ✅ Completed Topics */}
           <Text style={styles.sectionTitle}>✅ Completed </Text>
-          <View style={styles.tableHeader}>
-            <Text style={styles.cellHeader}>Topic</Text>
-            <Text style={styles.cellHeader}>Correct</Text>
-            <Text style={styles.cellHeader}>Wrong</Text>
-            <Text style={styles.cellHeader}>%</Text>
-            <Text style={styles.cellHeader}>Status</Text>
-          </View>
           {completedTopics.map((topic, idx) => (
-            <View key={idx} style={styles.tableRow}>
-              <Text style={styles.cell}>{topic.topic}</Text>
-              <Text style={styles.cell}>{topic.correct}</Text>
-              <Text style={styles.cell}>{topic.wrong}</Text>
-              <Text style={styles.cell}>{topic.percentage}%</Text>
-              <View style={styles.cell}>
+            <View key={idx} style={styles.card}>
+              <Text style={styles.topicTitle}>{topic.topic}</Text>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardLabel}>Correct:</Text>
+                <Text>{topic.correct}</Text>
+              </View>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardLabel}>Wrong:</Text>
+                <Text>{topic.wrong}</Text>
+              </View>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardLabel}>Percentage:</Text>
+                <Text>{topic.percentage}%</Text>
+              </View>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardLabel}>Status:</Text>
                 <Text style={{ color: 'green' }}>✔ Completed</Text>
+
               </View>
             </View>
+
           ))}
         </View>
       )}
@@ -252,4 +261,34 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 8,
   },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 12,
+    marginVertical: 6,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+
+  topicTitle: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: '#2d3436',
+    marginBottom: 6,
+  },
+
+  cardRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 2,
+  },
+
+  cardLabel: {
+    fontWeight: '600',
+    color: '#636e72',
+  },
+
 });
