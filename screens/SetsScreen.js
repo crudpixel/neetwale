@@ -77,14 +77,15 @@ export default function SetsScreen({ route, navigation }) {
               }}
             >
               <View style={styles.cardContent}>
-                <View style={styles.sets}>
-                {isLocked && <Image source={require('../asstes/padlock.png')} style={styles.icon}/>}
+                
                 <Text style={[styles.cardText, isLocked && styles.lockedText]}>
                   {set.name}
                 </Text>
-                </View>
+                
+                <View style={styles.sets}>
+                {isLocked && <Image source={require('../asstes/padlock.png')} style={styles.icon}/>}
                 <Image source={require('../asstes/chevron.png')} style={styles.icon}/>
-
+                </View>
               </View>
             </TouchableOpacity>
           );
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
   card: {
 
     paddingVertical: 20,
-    paddingHorizontal: 30,
+    paddingHorizontal: 10,
     marginBottom: 10,
     width: '100%',
     borderBottomWidth:1,

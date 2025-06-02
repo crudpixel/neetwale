@@ -433,7 +433,7 @@ const styles = StyleSheet.create({
 
   btn1: {
     flexDirection: 'row',
-    justifyContent: "center",
+   // justifyContent: "center",
     gap: 10,
 
 
@@ -462,12 +462,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 4,
     borderRadius: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
     marginTop: 8,
-    width: 175,
+    width:"49%",
     borderWidth: 1,
     borderColor: "#ccc"
 
