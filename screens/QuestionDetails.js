@@ -28,7 +28,7 @@ const QuestionDetails = ({route}) => {
         data.comments.map(comment => (
           <View key={comment.cid} style={styles.commentBox}>
             <Text style={styles.subject}>Subject: {comment.subject}</Text>
-            <Text style={styles.author}>Author: {comment.author}</Text>
+            <Text style={styles.author}>Student: {comment.author}</Text>
             <RenderHTML
               contentWidth={width}
               source={{ html: comment.comment_body }}

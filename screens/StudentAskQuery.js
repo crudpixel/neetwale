@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet, ScrollView,navigation } from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet, ScrollView,navigation ,TouchableOpacity} from 'react-native';
 
 const StudentAskQuery = ({navigation}) => {
   const [title, setTitle] = useState('');
@@ -44,7 +44,7 @@ const StudentAskQuery = ({navigation}) => {
       <TextInput
         value={title}
         onChangeText={setTitle}
-        placeholder="Enter your question title"
+        placeholder="Enter Your Subject"
         style={styles.input}
       />
 
@@ -57,9 +57,16 @@ const StudentAskQuery = ({navigation}) => {
         numberOfLines={6}
         style={[styles.input, styles.textArea]}
       />
+<View style={styles.buttonContainer}>
+  <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+    <Text style={styles.buttonText}>Submit Question</Text>
+  </TouchableOpacity>
 
-      <Button title="Submit Question" onPress={handleSubmit} />
-      <Button title="See Your Raised Question" onPress={()=>navigation.navigate("AllRaiseQuestion")} />
+  <TouchableOpacity style={styles.viewButton} onPress={() => navigation.navigate("AllRaiseQuestion")}>
+    <Text style={styles.buttonText}>See Your Raised Question</Text>
+  </TouchableOpacity>
+</View>
+
 
     </ScrollView>
   );
@@ -85,6 +92,33 @@ const styles = StyleSheet.create({
     height: 120,
     textAlignVertical: 'top',
   },
+  buttonContainer: {
+  marginTop: 20,
+  flexDirection: 'column',
+  gap: 12, 
+},
+
+submitButton: {
+  backgroundColor: '#007bff',
+  paddingVertical: 12,
+  paddingHorizontal: 20,
+  borderRadius: 8,
+  alignItems: 'center',
+},
+
+viewButton: {
+  backgroundColor: '#28a745',
+  paddingVertical: 12,
+  paddingHorizontal: 20,
+  borderRadius: 8,
+  alignItems: 'center',
+},
+
+buttonText: {
+  color: '#fff',
+  fontSize: 16,
+  fontWeight: 'bold',
+},
 });
 
 export default StudentAskQuery;

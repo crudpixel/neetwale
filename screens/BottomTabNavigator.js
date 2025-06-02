@@ -7,6 +7,8 @@ import DashboardScreen from './DashboardScreen';
 import StudyMaterial from './StudyMaterial';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TouchableOpacity } from 'react-native';
+import StudentAskQuery from './StudentAskQuery';
+import ForumScreen from './ForumScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -46,6 +48,8 @@ export default function BottomTabNavigator({ navigation }) {
           else if (route.name === 'Profile') iconName = 'person';
           else if (route.name === 'Study Material') iconName = 'picture-as-pdf';
           else if (route.name === 'Test Series') iconName = 'book';
+          else if (route.name === 'Forum') iconName = 'chat';
+
 
           return <MaterialIcons name={iconName} size={size} color={color} />;
         },
@@ -81,7 +85,8 @@ export default function BottomTabNavigator({ navigation }) {
         ),
         }}
       />
-      <Tab.Screen name="Study Material" component={StudyMaterial} />
+      <Tab.Screen name="Study Material" component={StudyMaterial} />      
+      <Tab.Screen name="Forum" component={ForumScreen} />
       <Tab.Screen name="Test Series" component={SubjectsScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>

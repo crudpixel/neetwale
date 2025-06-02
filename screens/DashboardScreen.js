@@ -380,7 +380,7 @@ const renderCarouselItem = ({ item }) => (
               </TouchableOpacity>
               </View>
           </View>
-          <Button title='Raise Question doubt' onPress={()=>navigation.navigate("StudentAskQuery")}/>
+          
         </View>
       </View>
 

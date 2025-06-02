@@ -26,6 +26,7 @@ import AllSessions from './screens/AllSession';
 import StudentAskQuery from './screens/StudentAskQuery';
 import QuestionDetails from './screens/QuestionDetails';
 import AuthorNodesList from './screens/AuthorNodeList';
+import ForumScreen from './screens/ForumScreen';
 
 
 
@@ -116,6 +117,7 @@ useEffect(() => {
         <Stack.Screen name="StudentAskQuery" component={StudentAskQuery} />
         <Stack.Screen name="QuestionDetails" component={QuestionDetails} />
         <Stack.Screen name="AllRaiseQuestion" component={AuthorNodesList} />
+        <Stack.Screen name="Forum" component={ForumScreen} />
         
 
       </Stack.Navigator>

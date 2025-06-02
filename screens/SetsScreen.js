@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
   },
   sets:{
   flexDirection:"row",
+  alignItems:"center",
   gap:20
   },
   icon:{
