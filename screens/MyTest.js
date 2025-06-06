@@ -100,7 +100,7 @@ useFocusEffect(
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}> 🧠My Submitted Tests</Text>
+      <Text style={styles.title}>My Submitted Tests</Text>
 
       <FlatList
         data={tests}
@@ -122,7 +122,7 @@ useFocusEffect(
 
               <TouchableOpacity
                 style={styles.testItem}
-                onPress={() => navigation.navigate('review', { testData: item })}
+                onPress={() => navigation.navigate('Review', { testData: item })}
               >
                 <Text style={styles.reviewBtn}>Review Your Test</Text>
               </TouchableOpacity>

@@ -523,7 +523,7 @@ console.log('📊 Topic Stats:', topicStats);
         Alert.alert(
           'Success',
           'Your test has been submitted successfully!',
-          [{ text: 'OK', onPress: () => navigation.navigate('test', { solved_id: userSolvedId, questionLength: questions.length , topicStats : topicStats }) }]
+          [{ text: 'OK', onPress: () => navigation.navigate('Test', { solved_id: userSolvedId, questionLength: questions.length , topicStats : topicStats }) }]
         );
       } else {
         console.warn('Failed to submit result:', data);
@@ -767,8 +767,8 @@ const styles = StyleSheet.create({
   navButton: {
     //backgroundColor: '#007bff',
     paddingVertical: 10,
-    paddingHorizontal: 18,
-    marginHorizontal: 5,
+    paddingHorizontal: 10,
+    //marginHorizontal: 5,
     position:"fixed"
   },
   buttonText: {
@@ -776,15 +776,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     borderWidth:1,
     padding:10,
-    borderRadius:10
+    borderRadius:5
   },
   buttonText2: {
     color: 'black',
     fontWeight: 'bold',
     borderWidth:1,
     padding:10,
-    borderRadius:10,
-    minWidth:"80",
+    borderRadius:5,
+    minWidth:70,
+    maxWidth:70,
     textAlign:"center"
   },
   disabledButton: {

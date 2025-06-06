@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet, ActivityIndicator,ScrollView} from 'react-native';
+import { View, Text, Button, StyleSheet, ActivityIndicator,ScrollView, TouchableOpacity} from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import RenderHTML, { RenderHTMLSource } from 'react-native-render-html'
 export default function ReviewScreen({ route, navigation }) {
@@ -67,9 +67,6 @@ export default function ReviewScreen({ route, navigation }) {
       {/* <Text style={styles.questionText}>{currentIndex + 1}. {currentQuestion.title}</Text> */}
 
                 <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                  <Text style={{ fontSize: 18, fontWeight: 'bold', marginRight: 5 }}>
-                    {currentIndex + 1}.
-                  </Text>
                   <View style={{ flex: 1 }}>
                     <RenderHTML
                       contentWidth={width}
@@ -101,8 +98,8 @@ export default function ReviewScreen({ route, navigation }) {
         );
       })}
        <ScrollView>
-      <Text style={styles.correctAnswer}>✅ Correct Answer: {currentQuestion.correct}</Text>
-      <Text style={styles.topicText}>📘 Topic: {currentQuestion.topicName}</Text>
+      <Text style={styles.correctAnswer}>Correct Answer: {currentQuestion.correct}</Text>
+      <Text style={styles.topicText}>Topic: {currentQuestion.topicName}</Text>
       {currentQuestion.explanation ? (
      
        // <Text style={styles.explanationText}>💡 Explanation: {currentQuestion.explanation.replace(/<[^>]+>/g, " ")}</Text>
@@ -118,14 +115,34 @@ export default function ReviewScreen({ route, navigation }) {
       ) : null}
 
 </ScrollView>
-      <View style={styles.navigationButtons}>
-        {currentIndex > 0 && (
-          <Button title="Previous" onPress={() => setCurrentIndex(prev => prev - 1)} />
-        )}
-        {currentIndex < questions.length - 1 && (
-          <Button title="Next" onPress={() => setCurrentIndex(prev => prev + 1)} />
-        )}
-      </View>
+<View style={styles.navigationButtons}>
+  {/* Previous Button (always visible, disabled on index 0) */}
+  <TouchableOpacity
+    onPress={() => setCurrentIndex(prev => prev - 1)}
+    disabled={currentIndex === 0}
+    style={[
+      styles.navButton,
+      currentIndex === 0 && styles.disabledButton
+    ]}
+  >
+    <Text style={[
+      styles.buttonText,
+      currentIndex === 0 && styles.disabledText
+    ]}>
+      Previous
+    </Text>
+  </TouchableOpacity>
+
+  {/* Next Button (only visible if not on last question) */}
+  {currentIndex < questions.length - 1 && (
+    <TouchableOpacity
+      onPress={() => setCurrentIndex(prev => prev + 1)}
+      style={styles.navButton}
+    >
+      <Text style={styles.buttonText}>Next</Text>
+    </TouchableOpacity>
+  )}
+</View>
     </View>
   );
 }
@@ -154,7 +171,8 @@ const styles = StyleSheet.create({
   correctAnswer: {
     marginTop: 15,
     fontStyle: 'italic',
-    color: 'green'
+    color: 'green',
+    fontSize:16
   },
   explanationText: {
     marginTop: 10,
@@ -162,10 +180,37 @@ const styles = StyleSheet.create({
     color: 'black',
     fontStyle: 'italic'
   },
-  navigationButtons: {
-    marginTop: 20,
+navigationButtons: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    //marginVertical: 10,
+    borderTopWidth:1
+    //paddingHorizontal: 10,
   },
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' }
+  navButton: {
+    paddingVertical: 10,
+    //paddingHorizontal: 10,
+    //backgroundColor: '#007bff',
+    borderRadius: 5,
+   
+    
+  },
+  disabledButton: {
+   // backgroundColor: '#ccc',
+  },
+  buttonText: {
+    color: 'black',
+    fontWeight: 'bold',
+    borderWidth:1,
+    padding:10,
+    borderRadius:5
+  },
+  disabledText: {
+    color: '#888',
+  },
+  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  topicText:{
+    fontSize:16,
+    marginTop:10
+  }
 });

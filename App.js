@@ -102,8 +102,8 @@ useEffect(() => {
          {/* <Stack.Screen name="MainDrawer" component={DrawerNavigator} /> */}
         <Stack.Screen name="Dashboard" component={BottomTabNavigator} options={{ headerShown: true ,}}   />
         <Stack.Screen name="Home" component={FirstScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="test" component={MyTestsScreen} />
-        <Stack.Screen name="review" component={ReviewScreen} />
+        <Stack.Screen name="Test" component={MyTestsScreen} />
+        <Stack.Screen name="Review" component={ReviewScreen} />
         <Stack.Screen name="studymaterial" component={StudyMaterial} />
         <Stack.Screen name="PDFScreen" component={PDFScreen} options={{ headerShown: false }} />
         <Stack.Screen name="ChapterList" component={ChapterList} />
