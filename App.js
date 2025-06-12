@@ -27,6 +27,7 @@ import StudentAskQuery from './screens/StudentAskQuery';
 import QuestionDetails from './screens/QuestionDetails';
 import AuthorNodesList from './screens/AuthorNodeList';
 import ForumScreen from './screens/ForumScreen';
+import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 
 
 
@@ -118,6 +119,7 @@ useEffect(() => {
         <Stack.Screen name="QuestionDetails" component={QuestionDetails} />
         <Stack.Screen name="AllRaiseQuestion" component={AuthorNodesList} />
         <Stack.Screen name="Forum" component={ForumScreen} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         
 
       </Stack.Navigator>

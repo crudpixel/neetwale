@@ -7,7 +7,6 @@ import DashboardScreen from './DashboardScreen';
 import StudyMaterial from './StudyMaterial';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TouchableOpacity } from 'react-native';
-import StudentAskQuery from './StudentAskQuery';
 import ForumScreen from './ForumScreen';
 
 const Tab = createBottomTabNavigator();

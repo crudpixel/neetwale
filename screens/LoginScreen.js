@@ -92,8 +92,9 @@ if (isFaculty) {
           <Text style={styles.signUpText}>Sign Up</Text>
         </Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ForgotPassword')}>
         <Text style={styles.signUpText1}>Forgot Password?</Text>
-
+      </TouchableOpacity>
       </View>
     </View>
     </ScrollView>

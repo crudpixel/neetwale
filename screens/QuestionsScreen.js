@@ -37,6 +37,14 @@ export default function QuestionsScreen({ route, navigation }) {
   const isFocused = useIsFocused();
   const { width } = useWindowDimensions();
 
+  const BASE_URL = 'https://studyneet.crudpixel.tech';
+
+// Fix relative image paths
+const fixImageUrls = (html) => {
+  if (!html) return '';
+  return html.replace(/<img\s+[^>]*src="(\/[^"]*)"/g, `<img src="${BASE_URL}$1"`);
+};
+
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -593,7 +601,7 @@ console.log('📊 Topic Stats:', topicStats);
           {/* <Text style={styles.title}>
             {currentIndex + 1}. {currentQuestion.title}
           </Text> */}
-
+          <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
           <View style={styles.questionTitle}>
             {/* <Text style={{ fontSize: 18, marginRight: 5 }}>
               {currentIndex + 1}.
@@ -604,13 +612,13 @@ console.log('📊 Topic Stats:', topicStats);
                 tagsStyles={{
                   p: { fontSize: 18, color: 'black', marginBottom: 20 ,  fontWeight:600,lineHeight:25},
                   img: {
-                    maxWidth: '100%',
-                    height: undefined,
+                    maxWidth:300,
+                    height: 300,
                     display: 'flex', // ensures proper layout
                     resizeMode: 'contain'
                   }
                 }}
-                source={{ html: currentQuestion.title }}
+                  source={{ html: fixImageUrls(currentQuestion.title) }}
               />
             </View>
           </View>
@@ -628,7 +636,7 @@ console.log('📊 Topic Stats:', topicStats);
           <Text style={styles.optionText}>{opt}</Text>
         </TouchableOpacity>
       ))}
-
+</ScrollView>
 <View style={styles.navigationContainer}>
   {/* Previous Button - Always visible, disabled at index 0 */}
   <TouchableOpacity
@@ -743,6 +751,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     borderWidth: 1,
     borderColor: '#ccc',
+  
   },
   selectedOption: {
     backgroundColor: '#f2f2f2',
