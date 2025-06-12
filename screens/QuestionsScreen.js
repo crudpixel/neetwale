@@ -258,29 +258,33 @@ const fixImageUrls = (html) => {
 .then(data => {
   const included = data.included || [];
 
-  const formatted = data.data.map(q => {
-    const optionLabels = ['A', 'B', 'C', 'D'];
-    const correctIndex = optionLabels.indexOf(q.attributes.field_correct_answer);
+const formatted = data.data.map(q => {
+  const options = q.attributes.field_option || [];
 
-    // Find topic name from included
-const topicId = q.relationships.field_subject_topics?.data?.id;
+  // Detect if options are labeled 1–4 instead of A–D
+  const isNumeric = options.length && ['1', '2', '3', '4'].includes(q.attributes.field_correct_answer);
 
-const topic = included.find(
-  i => i.id === topicId && i.type === 'taxonomy_term--subject_topic'
-)?.attributes?.name || 'Unknown';
+  // Choose labels dynamically
+  const optionLabels = isNumeric ? ['1', '2', '3', '4'] : ['A', 'B', 'C', 'D'];
 
-console.log( topic);
+  const correctIndex = optionLabels.indexOf(q.attributes.field_correct_answer);
+
+  // Find topic name from included
+  const topicId = q.relationships.field_subject_topics?.data?.id;
+
+  const topic = included.find(
+    i => i.id === topicId && i.type === 'taxonomy_term--subject_topic'
+  )?.attributes?.name || 'Unknown';
+
+  return {
+    id: q.id,
+    title: q.attributes.field_question?.value || '',
+    options: options,
+    correct: options[correctIndex] || '', // Use computed index safely
+    topic: topic,
+  };
 
 
-
-
-    return {
-      id: q.id,
-      title: q.attributes.field_question?.value || '',
-      options: q.attributes.field_option,
-      correct: q.attributes.field_option[correctIndex] || '',
-      topic: topic,
-    };
   });
 
   setQuestions(formatted);

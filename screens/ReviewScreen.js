@@ -33,7 +33,6 @@ export default function ReviewScreen({ route }) {
     )
       .then((res) => res.json())
       .then((data) => {
-        const optionLabels = ['A', 'B', 'C', 'D'];
         const topicMap = {};
 
         data.included?.forEach((item) => {
@@ -43,18 +42,20 @@ export default function ReviewScreen({ route }) {
         });
 
         const formatted = data.data.map((q, idx) => {
-          const options = q.attributes.field_option;
-          const correctLetter = q.attributes.field_correct_answer?.trim();
+          const options = q.attributes.field_option || [];
+          const correctAnswer = q.attributes.field_correct_answer?.trim();
+          const isNumeric = ['1', '2', '3', '4'].includes(correctAnswer);
+          const optionLabels = isNumeric ? ['1', '2', '3', '4'] : ['A', 'B', 'C', 'D'];
 
           let correctOption = '';
-          if (optionLabels.includes(correctLetter)) {
-            const index = optionLabels.indexOf(correctLetter);
-            correctOption = options[index] || 'Not Available';
+          const index = optionLabels.indexOf(correctAnswer);
+          if (index !== -1 && options[index]) {
+            correctOption = options[index];
           } else {
             correctOption =
               options.find(
                 (opt) =>
-                  opt.trim().toLowerCase() === correctLetter?.toLowerCase()
+                  opt.trim().toLowerCase() === correctAnswer?.toLowerCase()
               ) || 'Not Available';
           }
 
@@ -162,7 +163,6 @@ export default function ReviewScreen({ route }) {
         </ScrollView>
       </View>
 
-      {/* Navigation Buttons */}
       <View style={styles.navigationButtons}>
         <TouchableOpacity
           onPress={() => setCurrentIndex((prev) => prev - 1)}
