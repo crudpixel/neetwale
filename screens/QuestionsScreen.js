@@ -553,6 +553,11 @@ console.log('📊 Topic Stats:', topicStats);
 
   if (loading) return <ActivityIndicator size="large" style={styles.centered} />;
 
+const sanitizeText = (text) => {
+  if (!text) return '';
+  return text
+    .replace(/🠒|🡆|➡️/g, '→'); // Replace problematic arrows with a standard one
+};
 
 
   return (
@@ -622,7 +627,7 @@ console.log('📊 Topic Stats:', topicStats);
                     resizeMode: 'contain'
                   }
                 }}
-                  source={{ html: fixImageUrls(currentQuestion.title) }}
+                  source={{ html: sanitizeText(fixImageUrls(currentQuestion.title)) }}
               />
             </View>
           </View>
@@ -637,7 +642,7 @@ console.log('📊 Topic Stats:', topicStats);
           ]}
           onPress={() => handleOptionPress(opt)}
         >
-          <Text style={styles.optionText}>{opt}</Text>
+          <Text style={styles.optionText}>{sanitizeText(opt)}</Text>
         </TouchableOpacity>
       ))}
 </ScrollView>
