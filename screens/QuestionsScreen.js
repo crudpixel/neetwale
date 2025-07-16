@@ -241,59 +241,94 @@ const fixImageUrls = (html) => {
   // --------------------------------------------------------------------------------------------------------------------//
 
 
-  useEffect(() => {
-    fetch(`https://studyneet.crudpixel.tech/jsonapi/taxonomy_term/subjects`)
-      .then(res => res.json())
-      .then(data => {
-        const subject = data.data.find(term => term.id === setId);
-        if (subject) {
-          setPaperSet(subject.attributes.name);
-        }
-      });
+useEffect(() => {
+  fetch(`https://studyneet.crudpixel.tech/jsonapi/taxonomy_term/subjects`)
+    .then(res => res.json())
+    .then(data => {
+      const subject = data.data.find(term => term.id === setId);
+      if (subject) {
+        setPaperSet(subject.attributes.name);
+      }
+    })
+    .catch(err => {
+      console.error("Error fetching subjects:", err);
+      setLoading(false);
+    });
+fetch(`https://studyneet.crudpixel.tech/jsonapi/taxonomy_term/subjects/${setId}?include=field_question,field_question.field_subject_topics`)
+  .then(res => res.json())
+  .then(data => {
+    if (!data.included || !Array.isArray(data.included)) {
+      console.error("No included questions found");
+      setLoading(false);
+      return;
+    }
 
-    fetch(
-      `https://studyneet.crudpixel.tech/jsonapi/node/question?filter[field_subject_set.id]=${setId}&include=field_subject_topics`
-    )
-      .then(res => res.json())
-.then(data => {
-  const included = data.included || [];
+    const included = data.included || [];
 
-const formatted = data.data.map(q => {
-  const options = q.attributes.field_option || [];
-
-  // Detect if options are labeled 1–4 instead of A–D
-  const isNumeric = options.length && ['1', '2', '3', '4'].includes(q.attributes.field_correct_answer);
-
-  // Choose labels dynamically
-  const optionLabels = isNumeric ? ['1', '2', '3', '4'] : ['A', 'B', 'C', 'D'];
-
-  const correctIndex = optionLabels.indexOf(q.attributes.field_correct_answer);
-
-  // Find topic name from included
-  const topicId = q.relationships.field_subject_topics?.data?.id;
-
-  const topic = included.find(
-    i => i.id === topicId && i.type === 'taxonomy_term--subject_topic'
-  )?.attributes?.name || 'Unknown';
-
-  return {
-    id: q.id,
-    title: q.attributes.field_question?.value || '',
-    options: options,
-    correct: options[correctIndex] || '', // Use computed index safely
-    topic: topic,
-  };
-
-
-  });
-
-  setQuestions(formatted);
-  setLoading(false);
+// 1. Build topic lookup by ID
+const topicsById = {};
+included.forEach(item => {
+  if (item.type === 'taxonomy_term--subject_topic') {
+    topicsById[item.id] = item;
+  }
 });
 
 
-    userData();
-  }, [setId]);
+
+    // Filter included to only questions
+    const questions = data.included.filter(item => item.type === 'node--question');
+
+
+
+    const formatted = questions.map(q => {
+
+   const topicRefs = q.relationships?.field_subject_topics?.data;
+  // Handle both array and single object
+  const topicIds = Array.isArray(topicRefs)
+    ? topicRefs.map(ref => ref.id)
+    : topicRefs
+    ? [topicRefs.id]
+    : [];
+
+  // Map topic IDs to names using your lookup object
+  const topicNames = topicIds
+    .map(id => topicsById[id]?.attributes?.name)
+    .filter(Boolean);
+    console.log(topicNames)
+
+    const options = q.attributes.field_option || [];
+
+      // Detect if options are labeled numerically or as letters
+      const isNumeric = options.length && ['1', '2', '3', '4'].includes(q.attributes.field_correct_answer?.replace(/[^\d]/g, ''));
+
+      const optionLabels = isNumeric ? ['1', '2', '3', '4'] : ['A', 'B', 'C', 'D'];
+
+      // Remove any parentheses or extra chars from correct answer before index lookup
+      const correctAnswerClean = (q.attributes.field_correct_answer || '').replace(/[^A-D1-4]/gi, '');
+
+      const correctIndex = optionLabels.indexOf(correctAnswerClean);
+
+      return {
+        id: q.id,
+        title: q.attributes.field_question?.value || q.attributes.title || '',
+        options: options,
+        correct: options[correctIndex] || '',
+        topic:topicNames, // You can improve this by mapping relationships if needed
+      };
+    });
+
+    setQuestions(formatted);
+    setLoading(false);
+  })
+  .catch(err => {
+    console.error("Error fetching questions:", err);
+    setLoading(false);
+  });
+
+
+  userData();
+}, [setId]);
+
 
   const userData = async () => {
     const user = JSON.parse(await AsyncStorage.getItem('user'));
@@ -444,32 +479,35 @@ const formatted = data.data.map(q => {
 
       // -------------------------------------------------------------------------------//
 
-      const topicStatsMap = {};
+const topicStatsMap = {};
 
 questions.forEach((q, index) => {
   const qKey = `Q${index + 1}`;
   const selected = userAnswers[qKey];
-  const topic = q.topic || 'Unknown';
+  const topicNames = Array.isArray(q.topic) && q.topic.length > 0 ? q.topic : ['Unknown'];
 
-  if (!topicStatsMap[topic]) {
-    topicStatsMap[topic] = { topic, correct: 0, wrong: 0 };
-  }
+  topicNames.forEach(topic => {
+    if (!topicStatsMap[topic]) {
+      topicStatsMap[topic] = { topic, correct: 0, wrong: 0 };
+    }
 
-  if (selected) {
-    if (selected === q.correct) {
-      topicStatsMap[topic].correct += 1;
+    if (selected) {
+      if (selected === q.correct) {
+        topicStatsMap[topic].correct += 1;
+      } else {
+        topicStatsMap[topic].wrong += 1;
+      }
     } else {
       topicStatsMap[topic].wrong += 1;
     }
-  } else {
-    topicStatsMap[topic].wrong += 1; // treat unattempted as wrong if needed
-  }
+  });
 });
 
 const topicStats = Object.values(topicStatsMap).map(stat => ({
   ...stat,
   percentage: ((stat.correct / (stat.correct + stat.wrong)) * 100).toFixed(2),
 }));
+
 
 console.log('📊 Topic Stats:', topicStats);
 
@@ -535,8 +573,9 @@ console.log('📊 Topic Stats:', topicStats);
         Alert.alert(
           'Success',
           'Your test has been submitted successfully!',
-          [{ text: 'OK', onPress: () => navigation.navigate('Test', { solved_id: userSolvedId, questionLength: questions.length , topicStats : topicStats }) }]
-        );
+          [{ text: 'OK', onPress: () => navigation.navigate('Test', { solved_id: userSolvedId, questionLength: questions.length , topicStats : topicStats, set_Id : setId }) }]
+         
+        ); 
       } else {
         console.warn('Failed to submit result:', data);
       }
@@ -627,7 +666,7 @@ const sanitizeText = (text) => {
                     resizeMode: 'contain'
                   }
                 }}
-                  source={{ html: sanitizeText(fixImageUrls(currentQuestion.title)) }}
+                  source={{ html: sanitizeText(fixImageUrls(currentQuestion.title || '')) }}
               />
             </View>
           </View>

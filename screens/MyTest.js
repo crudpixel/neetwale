@@ -42,6 +42,7 @@ export default function MyTestsScreen({ route, navigation }) {
   const solved_id = route?.Params || '';
   const questionLength = route?.Params;
   const topicStats = route?.params?.topicStats || [];
+  console.log(solved_id,questionLength,topicStats)
 
   useLayoutEffect(() => {
     navigation.setOptions({

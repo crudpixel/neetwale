@@ -25,66 +25,97 @@ export default function ReviewScreen({ route }) {
   const studentAnswers = JSON.parse(testData.answer);
   const { width } = useWindowDimensions();
 
-  useEffect(() => {
-    fetch(
-      `https://studyneet.crudpixel.tech/jsonapi/node/question?filter[field_subject_set.name]=${encodeURIComponent(
-        testData.question_paper_id
-      )}&include=field_subject_topics`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        const topicMap = {};
+  console.log("testdata",testData)
 
-        data.included?.forEach((item) => {
-          if (item.type === 'taxonomy_term--subject_topic') {
-            topicMap[item.id] = item.attributes.name;
-          }
-        });
 
-        const formatted = data.data.map((q, idx) => {
-          const options = q.attributes.field_option || [];
-          const correctAnswer = q.attributes.field_correct_answer?.trim();
-          const isNumeric = ['1', '2', '3', '4'].includes(correctAnswer);
-          const optionLabels = isNumeric ? ['1', '2', '3', '4'] : ['A', 'B', 'C', 'D'];
+useEffect(() => {
+  const fetchQuestions = async () => {
+    try {
+      const response = await fetch(
+        `https://studyneet.crudpixel.tech/jsonapi/taxonomy_term/subjects?filter[name]=${encodeURIComponent(
+          testData.question_paper_id
+        )}&include=field_question,field_question.field_subject_topics`
+      );
+      const data = await response.json();
 
-          let correctOption = '';
-          const index = optionLabels.indexOf(correctAnswer);
-          if (index !== -1 && options[index]) {
-            correctOption = options[index];
-          } else {
-            correctOption =
-              options.find(
-                (opt) =>
-                  opt.trim().toLowerCase() === correctAnswer?.toLowerCase()
-              ) || 'Not Available';
-          }
+      const subject = data.data[0]; // Ensure subject exists
+      if (!subject) {
+        console.warn('Subject not found for this test');
+        return;
+      }
 
-          const topicId = q.relationships.field_subject_topics?.data?.id;
-          const topicName = topicMap[topicId] || 'Unknown Topic';
+      const questions = subject.relationships.field_question.data || [];
 
-          return {
-            title: q.attributes.field_question?.value || '',
-            options,
-            correct: correctOption,
-            qKey: `Q${idx + 1}`,
-            topicName,
-            explanation: q.attributes.field_answer_explanation?.processed || '',
-          };
-        });
-
-        setQuestions(formatted);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error loading questions:', err);
-        setLoading(false);
+      // Build a map of topic IDs to names from included
+      const topicMap = {};
+      data.included?.forEach((item) => {
+        if (item.type === 'taxonomy_term--subject_topic') {
+          topicMap[item.id] = item.attributes.name;
+        }
       });
-  }, []);
+
+      // Prepare formatted question list
+      const formatted = questions.map((qRef, idx) => {
+        const question = data.included.find(
+          (item) => item.id === qRef.id && item.type === 'node--question'
+        );
+        if (!question) return null;
+
+        const options = question.attributes.field_option || [];
+        const correctAnswer = question.attributes.field_correct_answer?.trim();
+// const correctAnswer = question.attributes.field_correct_answer?.trim();
+
+// Match numeric values like "3" or "(3)"
+const correctIndex = (() => {
+  const match = correctAnswer?.match(/\d+/); // extract number like 3
+  if (match) return parseInt(match[0], 10) - 1;
+  const optionLabels = ['A', 'B', 'C', 'D'];
+  const alphaIndex = optionLabels.indexOf(correctAnswer);
+  return alphaIndex;
+})();
+
+const correctOption =
+  correctIndex !== -1 && options[correctIndex]
+    ? options[correctIndex]
+    : options.find(
+        (opt) =>
+          opt.trim().toLowerCase() === correctAnswer?.toLowerCase()
+      ) || 'Not Available';
+
+
+        // Handle topic
+        const topicData = question.relationships?.field_subject_topics?.data;
+        const topicId = Array.isArray(topicData) ? topicData[0]?.id : topicData?.id;
+        const topicName = topicMap[topicId] || 'Unknown Topic';
+
+        return {
+          qKey: `Q${idx + 1}`,
+          title: question.attributes.field_question?.value || '',
+          options,
+          correct: correctOption,
+          topicName,
+          explanation: question.attributes.field_answer_explanation?.processed || '',
+        };
+      }).filter(Boolean);
+
+      setQuestions(formatted);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching review questions:', error);
+      setLoading(false);
+    }
+  };
+
+  fetchQuestions();
+}, []);
+
+
 
   if (loading) return <ActivityIndicator size="large" style={styles.centered} />;
 
-  const currentQuestion = questions[currentIndex];
-  const selectedAnswer = studentAnswers[currentQuestion.qKey];
+ const currentQuestion = questions[currentIndex] || null;
+const selectedAnswer = currentQuestion ? studentAnswers[currentQuestion.qKey] : null;
+
 
   return (
     <View style={styles.container}>
