@@ -28,8 +28,9 @@ import QuestionDetails from './screens/QuestionDetails';
 import AuthorNodesList from './screens/AuthorNodeList';
 import ForumScreen from './screens/ForumScreen';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
-
-
+import FlashCardSubjectScreen from './screens/FlashCardSubjectScreen';
+import FlashCardChapterListScreen from './screens/FlashCardChapterListScreen';
+import FlashCardPdfScreen from './screens/FlashCardPdfScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -120,6 +121,10 @@ useEffect(() => {
         <Stack.Screen name="AllRaiseQuestion" component={AuthorNodesList} />
         <Stack.Screen name="Forum" component={ForumScreen} />
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+        <Stack.Screen name="FlashCardSubject" component={FlashCardSubjectScreen} />
+        <Stack.Screen name="FlashCardChapter" component={FlashCardChapterListScreen} />
+        <Stack.Screen name="FlashCardPdf" component={FlashCardPdfScreen} />
+        
         
 
       </Stack.Navigator>

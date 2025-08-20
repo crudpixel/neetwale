@@ -380,7 +380,10 @@ const renderCarouselItem = ({ item }) => (
               </TouchableOpacity>
               </View>
           </View>
-          
+          <Button
+      title="Flashcard Subject"
+      onPress={() => navigation.navigate("FlashCardSubject")}
+    />
         </View>
       </View>
 

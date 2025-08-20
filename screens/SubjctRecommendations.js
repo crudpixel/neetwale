@@ -34,6 +34,7 @@ export default function SubjectRecommendations({ route }) {
     setLoading(true);
     const user = JSON.parse(await AsyncStorage.getItem('user'));
     const userId = user?.userid;
+    console.log(userId,subject)
 
     try {
       const response = await fetch(
@@ -42,7 +43,10 @@ export default function SubjectRecommendations({ route }) {
       const result = await response.json();
       const rawTopics = result?.data || [];
 
-      const formattedTopics = rawTopics.map(item => {
+      const formattedTopics = rawTopics.filter(item => {
+    const topic = item.recommendation_topic?.topic;
+    return topic !== 'Unknown Topic' && !(Array.isArray(topic) && topic.length === 0);
+  }).map(item => {
         const correct = Number(item.recommendation_topic?.correct || 0);
         const wrong = Number(item.recommendation_topic?.wrong || 0);
         const total = correct + wrong;

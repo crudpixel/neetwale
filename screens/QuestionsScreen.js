@@ -660,10 +660,10 @@ const sanitizeText = (text) => {
                 tagsStyles={{
                   p: { fontSize: 18, color: 'black', marginBottom: 20 ,  fontWeight:600,lineHeight:25},
                   img: {
-                    maxWidth:300,
-                    height: 300,
-                    display: 'flex', // ensures proper layout
-                    resizeMode: 'contain'
+                   maxWidth: width - 40,
+                    height: 'auto',  
+                     alignSelf: 'center',
+                    
                   }
                 }}
                   source={{ html: sanitizeText(fixImageUrls(currentQuestion.title || '')) }}

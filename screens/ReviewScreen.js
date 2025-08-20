@@ -63,7 +63,6 @@ useEffect(() => {
 
         const options = question.attributes.field_option || [];
         const correctAnswer = question.attributes.field_correct_answer?.trim();
-// const correctAnswer = question.attributes.field_correct_answer?.trim();
 
 // Match numeric values like "3" or "(3)"
 const correctIndex = (() => {
