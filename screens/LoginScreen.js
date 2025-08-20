@@ -102,7 +102,7 @@ if (isFaculty) {
 }
 
 const styles = StyleSheet.create({
-  container: {flex:1, padding: 10, backgroundColor: "white",paddingTop:"60"},
+  container: {flex:1, padding: 10, backgroundColor: "white",paddingTop:"40"},
   input: {
     borderWidth: 1,
     padding: 15,

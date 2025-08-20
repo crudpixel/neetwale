@@ -661,8 +661,8 @@ const sanitizeText = (text) => {
                   p: { fontSize: 18, color: 'black', marginBottom: 20 ,  fontWeight:600,lineHeight:25},
                   img: {
                    maxWidth: width - 40,
-                    height: 'auto',  
-                     alignSelf: 'center',
+                    height: 'auto',
+                    alignSelf:'center'
                     
                   }
                 }}
